@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" role="img"
+     aria-label="Pipeline: paper in, brief, script, narration and Manim per beat, render out">
+  <!-- Hand-drawn on purpose: every box is a wobbly path, not a rect, and every
+       edge overshoots slightly. Colours come from the page via CSS classes. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- paper in -->
+    <path class="dg-fill" d="M22 40 L152 37 Q158 38 157 44 L159 88 Q158 95 151 94 L26 96 Q19 95 20 88 L21 45 Q21 40 22 40 Z"/>
+    <text class="dg-text" x="42" y="62">arXiv id / PDF</text>
+    <text class="dg-note" x="42" y="79">or just a topic</text>
+
+    <!-- critic -->
+    <path class="dg-fill" d="M232 38 L344 36 Q350 37 349 43 L351 87 Q350 94 343 93 L236 95 Q229 94 230 87 L231 44 Q231 39 232 38 Z"/>
+    <text class="dg-text" x="252" y="62">critic</text>
+    <text class="dg-note" x="252" y="79">plans the brief</text>
+
+    <!-- storyteller -->
+    <path class="dg-fill" d="M424 39 L556 37 Q562 38 561 44 L563 88 Q562 95 555 94 L428 96 Q421 95 422 88 L423 45 Q423 40 424 39 Z"/>
+    <text class="dg-text" x="444" y="62">storyteller</text>
+    <text class="dg-note" x="444" y="79">script.md, in beats</text>
+
+    <!-- producer -->
+    <path class="dg-fill" d="M232 176 L346 174 Q352 175 351 181 L353 225 Q352 232 345 231 L236 233 Q229 232 230 225 L231 182 Q231 177 232 176 Z"/>
+    <text class="dg-text" x="252" y="200">producer</text>
+    <text class="dg-note" x="252" y="217">narrates each beat</text>
+
+    <!-- visualizer -->
+    <path class="dg-fill" d="M424 177 L554 175 Q560 176 559 182 L561 226 Q560 233 553 232 L428 234 Q421 233 422 226 L423 183 Q423 178 424 177 Z"/>
+    <text class="dg-text" x="444" y="200">visualizer</text>
+    <text class="dg-note" x="444" y="217">Manim per beat</text>
+
+    <!-- output -->
+    <path class="dg-fill" d="M624 176 L736 174 Q742 175 741 181 L743 225 Q742 232 735 231 L628 233 Q621 232 622 225 L623 182 Q623 177 624 176 Z"/>
+    <text class="dg-text" x="644" y="200">output.mp4</text>
+    <text class="dg-note" x="644" y="217">Remotion</text>
+
+    <!-- arrows, drawn with a little sag -->
+    <path class="dg-accent" d="M162 66 Q196 61 224 66"/>
+    <path class="dg-accent" d="M224 66 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M356 66 Q390 71 416 66"/>
+    <path class="dg-accent" d="M416 66 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- storyteller down and back to producer -->
+    <path class="dg-accent" d="M492 100 Q495 132 400 138 Q320 143 291 170"/>
+    <path class="dg-accent" d="M291 170 l1 -10 m-1 10 l9 -3"/>
+
+    <path class="dg-accent" d="M357 204 Q390 199 416 204"/>
+    <path class="dg-accent" d="M416 204 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M565 204 Q592 209 616 204"/>
+    <path class="dg-accent" d="M616 204 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- live-sync loop back to the editor -->
+    <path class="dg-accent" stroke-dasharray="5 6" d="M300 236 Q300 286 470 288 Q640 290 672 240"/>
+    <path class="dg-accent" d="M672 240 l-7 7 m7 -7 l1 10"/>
+    <text class="dg-note" x="392" y="308">live-syncs after every beat — the editor fills in as it goes</text>
+
+    <text class="dg-note" x="22" y="126">Claude Code is the orchestrator; each box is a subagent</text>
+  </g>
+</svg>

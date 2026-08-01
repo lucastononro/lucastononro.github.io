@@ -34,14 +34,18 @@ Set `draft: true` to keep a post out of the build.
 
 ### Categories are tags
 
-Everything is a post; categories are just tags. `skill` marks the ones with an
-installable repository behind them, and the nav's **Skills** link appears as soon
-as anything carries that tag (`skillTag` in `site.config.mjs`).
+Everything is a post and each one carries exactly one category tag. The whole
+list lives in `site.config.mjs`:
 
-The feed's filter bar is built from `featuredTags` — pinned first, in the order
-you list them, then any remaining tags by post count, capped at eight. The chips
-are real links to `/tags/<tag>/`, so filtering works without JavaScript; with it
-they filter the list in place and put the tag in the URL hash.
+```js
+categories: ['skill', 'agents', 'talks', 'research']
+```
+
+The feed's filter bar shows all of them in that order, **including empty ones**
+(dimmed, with a count of zero), so a category can exist before it has anything
+in it. Every category gets a page at `/tags/<tag>/` either way. The chips are
+real links, so filtering works with JavaScript off; with it on they filter the
+list in place and put the tag in the URL hash.
 
 ### What the markdown supports
 
@@ -52,6 +56,9 @@ they filter the list in place and put the tag in the URL hash.
 | `[^note]` + `[^note]: text` | A margin note, floated into the right gutter on wide screens and collapsible inline on narrow ones |
 | `![caption](img.png)` alone in a paragraph | A `<figure>` with the alt text as its caption |
 | `[caption](youtube url)` alone in a paragraph | A click-to-load video: thumbnail facade now, `youtube-nocookie` iframe once you press play. `?t=490s` is preserved as a start time |
+| `[caption](spotify episode url)` alone in a paragraph | A click-to-load Spotify player, same contract |
+| `[caption](/video/thing.mp4)` alone in a paragraph | A self-hosted `<video>`, using `/video/thing.jpg` as its poster |
+| `@diagram(name) Caption` on its own line | Inlines `static/diagrams/name.svg` so the drawing can use `.dg-stroke` / `.dg-accent` / `.dg-text` and follow the theme |
 | `/feed.xml` | Root-relative links get the site's base path applied automatically |
 | `## Heading` | An anchor link plus a margin section number |
 
@@ -69,7 +76,7 @@ lib/templates.mjs       every page shape
 lib/feed.mjs            RSS, sitemap, robots.txt
 posts/                  YYYY-MM-DD-slug.md
 pages/                  standalone pages (about.md -> /about/)
-static/                 copied verbatim: styles.css, theme.js, portrait.png, favicon.svg
+static/                 copied verbatim: css, js, portrait.jpg + tonoff.jpg, images/, video/, diagrams/
 ```
 
 Generated on every build: the home page, one page per post, `/feed/`, `/tags/`
@@ -93,7 +100,10 @@ Alegreya and Alegreya Sans — a humanist superfamily built for long-form readin
 — with IBM Plex Mono for code.
 
 The light/dark control is the **Tonon/Tonoff** switch: Tonon means the lights
-are on. It reflects the OS preference until you flick it, then remembers.
+are on. It reflects the OS preference until you flick it, then remembers — and
+flipping it renames the site (Tonon → Tonoff, in the masthead, the hero and the
+footer) and swaps the portrait for the lights-off one. All of that is CSS: both
+halves are in the markup and the theme decides which is displayed.
 
 Client-side JavaScript does three things and nothing else: the switch, the feed
 filter, and swapping a video facade for an iframe when you press play. The

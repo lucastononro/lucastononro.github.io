@@ -13,22 +13,26 @@
   const current = () =>
     root.dataset.theme || (systemPrefersDark() ? 'dark' : 'light')
 
-  const sw = document.querySelector('.tonon')
-  if (sw) {
+  const switches = [...document.querySelectorAll('.tonon')]
+  if (switches.length) {
     const sync = () => {
       const on = current() === 'light'
-      // Pressed = lights on = Tonon.
-      sw.setAttribute('aria-pressed', String(on))
-      sw.setAttribute('aria-label', on ? 'Tonon: lights are on. Switch to dark.'
-                                       : 'Tonoff: lights are off. Switch to light.')
+      for (const sw of switches) {
+        // Pressed = lights on = Tonon.
+        sw.setAttribute('aria-pressed', String(on))
+        sw.setAttribute('aria-label', on ? 'Tonon: lights are on. Switch to dark.'
+                                         : 'Tonoff: lights are off. Switch to light.')
+      }
     }
     sync()
-    sw.addEventListener('click', () => {
-      const next = current() === 'dark' ? 'light' : 'dark'
-      root.dataset.theme = next
-      try { localStorage.setItem('theme', next) } catch {}
-      sync()
-    })
+    for (const sw of switches) {
+      sw.addEventListener('click', () => {
+        const next = current() === 'dark' ? 'light' : 'dark'
+        root.dataset.theme = next
+        try { localStorage.setItem('theme', next) } catch {}
+        sync()
+      })
+    }
     // Follow the OS until someone actually flicks the switch.
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (!root.dataset.theme) sync()
@@ -87,6 +91,18 @@
   // the "no cookies" line in the footer stays true.
 
   document.addEventListener('click', (event) => {
+    const audio = event.target.closest?.('.audio-embed')
+    if (audio) {
+      const frame = document.createElement('iframe')
+      frame.className = 'audio-frame'
+      frame.src = `https://open.spotify.com/embed/${audio.dataset.spotify}`
+      frame.title = audio.getAttribute('aria-label') || 'Spotify player'
+      frame.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
+      frame.loading = 'lazy'
+      audio.replaceWith(frame)
+      return
+    }
+
     const button = event.target.closest?.('.video-embed')
     if (!button) return
 

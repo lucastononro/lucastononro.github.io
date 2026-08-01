@@ -5,7 +5,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { site, u, abs, orderedTags } from './site.config.mjs'
+import { site, u, abs, categoryCounts } from './site.config.mjs'
 import { initHighlighter, renderMarkdown } from './lib/markdown.mjs'
 import { loadPosts, groupByTag, tagSlug, parseFrontmatter } from './lib/content.mjs'
 import {
@@ -48,58 +48,44 @@ async function build() {
 
   const posts = await loadPosts(path.join(root, 'posts'))
   const tags = groupByTag(posts)
-  const chips = orderedTags(tags)
-  const filters = { tagMap: tags, chips }
+  const filters = categoryCounts(tags)
   const written = []
 
-  // The nav only advertises a Skills link once something is tagged as one.
   runtime.nav = [
     { label: 'Feed', href: '/feed/' },
-    ...(tags.has(site.skillTag) ? [{ label: 'Skills', href: `/tags/${tagSlug(site.skillTag)}/` }] : []),
+    { label: 'Skills', href: `/tags/${tagSlug(site.navCategory)}/` },
     { label: 'About', href: '/about/' },
     { label: 'RSS', href: '/feed.xml' },
   ]
 
-  written.push(await write('/', homePage(posts, tags, chips)))
+  written.push(await write('/', homePage(posts, filters)))
 
   for (const [i, post] of posts.entries()) {
     written.push(await write(post.href, postPage(post, {
       prev: posts[i - 1] || null, // newer
       next: posts[i + 1] || null, // older
-      kicker: post.tags.find((t) => site.featuredTags.includes(t)) || post.tags[0] || '',
+      kicker: post.tags.find((t) => site.categories.includes(t)) || post.tags[0] || '',
     })))
   }
 
   written.push(await write('/feed/', listPage({
-    title: 'The feed',
-    label: 'Everything',
-    intro: posts.length
-      ? `${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}, newest first. Filter it, or don't.`
-      : 'Nothing yet.',
+    title: 'Everything',
+    label: 'The feed',
+    intro: posts.length ? `${posts.length} entries, newest first.` : 'Nothing yet.',
     posts,
-    filters: posts.length ? filters : null,
+    filters,
     canonical: abs('/feed/'),
   })))
 
-  for (const [tag, list] of tags) {
-    written.push(await write(`/tags/${tagSlug(tag)}/`, listPage({
-      title: tag,
-      label: 'Tag',
-      intro: `${list.length} ${list.length === 1 ? 'entry' : 'entries'} tagged <em>${tag}</em>.`,
+  // A page per declared category, whether or not anything is in it yet.
+  for (const { slug, count } of filters) {
+    const list = tags.get(slug) || []
+    written.push(await write(`/tags/${tagSlug(slug)}/`, listPage({
+      title: slug,
+      label: 'Category',
+      intro: count ? `${count} ${count === 1 ? 'entry' : 'entries'}.` : 'Nothing here yet.',
       posts: list,
-      canonical: abs(`/tags/${tagSlug(tag)}/`),
-    })))
-  }
-
-  if (tags.size) {
-    written.push(await write('/tags/', listPage({
-      title: 'Tags',
-      label: 'Index',
-      intro: [...tags.entries()]
-        .map(([t, l]) => `<a class="tag" href="${u(`/tags/${tagSlug(t)}/`)}">${t}<span>${l.length}</span></a>`)
-        .join(' '),
-      posts: [],
-      canonical: abs('/tags/'),
+      canonical: abs(`/tags/${tagSlug(slug)}/`),
     })))
   }
 

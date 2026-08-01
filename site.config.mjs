@@ -29,15 +29,14 @@ export const site = {
   launchYear: 2026,
 
   /**
-   * Categories are just tags. Every post is a post; `skill` marks the ones
-   * with an installable repository behind them. These tags get pinned to the
-   * front of the feed's filter bar, in this order — anything else follows by
-   * post count. Reorder freely; a tag nobody uses is skipped.
+   * Categories are tags. Every post carries exactly one. These are the only
+   * ones — the filter bar shows all of them in this order, including empty
+   * ones, so a category can exist before it has anything in it.
    */
-  featuredTags: ['skill', 'project', 'agents', 'claude-code'],
+  categories: ['skill', 'agents', 'talks', 'research'],
 
-  /** Which tag the "Skills" nav link points at. */
-  skillTag: 'skill',
+  /** Which category the nav link points at. */
+  navCategory: 'skill',
 }
 
 /** Join a site-relative path onto the base path. */
@@ -51,12 +50,7 @@ export function abs(path = '/') {
   return `${site.origin}${u(path)}`
 }
 
-/**
- * Filter-bar order: pinned tags first (only the ones in use), then whatever
- * is left, most-used first.
- */
-export function orderedTags(tagMap) {
-  const pinned = site.featuredTags.filter((t) => tagMap.has(t))
-  const rest = [...tagMap.keys()].filter((t) => !pinned.includes(t))
-  return [...pinned, ...rest].slice(0, 8)
+/** Every declared category with its post count, empty ones included. */
+export function categoryCounts(tagMap) {
+  return site.categories.map((slug) => ({ slug, count: (tagMap.get(slug) || []).length }))
 }
