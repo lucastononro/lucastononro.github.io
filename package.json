@@ -1,0 +1,20 @@
+{
+  "name": "ablations",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A hand-rolled static blog generator. Markdown in, letterpress HTML out.",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node serve.mjs",
+    "clean": "rm -rf dist"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "katex": "^0.16.11",
+    "marked": "^15.0.6",
+    "shiki": "^1.26.1"
+  }
+}
