@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img"
+     aria-label="System context: one practitioner in a browser talks to Trainable over REST with an SSE stream back; Trainable talks out to the Claude API, Modal for sandboxes and the volume, and S3 or MinIO for datasets">
+  <!-- Redrawn by hand from docs/diagrams/c1-context/c1-system-context.excalidraw.
+       Hand-drawn on purpose: every box is a wobbly path, not a rect, and every
+       edge overshoots slightly. Colours come from the page via CSS classes. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- the person -->
+    <path class="dg-fill" d="M24 41 L163 38 Q169 39 168 45 L170 98 Q169 105 162 104 L28 106 Q21 105 22 98 L23 46 Q23 41 24 41 Z"/>
+    <text class="dg-text" x="44" y="63">practitioner</text>
+    <text class="dg-note" x="44" y="80">brings the data</text>
+
+    <!-- browser -->
+    <path class="dg-fill" d="M232 41 L371 38 Q377 39 376 45 L378 98 Q377 105 370 104 L236 106 Q229 105 230 98 L231 46 Q231 41 232 41 Z"/>
+    <text class="dg-text" x="252" y="63">browser</text>
+    <text class="dg-note" x="252" y="80">Next.js studio</text>
+
+    <!-- the system in scope -->
+    <path class="dg-fill" d="M432 39 L731 36 Q737 37 736 43 L738 100 Q737 107 730 106 L436 108 Q429 107 430 100 L431 44 Q431 39 432 39 Z"/>
+    <text class="dg-text" x="452" y="61">Trainable</text>
+    <text class="dg-note" x="452" y="78">nine agents: EDA, prep, train, review</text>
+
+    <!-- externals -->
+    <path class="dg-fill" d="M82 205 L253 202 Q259 203 258 209 L260 260 Q259 267 252 266 L86 268 Q79 267 80 260 L81 210 Q81 205 82 205 Z"/>
+    <text class="dg-text" x="102" y="227">Claude API</text>
+    <text class="dg-note" x="102" y="244">Agent SDK · MCP</text>
+
+    <path class="dg-fill" d="M292 205 L463 202 Q469 203 468 209 L470 260 Q469 267 462 266 L296 268 Q289 267 290 260 L291 210 Q291 205 292 205 Z"/>
+    <text class="dg-text" x="312" y="227">Modal</text>
+    <text class="dg-note" x="312" y="244">sandboxes + volume</text>
+
+    <path class="dg-fill" d="M502 205 L673 202 Q679 203 678 209 L680 260 Q679 267 672 266 L506 268 Q499 267 500 260 L501 210 Q501 205 502 205 Z"/>
+    <text class="dg-text" x="522" y="227">S3 / MinIO</text>
+    <text class="dg-note" x="522" y="244">boto3 · browsable copy</text>
+
+    <!-- person to browser -->
+    <path class="dg-accent" d="M172 72 Q199 78 226 72"/>
+    <path class="dg-accent" d="M226 72 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="184" y="30">uses</text>
+
+    <!-- browser to backend, and the stream back -->
+    <path class="dg-accent" d="M380 82 Q404 88 426 82"/>
+    <path class="dg-accent" d="M426 82 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" stroke-dasharray="5 6" d="M426 60 Q403 54 381 60"/>
+    <path class="dg-accent" d="M381 60 l9 -4 m-9 4 l9 5"/>
+    <text class="dg-note" x="386" y="30">SSE</text>
+
+    <!-- out to the three clouds -->
+    <path class="dg-accent" d="M470 110 Q330 132 176 196"/>
+    <path class="dg-accent" d="M176 196 l10 1 m-10 -1 l7 -7"/>
+
+    <path class="dg-accent" d="M560 110 Q500 152 384 197"/>
+    <path class="dg-accent" d="M384 197 l10 1 m-10 -1 l7 -7"/>
+
+    <path class="dg-accent" d="M660 110 Q650 155 592 197"/>
+    <path class="dg-accent" d="M592 197 l10 -2 m-10 2 l5 -9"/>
+
+    <text class="dg-note" x="22" y="296">Redrawn from the repo's own C4 context diagram; the bottom row is all somebody else's cloud.</text>
+  </g>
+</svg>
