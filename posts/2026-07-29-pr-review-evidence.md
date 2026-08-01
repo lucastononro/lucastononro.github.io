@@ -82,20 +82,28 @@ So the playbook is mostly about time. Aim for 20–90 seconds and 3–7 chapters
 
 ## The manifest
 
-`finalize` stops the recorder, concatenates the raw segments if `record-start` ran more than once, probes the duration, warns if it comes back under two seconds[^mount], and writes the one file a publisher is meant to read — shape below, values from the session above:
+`finalize` stops the recorder, concatenates the raw segments if `record-start` ran more than once, probes the duration, warns if it comes back under two seconds[^mount], and writes the one file a publisher is meant to read. This is not an illustration — it is the manifest published on PR #12, trimmed only of whitespace:
 
 ```json
 {
   "schema": "pr-review-evidence/1",
+  "session": "task-priorities-20260730T144730Z",
+  "created_at": "2026-07-30T14:56:56Z",
   "capture": { "mode": "desktop", "display": "1280x720", "recorder": "ffmpeg x11grab" },
-  "video": { "file": "evidence.mp4", "duration_s": 41, "size_bytes": 1934812 },
-  "source": { "repo": "…", "branch": "…", "commit": "…", "pr_url": "…" },
-  "agent": { "harness": "unknown", "model": "unknown" },
-  "chapters": ["1. Empty board", "2. Archive a task"]
+  "video": { "file": "evidence.mp4", "duration_s": 72, "size_bytes": 172715 },
+  "source": {
+    "repo": "https://github.com/lucastononro/pr-review-evidence.git",
+    "branch": "examples/task-priorities",
+    "commit": "fb739417404fbb35755afc9afaccc8dffef8c463",
+    "pr_url": "https://github.com/lucastononro/pr-review-evidence/pull/12"
+  },
+  "agent": { "harness": "kimi-code", "model": "kimi-k2" },
+  "chapters": ["1. Add a normal task, then a HIGH one", "2. NEW: High priority filter",
+               "3. Complete a task, filter Active"]
 }
 ```
 
-The two halves are not equally trustworthy, and it's worth being precise about which claim is which. `source` is read on the host at finalize time — `git remote get-url origin`, `git branch --show-current`, `git rev-parse HEAD`, `gh pr view --json url` — so anyone can check it against the repo. `agent` is `${EVIDENCE_HARNESS:-unknown}` and `${EVIDENCE_MODEL:-unknown}`: self-declared, and genuinely `unknown` unless someone exported them. I'd rather ship a field that admits it doesn't know than one that guesses.
+The two halves are not equally trustworthy, and it's worth being precise about which claim is which. `source` is read on the host at finalize time — `git remote get-url origin`, `git branch --show-current`, `git rev-parse HEAD`, `gh pr view --json url` — so anyone can check that commit against the repo. `agent` is `${EVIDENCE_HARNESS:-unknown}` and `${EVIDENCE_MODEL:-unknown}`: self-declared, and `unknown` unless the harness exported them. Kimi Code did, which is why that run names itself; nothing verified it, and the field should be read as a claim rather than a measurement.
 
 `chapters` is the nicest part and the least designed. It isn't authored anywhere: finalize greps `actions.jsonl` for `"cmd":"chapter ` and reads the titles back out of the log of what was actually sent to the desktop. The chapter list therefore cannot disagree with what appeared on screen. Same instinct as the rest of the skill — derive the description from the thing that happened, don't ask the agent to narrate it.
 
@@ -119,6 +127,10 @@ gh release upload "$tag" "${files[@]}" --repo "$repo" --clobber
 
 Then it prints PR-ready markdown against `https://github.com/$repo/releases/download/$tag/` — a bare link for `evidence.mp4`, `<img src=… width="800">` for each still, list items for each `logs/*.log`. The agent pastes that into the PR body. Access control is the repository's own permissions, which is the entire appeal: nothing to host, nothing to expire, no password to leak, and `--clobber` makes a re-record idempotent. The cleanup one-liner goes to stderr as an HTML comment so it lands in the PR body but not in the rendered text.[^tag]
 
+![The prerelease behind PR #12: five uploaded assets, plus the two source archives GitHub attaches to any tag](/images/pr-12-release-assets.jpg)
+
+That is the whole storage layer — a prerelease nobody will ever install, holding 280 KB of evidence, deleted when the PR is.
+
 I know release assets are the right answer because I shipped the wrong one first. Version 1.0.0 had a Cloudflare Worker with R2 behind it, then Workers KV when R2 turned out to want a card on file, serving password-gated links. PR #7 deleted the whole thing: the links never expired, the password travelled in the URL, and revoking one session meant rotating the admin token for all of them. Publishing is bring-your-own now, and the default has no moving parts.
 
 [^tag]: `pr-12-evidence` is derived from `gh pr view --json number`, so it only works from a branch with an open PR; outside one it falls back to a UTC timestamp, which uploads fine and is harder to find later. Deleting the PR's evidence is `gh release delete pr-12-evidence --cleanup-tag --yes`.
@@ -127,7 +139,17 @@ I know release assets are the right answer because I shipped the wrong one first
 
 The repo contains three small apps under `examples/` whose only job is to be something to record: `demo-webpage` (a greeting card and a counter), `launch-checklist` (tick items, watch a progress bar fill), and `task-tracker` (a small Vite SPA). Every feature added to them landed as a real PR with evidence attached by the skill, so the examples are readable rather than described — the merged PRs are the documentation.
 
-[PR #12](https://github.com/lucastononro/pr-review-evidence/pull/12) is the one I'd read. It adds priority levels and a filter bar to the task tracker, and its evidence block is exactly what the uploader printed: a ~40s video with three chapters — add a normal task and a HIGH one so the badge renders, switch to the High-priority filter, complete a task and watch the Active counter go 2→1 — plus `manifest.json` and three deliberately named stills, `high-badge.png`, `filter-high.png`, `active-filter.png`. All five files sit under the `pr-12-evidence` tag. The local session is named in the body too, `evidence/task-priorities-20260730T144730Z/`, which is the branch slug and the UTC stamp doing their job.
+[PR #12](https://github.com/lucastononro/pr-review-evidence/pull/12) is the one I'd read. It adds priority levels and a filter bar to the task tracker, and its evidence block is exactly what the uploader printed — nothing was tidied by hand:
+
+![PR #12's evidence section: the release-asset links the uploader emitted, then the stills rendering inline](/images/pr-12-pr-body.jpg)
+
+Three chapters, read back out of the action log rather than typed: *"1. Add a normal task, then a HIGH one"*, *"2. NEW: High priority filter"*, *"3. Complete a task, filter Active"*. Three deliberately named stills — `high-badge.png`, `filter-high.png`, `active-filter.png` — and the manifest beside them. The body also names the local session, `evidence/task-priorities-20260730T144730Z/`, which is the branch slug and the UTC stamp doing their job.
+
+Here is the video from that release, served from this site rather than from GitHub:
+
+[The evidence attached to PR #12. Real cursor, real keystrokes, recorded on a desktop that never existed.](/video/pr-12-evidence.mp4)
+
+Note the discrepancy: the PR body I wrote says "~40s" and the manifest says `"duration_s": 72`. The manifest is the one derived from `ffprobe` on the actual file, and I am the one who guessed. That is the argument for deriving the description from the artefact, made at my own expense.
 
 That PR also carries a one-line change to `vite.config.ts` adding `allowedHosts`, because the dev server refused requests with a `host.docker.internal` Host header. It is the container seam biting in the most ordinary way possible, and I like that it's in the diff rather than in a troubleshooting page.
 
