@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" role="img"
+     aria-label="Your display is never addressed: xdotool and ffmpeg both talk to display :99 inside the container, and only files cross back out">
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- host boundary -->
+    <path class="dg-stroke" stroke-dasharray="6 7"
+          d="M16 22 L744 20 Q750 21 749 27 L751 168 Q750 175 743 174 L20 176 Q13 175 14 168 L15 28 Q15 23 16 22 Z"/>
+    <text class="dg-note" x="30" y="40">your machine</text>
+
+    <!-- container boundary -->
+    <path class="dg-stroke" stroke-dasharray="6 7"
+          d="M16 200 L744 198 Q750 199 749 205 L751 378 Q750 385 743 384 L20 386 Q13 385 14 378 L15 206 Q15 201 16 200 Z"/>
+    <text class="dg-note" x="30" y="218">container — one docker run, torn down after</text>
+
+    <!-- host: your screen -->
+    <path class="dg-fill" d="M34 54 L206 51 Q212 52 211 58 L213 128 Q212 135 205 134 L38 136 Q31 135 32 128 L33 59 Q33 54 34 54 Z"/>
+    <text class="dg-text" x="52" y="80">your display :0</text>
+    <text class="dg-note" x="52" y="100">keyboard, mouse, monitor</text>
+    <text class="dg-note" x="52" y="120">never opened, never grabbed</text>
+
+    <!-- host: the agent -->
+    <path class="dg-fill" d="M296 54 L468 51 Q474 52 473 58 L475 128 Q474 135 467 134 L300 136 Q293 135 294 128 L295 59 Q295 54 296 54 Z"/>
+    <text class="dg-text" x="314" y="80">the agent</text>
+    <text class="dg-note" x="314" y="100">runs evidence-exec.sh</text>
+    <text class="dg-note" x="314" y="120">reads the PNGs off disk</text>
+
+    <!-- host: session dir -->
+    <path class="dg-fill" d="M556 54 L726 51 Q732 52 731 58 L733 128 Q732 135 725 134 L560 136 Q553 135 554 128 L555 59 Q555 54 556 54 Z"/>
+    <text class="dg-text" x="574" y="80">evidence/&lt;session&gt;/</text>
+    <text class="dg-note" x="574" y="100">shots/ raw/ logs/</text>
+    <text class="dg-note" x="574" y="120">evidence.mp4, manifest.json</text>
+
+    <!-- container: xdotool -->
+    <path class="dg-fill" d="M34 246 L206 243 Q212 244 211 250 L213 318 Q212 325 205 324 L38 326 Q31 325 32 318 L33 251 Q33 246 34 246 Z"/>
+    <text class="dg-text" x="52" y="272">xdotool</text>
+    <text class="dg-note" x="52" y="292">moves, clicks, types</text>
+    <text class="dg-note" x="52" y="312">DISPLAY=:99 only</text>
+
+    <!-- container: Xvfb -->
+    <path class="dg-fill" d="M296 240 L468 237 Q474 238 473 244 L475 324 Q474 331 467 330 L300 332 Q293 331 294 324 L295 245 Q295 240 296 240 Z"/>
+    <text class="dg-text" x="314" y="266">Xvfb :99</text>
+    <text class="dg-note" x="314" y="286">1280x720x24 framebuffer</text>
+    <text class="dg-note" x="314" y="306">in RAM — no monitor exists</text>
+    <text class="dg-note" x="314" y="324">openbox · chromium · xterm</text>
+
+    <!-- container: ffmpeg -->
+    <path class="dg-fill" d="M556 246 L726 243 Q732 244 731 250 L733 318 Q732 325 725 324 L560 326 Q553 325 554 318 L555 251 Q555 246 556 246 Z"/>
+    <text class="dg-text" x="574" y="272">ffmpeg x11grab</text>
+    <text class="dg-note" x="574" y="292">reads :99, 15 fps</text>
+    <text class="dg-note" x="574" y="312">writes raw/*.mp4</text>
+
+    <!-- agent -> xdotool (docker exec, crosses down) -->
+    <path class="dg-accent" d="M330 140 Q286 190 176 240"/>
+    <path class="dg-accent" d="M176 240 l3 -10 m-3 10 l10 -1"/>
+    <text class="dg-note" x="196" y="196">docker exec -e DISPLAY=:99</text>
+
+    <!-- xdotool -> Xvfb -->
+    <path class="dg-accent" d="M216 286 Q256 281 288 286"/>
+    <path class="dg-accent" d="M288 286 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- Xvfb -> ffmpeg -->
+    <path class="dg-accent" d="M478 286 Q518 291 548 286"/>
+    <path class="dg-accent" d="M548 286 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- ffmpeg -> host files (the only crossing) -->
+    <path class="dg-accent" d="M642 240 Q638 190 642 142"/>
+    <path class="dg-accent" d="M642 142 l-5 10 m5 -10 l6 9"/>
+    <text class="dg-note" x="654" y="196">bind mount</text>
+    <text class="dg-note" x="654" y="214">-v dir:/evidence</text>
+
+    <!-- files -> agent (reads) -->
+    <path class="dg-accent" stroke-dasharray="5 6" d="M548 96 Q510 101 482 96"/>
+    <path class="dg-accent" d="M482 96 l9 -4 m-9 4 l9 5"/>
+
+    <!-- the point: no path to :0 -->
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M120 246 Q118 190 120 142"/>
+    <path class="dg-accent" d="M108 186 l24 20 m0 -20 l-24 20"/>
+    <text class="dg-note" x="30" y="164">no X connection</text>
+  </g>
+</svg>
