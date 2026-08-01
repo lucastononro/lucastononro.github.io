@@ -5,7 +5,7 @@ date: 2026-07-29
 tags: [skill]
 ---
 
-Start with the output, because the output is the argument. This is a pull request on my own repo, and everything under the **Evidence** heading was produced and posted by an agent:
+Start with the output, because the output is the argument (you'd have skipped to it anyway). This is a pull request on my own repo, and everything under the **Evidence** heading was produced and posted by an agent:
 
 ![PR #12's evidence section: the release-asset links the uploader printed, then the stills rendering inline](/images/pr-12-pr-body.jpg)
 
@@ -13,15 +13,15 @@ And this is the video it attached — 72 seconds, three chapters, served here fr
 
 [The evidence on PR #12. A real cursor, real keystrokes, a desktop that never existed.](/video/pr-12-evidence.mp4)
 
-Watch the cursor. It travels, it hovers, the badge renders, a filter chip highlights. That is not a screencast of a browser tab; it is a recording of a whole desktop that came into existence for seventy-two seconds inside a container, and it never touched my screen.
+Watch the cursor. It travels, it hovers, the badge renders, a filter chip highlights. That's not a screencast of a browser tab. It's a recording of a whole desktop that came into existence for seventy-two seconds inside a container. It never touched my screen.
 
 ## Why this is worth having
 
-A good engineer attaching a PR does two things: describes the change, and shows it working. Agents have always been fine at the first and structurally incapable of the second, for the dull reason that they have no screen. So the second half arrived as prose — *"I verified the modal comes up clean"* — and I either took that on faith or opened the browser and repeated the work myself, which amounts to having had no account of it at all.
+A good engineer does two things in a PR: describes the change, and shows it working. Agents have always been fine at the first and structurally incapable of the second, for the dull reason that they have no screen. So the second half arrived as prose — *"I verified the modal comes up clean"* — and I either took that on faith or opened the browser and repeated the work myself. At that point the claim had bought me nothing.
 
 [pr-review-evidence](https://github.com/lucastononro/pr-review-evidence) closes that specific gap. It gives an agent a real X11 desktop in a container, lets it drive the thing computer-use style, and records the framebuffer while it works. Out comes `evidence.mp4`, `shots/*.png`, and a `manifest.json` carrying provenance you can check against the repo. Seven bash scripts, 541 lines, and Docker.
 
-The reason this is different from a claim is that the video *is* the check rather than a description of one. Nothing in the loop lets the agent narrate a step it didn't take: `click` and `type` print nothing at all, so the only way it learns what happened is to take another screenshot — the same frame a reviewer ends up looking at. The chapter titles aren't authored either; they're read back out of the log of commands actually sent to the desktop. An agent using this cannot tell you about a click it never looked at.
+The video *is* the check, not a description of one. Nothing in the loop lets the agent narrate a step it didn't take. `click` and `type` print nothing at all, so the only way it learns what happened is to take another screenshot — the same frame a reviewer ends up looking at. The chapter titles aren't authored either; they're read back out of the log of commands actually sent to the desktop. An agent using this can't tell you about a click it never looked at.
 
 @diagram(pr-review-evidence-loop) The only thing that crosses back out of the container is files.
 
@@ -41,11 +41,11 @@ evidence-exec.sh screenshot archived   # → …/shots/archived.png
 evidence-finalize.sh                   # → …/evidence.mp4 + manifest.json
 ```
 
-`screenshot` runs `scrot -o /evidence/shots/<name>.png` inside the container and then prints the *host* path, because `/evidence` is a bind mount of the session directory. The agent reads the PNG off its own filesystem with the tool it already has; no image travels over a protocol. Everything else in that list prints nothing at all — `mousemove`, `click` and `type` are silent, so the only way to learn what happened is the next screenshot, which is the behaviour I wanted.[^blind]
+`screenshot` runs `scrot -o /evidence/shots/<name>.png` inside the container and then prints the *host* path, because `/evidence` is a bind mount of the session directory. The agent reads the PNG off its own filesystem with the tool it already has; no image travels over a protocol. Everything else in that list prints nothing at all. `mousemove`, `click` and `type` are silent, so the only way to learn what happened is the next screenshot. That's the behavior I wanted.[^blind]
 
 Session state is one file. `evidence/.current-session` holds an id like `fix-archive-modal-20260730T141152Z`: the current git branch, slugged and truncated to 40 characters, plus a UTC stamp. Every script resolves it from `--session`, then `$EVIDENCE_SESSION`, then that marker. The container is named `pre-<session>` and holds nothing of value, so `evidence-clean.sh` removes it and leaves the files behind.
 
-There's a live noVNC view on `:6080` unless you start with `--no-live`, in which case no ports are published at all. You don't need it, and the first time an agent takes over a desktop and starts moving a cursor with intent, you will want it.[^open]
+There's a live noVNC view on `:6080` unless you start with `--no-live`, in which case no ports are published at all. You don't need it. But the first time an agent takes over a desktop and starts moving a cursor with intent, you'll want to be watching!![^open]
 
 [^blind]: The playbook's phrasing is "never act blind". Coordinates from an old frame are stale the moment the layout moves, and the failure mode isn't an error — it's a click that lands somewhere plausible and wrong, on video.
 
@@ -53,11 +53,11 @@ There's a live noVNC view on `:6080` unless you start with `--no-live`, in which
 
 ## Nothing on your screen
 
-The first question everyone asks is whether this thing is going to start moving their cursor while they're using the laptop. It can't, and the reason is structural rather than a promise.
+The first question everyone asks is whether this thing is going to start moving their cursor while they're using the laptop. It can't. The reason is structural, not a promise.
 
 @diagram(pr-review-evidence-isolation) Two X displays, no route between them. Only the bind mount crosses.
 
-X11 input goes to a display, and `xdotool` is given exactly one: every command in `evidence-exec.sh` is `docker exec -e DISPLAY=:99`. Display `:99` is a framebuffer Xvfb allocates in RAM inside the container, with no monitor attached to it. Your session is `:0`, on the other side of a container boundary, and nothing in the skill ever opens a connection to it — there is no `-v /tmp/.X11-unix`, no `--net=host`, no `$DISPLAY` passed inward. `ffmpeg` reads the same `:99`, so the recording and the input are pointed at the identical fake screen.
+X11 input goes to a display, and `xdotool` is given exactly one: every command in `evidence-exec.sh` is `docker exec -e DISPLAY=:99`. Display `:99` is a framebuffer Xvfb allocates in RAM inside the container, with no monitor attached to it. Your session is `:0`, on the other side of a container boundary. Nothing in the skill ever opens a connection to it: no `-v /tmp/.X11-unix`, no `--net=host`, no `$DISPLAY` passed inward. `ffmpeg` reads the same `:99`, so the recording and the input are pointed at the identical fake screen.
 
 What does cross is one bind mount, `-v "$dir:/evidence"`, and it carries files in one direction: the container writes PNGs and mp4s, the agent reads them off your disk. The optional noVNC view on `:6080` is the only published port, and with `--no-live` even that isn't there.[^watch]
 
@@ -96,7 +96,7 @@ So the playbook is mostly about time. Aim for 20–90 seconds and 3–7 chapters
 
 ## The manifest
 
-`finalize` stops the recorder, concatenates the raw segments if `record-start` ran more than once, probes the duration, warns if it comes back under two seconds[^mount], and writes the one file a publisher is meant to read. This is not an illustration — it is the manifest published on PR #12, trimmed only of whitespace:
+`finalize` stops the recorder, concatenates the raw segments if `record-start` ran more than once, probes the duration, warns if it comes back under two seconds[^mount], and writes the one file a publisher is meant to read. This isn't an illustration — it's the manifest published on PR #12, trimmed only of whitespace:
 
 ```json
 {
@@ -117,17 +117,17 @@ So the playbook is mostly about time. Aim for 20–90 seconds and 3–7 chapters
 }
 ```
 
-The two halves are not equally trustworthy, and it's worth being precise about which claim is which. `source` is read on the host at finalize time — `git remote get-url origin`, `git branch --show-current`, `git rev-parse HEAD`, `gh pr view --json url` — so anyone can check that commit against the repo. `agent` is `${EVIDENCE_HARNESS:-unknown}` and `${EVIDENCE_MODEL:-unknown}`: self-declared, and `unknown` unless the harness exported them. Kimi Code did, which is why that run names itself; nothing verified it, and the field should be read as a claim rather than a measurement.
+The two halves aren't equally trustworthy. `source` is read on the host at finalize time — `git remote get-url origin`, `git branch --show-current`, `git rev-parse HEAD`, `gh pr view --json url` — so anyone can check that commit against the repo. `agent` is `${EVIDENCE_HARNESS:-unknown}` and `${EVIDENCE_MODEL:-unknown}`: self-declared, and `unknown` unless the harness exported them. Kimi Code did, which is why that run names itself. Nothing verified it. Read that field as a claim, not a measurement.
 
-`chapters` is the nicest part and the least designed. It isn't authored anywhere: finalize greps `actions.jsonl` for `"cmd":"chapter ` and reads the titles back out of the log of what was actually sent to the desktop. The chapter list therefore cannot disagree with what appeared on screen. Same instinct as the rest of the skill — derive the description from the thing that happened, don't ask the agent to narrate it.
+`chapters` is the nicest part and the least designed. It isn't authored anywhere: finalize greps `actions.jsonl` for `"cmd":"chapter ` and reads the titles back out of the log of what was actually sent to the desktop. The chapter list can't disagree with what appeared on screen. Same instinct as the rest of the skill — derive the description from the thing that happened, don't ask the agent to narrate it.
 
-[^mount]: Which catches my favourite bug. Under colima, `$HOME` is shared with the VM but `/tmp` isn't, so running a session from an unshared path bind-mounts an empty directory in total silence and every capture stays trapped inside the container. It looks exactly like a broken recorder.
+[^mount]: Which catches my favorite bug. Under colima, `$HOME` is shared with the VM but `/tmp` isn't, so running a session from an unshared path bind-mounts an empty directory in total silence and every capture stays trapped inside the container. It looks exactly like a broken recorder.
 
 ## The endpoint that doesn't exist
 
-Having a video on disk is not the same as having it in the pull request, and this is where the project spent the most time being wrong.
+Having a video on disk isn't the same as having it in the pull request. This is where the project spent the most time being wrong.
 
-**GitHub has no API for attachments.** The drag-and-drop box under a PR comment posts to an internal endpoint that wants browser session cookies; there is no `gh api` call for it, and there never has been. So an agent holding an authenticated `gh` and a 2 MB mp4 has no supported way to put the second thing inside the first.
+**GitHub has no API for attachments.** None. The drag-and-drop box under a PR comment posts to an internal endpoint that wants browser session cookies; there is no `gh api` call for it, and there never has been. So an agent holding an authenticated `gh` and a 2 MB mp4 has no supported way to put the second thing inside the first. In 2026.
 
 The workaround the skill settles on comes from [mrshu's `gh-pr-image`](https://github.com/mrshu/agent-skills/tree/main/plugins/gh-pr-image): **release assets are the only fully-CLI upload whose URLs render for anyone with repo access.** One prerelease per PR, tagged from the PR number:
 
@@ -145,7 +145,7 @@ Then it prints PR-ready markdown against `https://github.com/$repo/releases/down
 
 That is the whole storage layer — a prerelease nobody will ever install, holding 280 KB of evidence, deleted when the PR is.
 
-I know release assets are the right answer because I shipped the wrong one first. Version 1.0.0 had a Cloudflare Worker with R2 behind it, then Workers KV when R2 turned out to want a card on file, serving password-gated links. PR #7 deleted the whole thing: the links never expired, the password travelled in the URL, and revoking one session meant rotating the admin token for all of them. Publishing is bring-your-own now, and the default has no moving parts.
+I know release assets are the right answer because I shipped the wrong one first. Version 1.0.0 had a Cloudflare Worker with R2 behind it — then Workers KV, once R2 declined to store a single byte without a credit card on file — serving password-gated links. PR #7 deleted the whole thing. The links never expired. The password traveled in the URL — a password, in a URL. Revoking one session meant rotating the admin token for all of them. Publishing is bring-your-own now, and the default has no moving parts.
 
 [^tag]: `pr-12-evidence` is derived from `gh pr view --json number`, so it only works from a branch with an open PR; outside one it falls back to a UTC timestamp, which uploads fine and is harder to find later. Deleting the PR's evidence is `gh release delete pr-12-evidence --cleanup-tag --yes`.
 
@@ -155,11 +155,11 @@ The repo contains three small apps under `examples/` whose only job is to be som
 
 [PR #12](https://github.com/lucastononro/pr-review-evidence/pull/12), the one at the top of this post, is the one I'd read in full. Its three chapters were read back out of the action log rather than typed: *"1. Add a normal task, then a HIGH one"*, *"2. NEW: High priority filter"*, *"3. Complete a task, filter Active"*. Three deliberately named stills — `high-badge.png`, `filter-high.png`, `active-filter.png` — and the manifest beside them. The body also names the local session, `evidence/task-priorities-20260730T144730Z/`, which is the branch slug and the UTC stamp doing their job.
 
-One discrepancy in that screenshot is worth pointing at, since it makes the case better than I can: the body says "~40s" and the manifest says `"duration_s": 72`. The manifest was derived with `ffprobe` from the actual file. The "~40s" is me, typing an estimate into a text box. Guess which number I'd trust in a review.
+One discrepancy in that screenshot makes the case better than I can: the body says "~40s" and the manifest says `"duration_s": 72`. The manifest was derived with `ffprobe` from the actual file. The "~40s" is me, typing an estimate into a text box. Guess which number I'd trust in a review.
 
-That PR also carries a one-line change to `vite.config.ts` adding `allowedHosts`, because the dev server refused requests with a `host.docker.internal` Host header. It is the container seam biting in the most ordinary way possible, and I like that it's in the diff rather than in a troubleshooting page.
+That PR also carries a one-line change to `vite.config.ts` adding `allowedHosts`, because the dev server refused requests with a `host.docker.internal` Host header. It's the container seam biting in the most ordinary way possible. I like that it's in the diff rather than in a troubleshooting page.
 
-The older ones are worth a look for a less flattering reason. [#1](https://github.com/lucastononro/pr-review-evidence/pull/1), [#5](https://github.com/lucastononro/pr-review-evidence/pull/5) and [#9](https://github.com/lucastononro/pr-review-evidence/pull/9) were recorded in the browser mode that [#10](https://github.com/lucastononro/pr-review-evidence/pull/10) then deleted — CDP screencasts with no cursor and teleporting actions. Put #5 next to #12 and the argument for grabbing a framebuffer makes itself; one reads as a slideshow of correct states, the other as somebody using an app.
+The older ones are worth a look for a less flattering reason. [#1](https://github.com/lucastononro/pr-review-evidence/pull/1), [#5](https://github.com/lucastononro/pr-review-evidence/pull/5) and [#9](https://github.com/lucastononro/pr-review-evidence/pull/9) were recorded in the browser mode that [#10](https://github.com/lucastononro/pr-review-evidence/pull/10) then deleted — CDP screencasts with no cursor and teleporting actions. Put #5 next to #12 and the argument for grabbing a framebuffer makes itself. One reads as a slideshow of correct states; the other, as somebody using an app.
 
 And not all evidence is visual. [#13](https://github.com/lucastononro/pr-review-evidence/pull/13) added `evidence-log.sh`, which runs a command **on the host** and captures stdout, stderr and the exit code into `logs/<name>.log`:
 
@@ -170,11 +170,11 @@ evidence-log.sh e2e-tests npm test
 
 It works inside a visual session, and standalone with no session and no Docker at all — `finalize` then writes `"video": null` with `"capture": {"mode": "logs"}`, and the uploader ships the log files with markdown links beside the stills. Some changes are proved by an exit code, and pretending otherwise would mean recording a video of a terminal.
 
-## What generalises, and what doesn't
+## What generalizes, and what doesn't
 
-The transferable idea is duller than the desktop, and it is the manifest rather than the video: keep host-checkable provenance apart from self-declared fields instead of averaging them into one blob a reader has to trust wholesale. `source` comes from `git` and `gh` on your machine; `agent` is whatever the harness said about itself. Any tool emitting machine-generated evidence has that same split to make, and most of them quietly don't.
+The transferable idea is duller than the desktop, and it's the manifest, not the video: keep host-checkable provenance apart from self-declared fields instead of averaging them into one blob a reader has to trust wholesale. `source` comes from `git` and `gh` on your machine; `agent` is whatever the harness said about itself. Any tool emitting machine-generated evidence has that same split to make. Most of them quietly don't.
 
-The honest limits are worth stating too. A recording shows one path through a UI, and a well-paced one can conceal as much as it proves — the playbook's advice about pacing is, read uncharitably, advice on making a demo look good. It tells you the modal opened this once, on this commit, for this agent. That is a great deal more than prose, and considerably less than a test suite.
+The limits, plainly: a recording shows one path through a UI, and a well-paced one can conceal as much as it proves. Read uncharitably, the playbook's pacing advice is advice on making a demo look good. A recording tells you the modal opened this once, on this commit, for this agent. That's much more than prose and much less than a test suite.
 
 ## What's left, and the invitation
 
@@ -182,11 +182,11 @@ Short list, in the order I'd do it:
 
 - **Auto-fill `agent.harness` and `agent.model`** so the manifest stops saying `unknown` unless someone remembered two env vars.
 - **One place for the display geometry.** `1280x720` is currently written in the entrypoint and again in the ffmpeg line, and nothing stops them drifting.
-- **Windows and Linux hosts.** It is Docker plus a bind mount, so it ought to work; it is only tested on macOS.
+- **Windows and Linux hosts.** In theory it just works — it's Docker plus a bind mount — but it's only tested on macOS.
 
-That's the whole roadmap, and I'd rather it were shorter than invented.
+That's the whole roadmap. Better short than invented.
 
-The repo is **[github.com/lucastononro/pr-review-evidence](https://github.com/lucastononro/pr-review-evidence)** — MIT, seven bash scripts, one Dockerfile. Issues, pull requests and forks are all welcome, and so is taking the scripts out and using them for something else entirely; there is nothing clever in here that deserves to be a dependency. If you record something with it, put the evidence in the PR — that's the point.
+The repo is **[github.com/lucastononro/pr-review-evidence](https://github.com/lucastononro/pr-review-evidence)** — MIT, seven bash scripts, one Dockerfile. Feedback and PRs welcome. Or just lift the scripts and use them for something else, if that's easier — nothing in here is clever enough to deserve being a dependency. If you record something with it, put the evidence in the PR. That's the point.
 
 ---
 
