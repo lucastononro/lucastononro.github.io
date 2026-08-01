@@ -1,4 +1,4 @@
-// Two small jobs: persist the theme choice, and make sidenote markers
+// Two small jobs: run the Tonon/Tonoff switch, and make sidenote markers
 // keyboard-operable. Everything else on this site is CSS.
 
 (() => {
@@ -7,20 +7,29 @@
   const systemPrefersDark = () =>
     window.matchMedia('(prefers-color-scheme: dark)').matches
 
+  // The effective theme, whether it came from a click or from the OS.
   const current = () =>
     root.dataset.theme || (systemPrefersDark() ? 'dark' : 'light')
 
-  const toggle = document.querySelector('.theme-toggle')
-  if (toggle) {
+  const sw = document.querySelector('.tonon')
+  if (sw) {
     const sync = () => {
-      toggle.setAttribute('aria-label', `Switch to ${current() === 'dark' ? 'light' : 'dark'} theme`)
+      const on = current() === 'light'
+      // Pressed = lights on = Tonon.
+      sw.setAttribute('aria-pressed', String(on))
+      sw.setAttribute('aria-label', on ? 'Tonon: lights are on. Switch to dark.'
+                                       : 'Tonoff: lights are off. Switch to light.')
     }
     sync()
-    toggle.addEventListener('click', () => {
+    sw.addEventListener('click', () => {
       const next = current() === 'dark' ? 'light' : 'dark'
       root.dataset.theme = next
       try { localStorage.setItem('theme', next) } catch {}
       sync()
+    })
+    // Follow the OS until someone actually flicks the switch.
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (!root.dataset.theme) sync()
     })
   }
 

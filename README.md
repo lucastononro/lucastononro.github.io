@@ -1,15 +1,15 @@
-# Ablations
+# Tonon Journey
 
-A hand-rolled static blog. Markdown in, letterpress HTML out — no framework, no
+My blog. A hand-rolled static site — markdown in, HTML out. No framework, no
 client-side rendering, no build step beyond `node build.mjs`.
 
-**Live:** https://lucastononro.github.io/ablations/
+**Live:** https://lucastononro.github.io
 
 ## Quick start
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321/ablations/ — rebuilds on save
+npm run dev      # http://localhost:4321 — rebuilds on save
 npm run build    # writes dist/
 ```
 
@@ -20,17 +20,25 @@ from the filename; frontmatter can override either.
 
 ```markdown
 ---
-title: What a loss spike actually tells you
+title: "notify: teaching the agent to shout down the hallway"
 dek: One-sentence standfirst, shown on the index and in the RSS feed.
-date: 2026-07-24
-tags: [optimization, training-dynamics]
+date: 2026-05-27
+section: skills
+tags: [claude-code, mcp, skills]
 draft: false
 ---
 
-Body starts here. The first paragraph's first line is set in small caps.
+Body starts here. The first line of the first paragraph is set in small caps.
 ```
 
 Set `draft: true` to keep a post out of the build.
+
+### Categories
+
+Sections live in `site.config.mjs`. A post joins one with `section: <slug>`;
+anything without one falls into `defaultSection`. Each section with at least one
+post gets a page at `/<slug>/`, a block on the home page, and a nav slot —
+empty categories are never advertised. Adding one is a config entry plus a post.
 
 ### What the markdown supports
 
@@ -48,40 +56,41 @@ Three or more `##` headings in a post generate a table of contents.
 ## Layout
 
 ```
-site.config.mjs         title, author, base path, nav — the only place these live
+site.config.mjs         title, author, base path, categories — the only place these live
 build.mjs               the whole build: posts + pages -> dist/
 serve.mjs               dev server, rebuilds on change
 lib/markdown.mjs        marked + KaTeX + Shiki + sidenotes
-lib/content.mjs         frontmatter, slugs, dates, tags, reading time
+lib/content.mjs         frontmatter, slugs, dates, tags, sections, reading time
 lib/templates.mjs       every page shape
 lib/feed.mjs            RSS, sitemap, robots.txt
 posts/                  YYYY-MM-DD-slug.md
 pages/                  standalone pages (about.md -> /about/)
-static/                 copied verbatim: styles.css, theme.js, favicon.svg
+static/                 copied verbatim: styles.css, theme.js, portrait.png, favicon.svg
 ```
 
-Generated for you on every build: the index, one page per post, `/archive/`,
-`/tags/` plus a page per tag, `404.html`, `feed.xml`, `sitemap.xml`,
-`robots.txt`, and `.nojekyll`.
+Generated on every build: the home page, one page per post, one page per
+category, `/archive/`, `/tags/` plus a page per tag, `404.html`, `feed.xml`,
+`sitemap.xml`, `robots.txt`, and `.nojekyll`.
 
 ## Deploying
 
 `.github/workflows/pages.yml` builds on every push to `main` and publishes
-`dist/` to GitHub Pages. Nothing to configure beyond setting **Settings → Pages
-→ Source** to **GitHub Actions** once.
+`dist/` to GitHub Pages. The only one-time setup is **Settings → Pages → Source
+→ GitHub Actions**.
 
-### Moving to a custom domain or user site
-
-Set `base: ''` in `site.config.mjs` and update `origin`. Every internal link,
-the feed, the sitemap, and the dev server follow from those two fields — there
-are no other hardcoded paths.
+Moving to a custom domain: set `origin` (and `base`, if it lives under a path)
+in `site.config.mjs`. Every internal link, the feed, and the sitemap follow from
+those two fields — nothing else hardcodes a URL.
 
 ## Design notes
 
-Warm paper and ink with a single vermilion accent, in light and dark. Instrument
-Serif for display, Newsreader for text, IBM Plex Mono for labels. Client-side
-JavaScript totals about thirty lines: a theme toggle and a keyboard handler for
-the margin notes. Everything else — the reading-progress bar, the margin-note
-layout, the staggered page load, the theme switch — is CSS.
+Warm paper and ink with a single terracotta accent, in light and dark. Set in
+Alegreya and Alegreya Sans — a humanist superfamily built for long-form reading
+— with IBM Plex Mono for code.
 
-The three posts included are starter content. Delete them.
+The light/dark control is the **Tonon/Tonoff** switch: Tonon means the lights
+are on. It reflects the OS preference until you flick it, then remembers.
+
+Client-side JavaScript totals about forty lines: that switch and a keyboard
+handler for the margin notes. The reading-progress bar, the margin-note layout,
+the staggered page load and the theme itself are all CSS.

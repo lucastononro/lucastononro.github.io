@@ -5,10 +5,14 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { site, u, abs } from './site.config.mjs'
+import { site, u, abs, sectionOf } from './site.config.mjs'
 import { initHighlighter, renderMarkdown } from './lib/markdown.mjs'
-import { loadPosts, groupByTag, tagSlug, parseFrontmatter } from './lib/content.mjs'
-import { homePage, postPage, listPage, prosePage, notFoundPage } from './lib/templates.mjs'
+import {
+  loadPosts, groupByTag, groupBySection, tagSlug, parseFrontmatter,
+} from './lib/content.mjs'
+import {
+  homePage, postPage, listPage, prosePage, notFoundPage, runtime,
+} from './lib/templates.mjs'
 import { rssFeed, sitemap, robots } from './lib/feed.mjs'
 
 const root = path.dirname(fileURLToPath(import.meta.url))
@@ -26,10 +30,13 @@ async function write(relPath, contents) {
 }
 
 async function copyStatic() {
-  const from = path.join(root, 'static')
-  await fs.cp(from, dist, { recursive: true })
+  await fs.cp(path.join(root, 'static'), dist, { recursive: true })
   // Tell GitHub Pages not to run Jekyll over the output.
   await fs.writeFile(path.join(dist, '.nojekyll'), '')
+}
+
+async function readdirSafe(dir) {
+  try { return (await fs.readdir(dir)).sort() } catch { return [] }
 }
 
 async function build() {
@@ -42,23 +49,43 @@ async function build() {
   await initHighlighter()
 
   const posts = await loadPosts(path.join(root, 'posts'))
-  if (!posts.length) throw new Error('no posts found in posts/')
+  const sections = groupBySection(posts)
   const tags = groupByTag(posts)
   const written = []
 
-  written.push(await write('/', homePage(posts, tags)))
+  // The nav only advertises categories that actually have something in them.
+  runtime.nav = [
+    ...sections.map((s) => ({ label: s.title, href: `/${s.slug}/` })),
+    { label: 'About', href: '/about/' },
+    { label: 'Feed', href: '/feed.xml' },
+  ]
+
+  written.push(await write('/', homePage(posts, sections)))
 
   for (const [i, post] of posts.entries()) {
     written.push(await write(post.href, postPage(post, {
       prev: posts[i - 1] || null, // newer
       next: posts[i + 1] || null, // older
+      section: sectionOf(post.section),
+    })))
+  }
+
+  for (const section of sections) {
+    written.push(await write(`/${section.slug}/`, listPage({
+      title: section.title,
+      label: 'Category',
+      intro: section.blurb,
+      posts: section.posts,
+      canonical: abs(`/${section.slug}/`),
     })))
   }
 
   written.push(await write('/archive/', listPage({
     title: 'Archive',
     label: 'Everything',
-    intro: `${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}, newest first.`,
+    intro: posts.length
+      ? `${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}, newest first.`
+      : 'Nothing yet.',
     posts,
     canonical: abs('/archive/'),
   })))
@@ -67,21 +94,23 @@ async function build() {
     written.push(await write(`/tags/${tagSlug(tag)}/`, listPage({
       title: tag,
       label: 'Tag',
-      intro: `${list.length} ${list.length === 1 ? 'entry' : 'entries'} filed under <em>${tag}</em>.`,
+      intro: `${list.length} ${list.length === 1 ? 'entry' : 'entries'} tagged <em>${tag}</em>.`,
       posts: list,
       canonical: abs(`/tags/${tagSlug(tag)}/`),
     })))
   }
 
-  written.push(await write('/tags/', listPage({
-    title: 'Tags',
-    label: 'Index',
-    intro: [...tags.entries()]
-      .map(([t, l]) => `<a class="tag" href="${u(`/tags/${tagSlug(t)}/`)}">${t}<span>${l.length}</span></a>`)
-      .join(' '),
-    posts: [],
-    canonical: abs('/tags/'),
-  })))
+  if (tags.size) {
+    written.push(await write('/tags/', listPage({
+      title: 'Tags',
+      label: 'Index',
+      intro: [...tags.entries()]
+        .map(([t, l]) => `<a class="tag" href="${u(`/tags/${tagSlug(t)}/`)}">${t}<span>${l.length}</span></a>`)
+        .join(' '),
+      posts: [],
+      canonical: abs('/tags/'),
+    })))
+  }
 
   for (const file of await readdirSafe(path.join(root, 'pages'))) {
     if (!file.endsWith('.md')) continue
@@ -108,13 +137,10 @@ async function build() {
   const ms = Number(process.hrtime.bigint() - started) / 1e6
   console.log(
     `\n  ${site.title} → dist/\n` +
-    `  ${posts.length} posts · ${tags.size} tags · ${written.length} pages · ${ms.toFixed(0)} ms\n` +
+    `  ${posts.length} posts · ${sections.length} sections · ${tags.size} tags · ` +
+    `${written.length} pages · ${ms.toFixed(0)} ms\n` +
     `  serving from ${abs('/')}\n`
   )
-}
-
-async function readdirSafe(dir) {
-  try { return (await fs.readdir(dir)).sort() } catch { return [] }
 }
 
 build().catch((err) => {
