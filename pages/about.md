@@ -11,12 +11,12 @@ This is a notebook, not a publication. Things get written here when I have built
 something and worked out why it was worth building. The bar is: *would this have
 saved me a day two months ago?*
 
-Categories are still being shaped. Right now there is one:
+Everything here is a post in one feed; the categories are tags you can filter
+by. The useful one so far is **skill** — a tool I built for coding agents,
+installable, that started as a specific annoyance. The rest are projects with
+videos attached and whatever else turns out to be worth writing down.
 
-- **Skills** — tools I built for coding agents. Each one started as a specific
-  annoyance and each one is installable.
-
-More will appear when there is something to put in them, and not before. An
+More tags will appear when there is something to put in them, and not before. An
 empty category is just a promise.
 
 ## The site
@@ -27,9 +27,9 @@ framework, no build step beyond `node build.mjs`. Markdown in, HTML out.
 
 Syntax highlighting runs at build time with Shiki, so no highlighter ships to
 your browser. Mathematics renders at build time with KaTeX, so equations do not
-reflow after paint. Margin notes are pure CSS. Total client-side JavaScript:
-the Tonon/Tonoff switch and a keyboard handler for the margin notes, about
-forty lines.
+reflow after paint. Margin notes are pure CSS. Videos are click-to-load, so
+nothing is requested from YouTube until you actually press play — which is how
+the no-cookies claim below stays true.
 
 Set in [Alegreya](https://fonts.google.com/specimen/Alegreya) and Alegreya Sans,
 a humanist superfamily designed for long-form reading, with IBM Plex Mono for

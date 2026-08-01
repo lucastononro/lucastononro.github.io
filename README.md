@@ -21,10 +21,9 @@ from the filename; frontmatter can override either.
 ```markdown
 ---
 title: "notify: teaching the agent to shout down the hallway"
-dek: One-sentence standfirst, shown on the index and in the RSS feed.
+dek: One-sentence standfirst, shown in the feed and in the RSS feed.
 date: 2026-05-27
-section: skills
-tags: [claude-code, mcp, skills]
+tags: [skill, claude-code, mcp]
 draft: false
 ---
 
@@ -33,12 +32,16 @@ Body starts here. The first line of the first paragraph is set in small caps.
 
 Set `draft: true` to keep a post out of the build.
 
-### Categories
+### Categories are tags
 
-Sections live in `site.config.mjs`. A post joins one with `section: <slug>`;
-anything without one falls into `defaultSection`. Each section with at least one
-post gets a page at `/<slug>/`, a block on the home page, and a nav slot —
-empty categories are never advertised. Adding one is a config entry plus a post.
+Everything is a post; categories are just tags. `skill` marks the ones with an
+installable repository behind them, and the nav's **Skills** link appears as soon
+as anything carries that tag (`skillTag` in `site.config.mjs`).
+
+The feed's filter bar is built from `featuredTags` — pinned first, in the order
+you list them, then any remaining tags by post count, capped at eight. The chips
+are real links to `/tags/<tag>/`, so filtering works without JavaScript; with it
+they filter the list in place and put the tag in the URL hash.
 
 ### What the markdown supports
 
@@ -48,6 +51,7 @@ empty categories are never advertised. Adding one is a config entry plus a post.
 | `$x^2$` / `$$…$$` | KaTeX, rendered at build time — no client-side math JS |
 | `[^note]` + `[^note]: text` | A margin note, floated into the right gutter on wide screens and collapsible inline on narrow ones |
 | `![caption](img.png)` alone in a paragraph | A `<figure>` with the alt text as its caption |
+| `[caption](youtube url)` alone in a paragraph | A click-to-load video: thumbnail facade now, `youtube-nocookie` iframe once you press play. `?t=490s` is preserved as a start time |
 | `/feed.xml` | Root-relative links get the site's base path applied automatically |
 | `## Heading` | An anchor link plus a margin section number |
 
@@ -56,7 +60,7 @@ Three or more `##` headings in a post generate a table of contents.
 ## Layout
 
 ```
-site.config.mjs         title, author, base path, categories — the only place these live
+site.config.mjs         title, author, base path, featured tags — the only place these live
 build.mjs               the whole build: posts + pages -> dist/
 serve.mjs               dev server, rebuilds on change
 lib/markdown.mjs        marked + KaTeX + Shiki + sidenotes
@@ -68,9 +72,9 @@ pages/                  standalone pages (about.md -> /about/)
 static/                 copied verbatim: styles.css, theme.js, portrait.png, favicon.svg
 ```
 
-Generated on every build: the home page, one page per post, one page per
-category, `/archive/`, `/tags/` plus a page per tag, `404.html`, `feed.xml`,
-`sitemap.xml`, `robots.txt`, and `.nojekyll`.
+Generated on every build: the home page, one page per post, `/feed/`, `/tags/`
+plus a page per tag, `404.html`, `feed.xml`, `sitemap.xml`, `robots.txt`, and
+`.nojekyll`.
 
 ## Deploying
 
@@ -91,6 +95,7 @@ Alegreya and Alegreya Sans — a humanist superfamily built for long-form readin
 The light/dark control is the **Tonon/Tonoff** switch: Tonon means the lights
 are on. It reflects the OS preference until you flick it, then remembers.
 
-Client-side JavaScript totals about forty lines: that switch and a keyboard
-handler for the margin notes. The reading-progress bar, the margin-note layout,
-the staggered page load and the theme itself are all CSS.
+Client-side JavaScript does three things and nothing else: the switch, the feed
+filter, and swapping a video facade for an iframe when you press play. The
+reading-progress bar, the margin-note layout, the staggered page load and the
+theme itself are all CSS.

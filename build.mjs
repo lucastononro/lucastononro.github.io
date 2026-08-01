@@ -5,11 +5,9 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { site, u, abs, sectionOf } from './site.config.mjs'
+import { site, u, abs, orderedTags } from './site.config.mjs'
 import { initHighlighter, renderMarkdown } from './lib/markdown.mjs'
-import {
-  loadPosts, groupByTag, groupBySection, tagSlug, parseFrontmatter,
-} from './lib/content.mjs'
+import { loadPosts, groupByTag, tagSlug, parseFrontmatter } from './lib/content.mjs'
 import {
   homePage, postPage, listPage, prosePage, notFoundPage, runtime,
 } from './lib/templates.mjs'
@@ -49,45 +47,38 @@ async function build() {
   await initHighlighter()
 
   const posts = await loadPosts(path.join(root, 'posts'))
-  const sections = groupBySection(posts)
   const tags = groupByTag(posts)
+  const chips = orderedTags(tags)
+  const filters = { tagMap: tags, chips }
   const written = []
 
-  // The nav only advertises categories that actually have something in them.
+  // The nav only advertises a Skills link once something is tagged as one.
   runtime.nav = [
-    ...sections.map((s) => ({ label: s.title, href: `/${s.slug}/` })),
+    { label: 'Feed', href: '/feed/' },
+    ...(tags.has(site.skillTag) ? [{ label: 'Skills', href: `/tags/${tagSlug(site.skillTag)}/` }] : []),
     { label: 'About', href: '/about/' },
-    { label: 'Feed', href: '/feed.xml' },
+    { label: 'RSS', href: '/feed.xml' },
   ]
 
-  written.push(await write('/', homePage(posts, sections)))
+  written.push(await write('/', homePage(posts, tags, chips)))
 
   for (const [i, post] of posts.entries()) {
     written.push(await write(post.href, postPage(post, {
       prev: posts[i - 1] || null, // newer
       next: posts[i + 1] || null, // older
-      section: sectionOf(post.section),
+      kicker: post.tags.find((t) => site.featuredTags.includes(t)) || post.tags[0] || '',
     })))
   }
 
-  for (const section of sections) {
-    written.push(await write(`/${section.slug}/`, listPage({
-      title: section.title,
-      label: 'Category',
-      intro: section.blurb,
-      posts: section.posts,
-      canonical: abs(`/${section.slug}/`),
-    })))
-  }
-
-  written.push(await write('/archive/', listPage({
-    title: 'Archive',
+  written.push(await write('/feed/', listPage({
+    title: 'The feed',
     label: 'Everything',
     intro: posts.length
-      ? `${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}, newest first.`
+      ? `${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}, newest first. Filter it, or don't.`
       : 'Nothing yet.',
     posts,
-    canonical: abs('/archive/'),
+    filters: posts.length ? filters : null,
+    canonical: abs('/feed/'),
   })))
 
   for (const [tag, list] of tags) {
@@ -137,7 +128,7 @@ async function build() {
   const ms = Number(process.hrtime.bigint() - started) / 1e6
   console.log(
     `\n  ${site.title} → dist/\n` +
-    `  ${posts.length} posts · ${sections.length} sections · ${tags.size} tags · ` +
+    `  ${posts.length} posts · ${tags.size} tags · ` +
     `${written.length} pages · ${ms.toFixed(0)} ms\n` +
     `  serving from ${abs('/')}\n`
   )

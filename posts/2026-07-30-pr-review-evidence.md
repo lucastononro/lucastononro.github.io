@@ -2,8 +2,7 @@
 title: "pr-review-evidence: a desktop nobody can see"
 dek: “Works on my machine” is not review evidence. So the agent gets its own machine — a real X11 desktop inside a container — and records itself using the feature, cursor and all.
 date: 2026-07-30
-section: skills
-tags: [agents, docker, code-review, skills]
+tags: [skill, agents, docker, code-review]
 ---
 
 A good engineer attaching a PR does two things: describes the change, and shows it working. A screen recording, a couple of annotated screenshots. Agents are decent at the first half and, until recently, structurally incapable of the second — they have no screen.
@@ -29,7 +28,19 @@ evidence-clean.sh                              # container gone, recordings kept
 
 Screenshot, look, move a real cursor with `xdotool`, screenshot again. Meanwhile `ffmpeg x11grab` is recording the actual framebuffer in real time, so the video contains the cursor travelling across the screen and the hover states firing on the way. It looks like a person using the app, because mechanically it is the same thing a person does.
 
+The full verb list is deliberately small — `screenshot`, `mousemove`, `click`, `drag`, `scroll`, `type`, `key`, `launch-browser`, `terminal`, `exec-gui`, `record-start`, `record-stop`, `chapter`. That is the entire interface. Anything you can do with a mouse and a keyboard is expressible; nothing else is.
+
 There is **no Playwright anywhere in the capture path**, which is the whole point. A browser automation library can only give you evidence about a browser. This gives you evidence about *any GUI application* — an Electron app, a native window, a terminal session via `terminal`, or whatever you launch with `exec-gui`. The container ships node and python3 too, so you can run the app inside it instead of on the host.[^host]
+
+My favourite line in the whole repo is a comment in the Dockerfile, because it heads off exactly the objection you are forming:
+
+```dockerfile
+# The base image is used ONLY for its preinstalled Chromium and system
+# libraries — nothing here drives Playwright; input is 100% xdotool.
+FROM mcr.microsoft.com/playwright:v1.55.0-noble
+```
+
+Microsoft's Playwright image is the most convenient way to get every browser system dependency in one layer. On top of it go the things that actually do the work: `ffmpeg`, `xvfb`, `openbox`, `x11vnc`, `novnc`, `websockify`, `xdotool`, `scrot`, `xterm`, `zenity`. Ports 5900 and 6080 for VNC and noVNC. That is the machine.
 
 [^host]: `host.docker.internal` is how the container reaches a dev server on your machine. That works out of the box on Docker Desktop; on Linux the script adds the mapping itself.
 
@@ -56,7 +67,9 @@ This one is not a Claude Code plugin. It is an [Agent Skill](https://agentskills
 ./install.sh --global   # every repo: ~/.claude, ~/.agents, ~/.codex, ~/.kimi-code
 ```
 
-Claude Code, Codex, Kimi Code, Gemini CLI, Cursor, Amp, OpenCode. Seven scripts and a `lib.sh`, about five hundred lines of bash in total. The skill has no idea which agent is calling it, which is the correct amount of coupling.
+Claude Code, Codex, Kimi Code, Gemini CLI, Cursor, Amp, OpenCode. Six scripts and a `lib.sh`, about five hundred and forty lines of bash in total. The skill has no idea which agent is calling it, which is the correct amount of coupling. There is also a `references/recording-playbook.md` — advice on pacing, what to record and what to skip — because an agent that can drive a desktop still needs to be told that nobody wants to watch it type a URL character by character.
+
+The repo ships three example apps under `examples/` (a plain web page, a launch checklist, a small React task tracker) purely so you can try the loop against something before pointing it at your own dev server.
 
 ---
 

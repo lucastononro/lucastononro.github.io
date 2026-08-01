@@ -384,32 +384,35 @@ main { padding: 0 clamp(1.2rem, 5vw, 3.5rem); }
 /* ------------------------------------------------------------ portrait ---- */
 
 .portrait {
-  margin: 0;
-  max-width: 23rem;
+  margin: 0 auto;
+  max-width: 20rem;
   animation: rise 1s var(--ease) 0.3s backwards;
 }
-.portrait-plate {
-  padding: 0.7rem;
-  background: var(--paper-lift);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  box-shadow: var(--shadow);
-}
-.portrait img {
+.portrait-img {
   width: 100%;
+  /* Without this, the width/height attributes win and the circle turns oval. */
+  height: auto;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 2px;
-  filter: saturate(0.94) contrast(1.02);
+  border-radius: 50%;
+  background: var(--paper-sunk);
+  /* A ring rather than a frame — the GitHub avatar treatment. */
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 0 0 0.55rem var(--paper-lift),
+    0 0 0 calc(0.55rem + 1px) var(--rule),
+    var(--shadow);
+  filter: saturate(0.95) contrast(1.02);
 }
 .portrait figcaption {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.85rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  margin-top: 1.6rem;
   font-family: var(--sans);
-  font-size: 0.86rem;
+  font-size: 0.9rem;
+  text-align: center;
   color: var(--ink-3);
 }
 .portrait figcaption b {
@@ -433,11 +436,63 @@ main { padding: 0 clamp(1.2rem, 5vw, 3.5rem); }
   text-wrap: pretty;
 }
 
+/* ------------------------------------------------------------- filters ---- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.24rem 0.68rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--ink-2);
+  background: var(--paper-lift);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.3s var(--ease);
+}
+.filter-chip span { font-size: 0.78rem; color: var(--ink-3); }
+.filter-chip:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+.filter-chip[aria-current="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+  font-weight: 700;
+}
+.filter-chip[aria-current="true"] span { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+
+.filter-count {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--ink-3);
+  margin-left: auto;
+}
+
+/* ------------------------------------------------------------ featured ---- */
+
 .feature-card {
   border-top: 2px solid var(--ink);
   padding-top: 1.5rem;
 }
 .feature-card > * { max-width: 52rem; }
+
+/* The newest entry in the feed gets a little extra presence. */
+.entries-lead > .entry:first-child .entry-title { font-size: 1.85rem; }
+.entries-lead > .entry:first-child .entry-dek { font-size: 1.08rem; color: var(--ink-2); }
+.entries-lead > .entry:first-child .entry-link { padding-top: 1.4rem; padding-bottom: 1.4rem; }
 .feature-meta {
   display: flex;
   align-items: baseline;
@@ -865,6 +920,94 @@ figcaption {
   color: var(--ink-3);
 }
 
+/* --------------------------------------------------------------- video ---- */
+
+.video { margin: 2.4em 0; }
+.video-embed {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: border-color 0.25s, transform 0.4s var(--ease);
+  /* Designed placeholder: if the YouTube thumbnail is blocked or missing, this
+     is what you see, and it should look intentional rather than broken. */
+  background:
+    radial-gradient(120% 120% at 20% 0%, var(--accent-soft), transparent 62%),
+    linear-gradient(160deg, var(--paper-lift), var(--paper-sunk));
+}
+.video-embed img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  display: block;
+  transition: filter 0.4s;
+}
+
+/* Only shown when there is no thumbnail to show. */
+.video-label {
+  position: absolute;
+  left: 1.1rem;
+  right: 1.1rem;
+  bottom: 1rem;
+  font-family: var(--sans);
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: left;
+  color: var(--ink-2);
+  display: none;
+}
+.video-embed:not(:has(img)) .video-label { display: block; }
+.video-embed:hover { border-color: var(--accent); transform: translateY(-2px); }
+.video-embed:hover img { filter: brightness(1.06); }
+
+/* A play button, drawn rather than downloaded. */
+.video-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.video-play::before {
+  content: "";
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 92%, transparent);
+  box-shadow: 0 6px 24px -6px rgba(0, 0, 0, 0.6);
+  transition: transform 0.35s var(--ease), background 0.25s;
+}
+.video-play::after {
+  content: "";
+  position: absolute;
+  border-style: solid;
+  border-width: 0.72rem 0 0.72rem 1.18rem;
+  border-color: transparent transparent transparent #fff;
+  transform: translateX(0.16rem);
+}
+.video-embed:hover .video-play::before { transform: scale(1.09); }
+
+.video-frame {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: #000;
+}
+.video-link { white-space: nowrap; }
+.post-body .video figcaption { margin-top: 0.7rem; }
+
 /* ---------------------------------------------------------------- code ---- */
 
 code, kbd, samp { font-family: var(--mono); }
@@ -1154,8 +1297,9 @@ a.pager-item:hover .pager-title { color: var(--accent); }
 }
 
 @media (max-width: 64rem) {
-  .hero { grid-template-columns: 1fr; gap: 2.5rem; }
-  .portrait { order: -1; max-width: 17rem; }
+  .hero { grid-template-columns: 1fr; gap: 3rem; justify-items: start; }
+  .portrait { order: -1; max-width: 13rem; margin: 0; }
+  .portrait figcaption { align-items: flex-start; text-align: left; margin-top: 1.4rem; }
 }
 
 @media (max-width: 44rem) {

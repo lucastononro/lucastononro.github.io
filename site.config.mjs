@@ -29,26 +29,15 @@ export const site = {
   launchYear: 2026,
 
   /**
-   * Categories. A post picks one with `section: <slug>` in its frontmatter;
-   * anything without one lands in `defaultSection`. Each section that has at
-   * least one post gets a page at /<slug>/ and a slot in the nav — so adding a
-   * category is one entry here plus a post.
+   * Categories are just tags. Every post is a post; `skill` marks the ones
+   * with an installable repository behind them. These tags get pinned to the
+   * front of the feed's filter bar, in this order — anything else follows by
+   * post count. Reorder freely; a tag nobody uses is skipped.
    */
-  sections: [
-    {
-      slug: 'skills',
-      title: 'Skills',
-      blurb:
-        'Things I built for coding agents, and why each one exists. All of ' +
-        'them are installable, and all of them started as a specific annoyance.',
-    },
-    {
-      slug: 'notes',
-      title: 'Notes',
-      blurb: 'Shorter things that did not need a repository.',
-    },
-  ],
-  defaultSection: 'notes',
+  featuredTags: ['skill', 'project', 'agents', 'claude-code'],
+
+  /** Which tag the "Skills" nav link points at. */
+  skillTag: 'skill',
 }
 
 /** Join a site-relative path onto the base path. */
@@ -62,6 +51,12 @@ export function abs(path = '/') {
   return `${site.origin}${u(path)}`
 }
 
-export function sectionOf(slug) {
-  return site.sections.find((s) => s.slug === slug)
+/**
+ * Filter-bar order: pinned tags first (only the ones in use), then whatever
+ * is left, most-used first.
+ */
+export function orderedTags(tagMap) {
+  const pinned = site.featuredTags.filter((t) => tagMap.has(t))
+  const rest = [...tagMap.keys()].filter((t) => !pinned.includes(t))
+  return [...pinned, ...rest].slice(0, 8)
 }
