@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" role="img"
+     aria-label="Six rows of one file's unified diff, each labelled with three coordinates. The @@ hunk header is position 1 with no old_line and no new_line; context rows carry both; add rows carry only a new_line; delete rows carry only an old_line. Position increments on every row, counts the header, and resets in the next file. Below, the pill author emits start_line 2, end_line 4 and side RIGHT using post-change numbers only, and the build step matches new_line for RIGHT or old_line for LEFT to recover the position.">
+  <!-- Hand-drawn on purpose: wobbly paths, not rects. Colours come from the
+       page via the dg-* classes so the drawing follows the theme. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <text class="dg-note" x="22" y="34">one file's diff, from the first @@</text>
+    <text class="dg-note" x="336" y="34">three coordinates, one physical line</text>
+
+    <!-- column headers -->
+    <text class="dg-note" x="336" y="52">old_line</text>
+    <text class="dg-note" x="430" y="52">new_line</text>
+    <text class="dg-note" x="524" y="52">position</text>
+
+    <!-- column dividers -->
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M412 46 Q409 140 413 234"/>
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M506 46 Q509 140 505 234"/>
+
+    <!-- the diff fragment, one wobbly box with six rows in it -->
+    <path class="dg-fill" d="M24 62 L297 59 Q303 60 302 66 L304 224 Q303 231 296 230 L28 232 Q21 231 22 224 L23 67 Q23 62 24 62 Z"/>
+    <path class="dg-stroke" d="M23 90 Q162 93 302 89"/>
+    <path class="dg-stroke" d="M23 119 Q160 116 303 118"/>
+    <path class="dg-stroke" d="M22 146 Q164 149 302 145"/>
+    <path class="dg-stroke" d="M23 175 Q158 172 303 174"/>
+    <path class="dg-stroke" d="M22 202 Q162 205 303 201"/>
+
+    <text class="dg-text" x="36" y="81">@@ -1,5 +1,10 @@</text>
+    <text class="dg-note" x="196" y="81">hunk</text>
+    <text class="dg-note" x="350" y="81">—</text>
+    <text class="dg-note" x="444" y="81">—</text>
+    <text class="dg-text" x="544" y="81">1</text>
+
+    <text class="dg-text" x="36" y="109">foo</text>
+    <text class="dg-note" x="196" y="109">context</text>
+    <text class="dg-text" x="356" y="109">1</text>
+    <text class="dg-text" x="450" y="109">1</text>
+    <text class="dg-text" x="544" y="109">2</text>
+
+    <text class="dg-text" x="36" y="137">+bar</text>
+    <text class="dg-note" x="196" y="137">add</text>
+    <text class="dg-note" x="350" y="137">—</text>
+    <text class="dg-text" x="450" y="137">2</text>
+    <text class="dg-text" x="544" y="137">3</text>
+
+    <text class="dg-text" x="36" y="165">-baz</text>
+    <text class="dg-note" x="196" y="165">del</text>
+    <text class="dg-text" x="356" y="165">2</text>
+    <text class="dg-note" x="444" y="165">—</text>
+    <text class="dg-text" x="544" y="165">4</text>
+
+    <text class="dg-text" x="36" y="193">qux</text>
+    <text class="dg-note" x="196" y="193">context</text>
+    <text class="dg-text" x="356" y="193">3</text>
+    <text class="dg-text" x="450" y="193">3</text>
+    <text class="dg-text" x="544" y="193">5</text>
+
+    <text class="dg-text" x="36" y="221">+quux</text>
+    <text class="dg-note" x="196" y="221">add</text>
+    <text class="dg-note" x="350" y="221">—</text>
+    <text class="dg-text" x="450" y="221">4</text>
+    <text class="dg-text" x="544" y="221">6</text>
+
+    <!-- what makes position different -->
+    <text class="dg-note" x="604" y="54">counts the @@ row too</text>
+    <text class="dg-note" x="604" y="72">resets each file</text>
+    <path class="dg-accent" stroke-dasharray="5 6" d="M598 58 Q588 62 580 55"/>
+    <path class="dg-accent" d="M580 55 l9 -4 m-9 4 l9 5"/>
+
+    <!-- what the pill author is allowed to say -->
+    <path class="dg-fill" d="M338 246 L697 243 Q703 244 702 250 L704 312 Q703 319 696 318 L342 320 Q335 319 336 312 L337 251 Q337 246 338 246 Z"/>
+    <text class="dg-text" x="352" y="270">the pill author emits</text>
+    <text class="dg-note" x="352" y="290">start_line 2 · end_line 4 · side RIGHT</text>
+    <text class="dg-note" x="352" y="308">post-change numbers only</text>
+
+    <!-- RIGHT: match new_line on a context-or-add row -->
+    <path class="dg-accent" d="M470 244 Q460 236 456 229"/>
+    <path class="dg-accent" d="M456 229 l-3 10 m3 -10 l7 7"/>
+    <text class="dg-note" x="478" y="240">RIGHT matches new_line</text>
+
+    <!-- LEFT does the same against old_line -->
+    <path class="dg-accent" stroke-dasharray="5 6" d="M356 244 Q314 212 316 180 Q319 166 336 163"/>
+    <path class="dg-accent" d="M336 163 l-9 -3 m9 3 l-8 6"/>
+    <text class="dg-note" x="196" y="250">LEFT matches old_line</text>
+
+    <!-- and the matched row hands back its position -->
+    <path class="dg-accent" d="M464 215 Q496 220 530 215"/>
+    <path class="dg-accent" d="M530 215 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="562" y="196">resolved at build time</text>
+    <text class="dg-note" x="562" y="214">unmatched anchors dropped</text>
+  </g>
+</svg>

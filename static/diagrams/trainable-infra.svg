@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img"
+     aria-label="Infrastructure path: browser to FastAPI with SSE streaming back, code dispatched into a Modal sandbox, session workspace on a Modal Volume, artifacts mirrored to S3, metadata in Postgres">
+  <!-- Hand-drawn on purpose: every box is a wobbly path, not a rect, and every
+       edge overshoots slightly. Colours come from the page via CSS classes. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- browser -->
+    <path class="dg-fill" d="M23 42 L152 39 Q158 40 157 46 L159 89 Q158 96 151 95 L27 97 Q20 96 21 89 L22 47 Q22 42 23 42 Z"/>
+    <text class="dg-text" x="43" y="63">browser</text>
+    <text class="dg-note" x="43" y="80">Next.js studio</text>
+
+    <!-- backend -->
+    <path class="dg-fill" d="M237 41 L366 38 Q372 39 371 45 L373 88 Q372 95 365 94 L241 96 Q234 95 235 88 L236 46 Q236 41 237 41 Z"/>
+    <text class="dg-text" x="257" y="62">FastAPI</text>
+    <text class="dg-note" x="257" y="79">broadcaster + routers</text>
+
+    <!-- sandbox -->
+    <path class="dg-fill" d="M449 43 L578 40 Q584 41 583 47 L585 90 Q584 97 577 96 L453 98 Q446 97 447 90 L448 48 Q448 43 449 43 Z"/>
+    <text class="dg-text" x="469" y="64">Modal Sandbox</text>
+    <text class="dg-note" x="469" y="81">600s per call</text>
+
+    <!-- database -->
+    <path class="dg-fill" d="M237 185 L366 182 Q372 183 371 189 L373 232 Q372 239 365 238 L241 240 Q234 239 235 232 L236 190 Q236 185 237 185 Z"/>
+    <text class="dg-text" x="257" y="206">Postgres</text>
+    <text class="dg-note" x="257" y="223">metrics, artifacts</text>
+
+    <!-- volume -->
+    <path class="dg-fill" d="M449 184 L578 182 Q584 183 583 189 L585 233 Q584 240 577 239 L453 241 Q446 240 447 233 L448 190 Q448 185 449 184 Z"/>
+    <text class="dg-text" x="469" y="206">Modal Volume</text>
+    <text class="dg-note" x="469" y="223">/data/sessions/{id}</text>
+
+    <!-- object store -->
+    <path class="dg-fill" d="M621 185 L734 182 Q740 183 739 189 L741 232 Q740 239 733 238 L625 240 Q618 239 619 232 L620 190 Q620 185 621 185 Z"/>
+    <text class="dg-text" x="641" y="206">S3 / MinIO</text>
+    <text class="dg-note" x="641" y="223">browsable copy</text>
+
+    <!-- browser to backend, and the SSE stream back -->
+    <path class="dg-accent" d="M163 74 Q199 80 231 74"/>
+    <path class="dg-accent" d="M231 74 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" stroke-dasharray="5 6" d="M231 55 Q197 49 165 55"/>
+    <path class="dg-accent" d="M165 55 l9 -4 m-9 4 l9 5"/>
+    <text class="dg-note" x="182" y="36">SSE</text>
+
+    <!-- backend dispatches code; stdout comes back as a stream -->
+    <path class="dg-accent" d="M375 57 Q411 51 443 57"/>
+    <path class="dg-accent" d="M443 57 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="386" y="30">execute_code</text>
+
+    <path class="dg-accent" stroke-dasharray="5 6" d="M443 80 Q409 87 377 80"/>
+    <path class="dg-accent" d="M377 80 l9 -4 m-9 4 l9 5"/>
+    <text class="dg-note" x="376" y="120">stdout: metrics, charts, new files</text>
+
+    <!-- backend writes rows -->
+    <path class="dg-accent" d="M300 98 Q296 138 301 176"/>
+    <path class="dg-accent" d="M301 176 l-5 -9 m5 9 l5 -9"/>
+    <text class="dg-note" x="196" y="146">rows, never files</text>
+
+    <!-- sandbox mounts the volume -->
+    <path class="dg-accent" d="M512 99 Q508 139 513 177"/>
+    <path class="dg-accent" d="M513 177 l-5 -9 m5 9 l5 -9"/>
+    <text class="dg-note" x="521" y="145">mounted at /data</text>
+
+    <!-- workspace mirrored out -->
+    <path class="dg-accent" d="M587 209 Q603 215 615 209"/>
+    <path class="dg-accent" d="M615 209 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="472" y="270">s3_sync mirrors the finished workspace</text>
+
+    <text class="dg-note" x="22" y="298">Solid = a request. Dashed = a stream. The sandbox mounts the volume; S3 is the copy you can browse.</text>
+  </g>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" role="img"
+     aria-label="The public sound name sosumi maps to the semantic category blocked, which each platform resolves its own way: macOS plays /System/Library/Sounds/Sosumi.aiff with afplay, keyed by the name rather than the category; Linux asks canberra for the dialog-warning event, else plays dialog-warning.oga; Windows tries %WINDIR%\Media\Windows Exclamation.wav, else falls back to MessageBeep with MB_ICONEXCLAMATION. When nothing resolves the tool returns a descriptive string instead of raising.">
+  <!-- Hand-drawn on purpose: wobbly paths, not rects. Colours come from the
+       page via the dg-* classes so the drawing follows the theme. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- the public name -->
+    <path class="dg-fill" d="M26 120 L159 117 Q165 118 164 124 L166 170 Q165 177 158 176 L30 178 Q23 177 24 170 L25 125 Q25 120 26 120 Z"/>
+    <text class="dg-text" x="44" y="146">sosumi</text>
+    <text class="dg-note" x="44" y="166">1 of 14 names</text>
+
+    <!-- the semantic category -->
+    <path class="dg-fill" d="M218 120 L369 117 Q375 118 374 124 L376 170 Q375 177 368 176 L222 178 Q215 177 216 170 L217 125 Q217 120 218 120 Z"/>
+    <text class="dg-text" x="236" y="146">blocked</text>
+    <text class="dg-note" x="236" y="166">1 of 7 categories</text>
+
+    <!-- macOS: straight off the name -->
+    <path class="dg-fill" d="M428 34 L739 31 Q745 32 744 38 L746 84 Q745 91 738 90 L432 92 Q425 91 426 84 L427 39 Q427 34 428 34 Z"/>
+    <text class="dg-text" x="446" y="58">macOS</text>
+    <text class="dg-note" x="446" y="78">afplay /System/Library/Sounds/Sosumi.aiff</text>
+
+    <!-- Linux: freedesktop theme by category -->
+    <path class="dg-fill" d="M428 106 L739 103 Q745 104 744 110 L746 170 Q745 177 738 176 L432 178 Q425 177 426 170 L427 111 Q427 106 428 106 Z"/>
+    <text class="dg-text" x="446" y="130">Linux</text>
+    <text class="dg-note" x="446" y="150">canberra event: dialog-warning</text>
+    <text class="dg-note" x="446" y="168">else dialog-warning.oga via paplay</text>
+
+    <!-- Windows: a candidate list, then a beep flag -->
+    <path class="dg-fill" d="M428 192 L739 189 Q745 190 744 196 L746 256 Q745 263 738 262 L432 264 Q425 263 426 256 L427 197 Q427 192 428 192 Z"/>
+    <text class="dg-text" x="446" y="216">Windows</text>
+    <text class="dg-note" x="446" y="236">%WINDIR%\Media\Windows Exclamation.wav</text>
+    <text class="dg-note" x="446" y="254">else MessageBeep MB_ICONEXCLAMATION</text>
+
+    <!-- hop 1: name to category -->
+    <path class="dg-accent" d="M166 148 Q192 153 214 148"/>
+    <path class="dg-accent" d="M214 148 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="174" y="138">hop 1</text>
+
+    <!-- macOS skips the category entirely -->
+    <path class="dg-accent" d="M104 118 Q104 66 160 62 Q288 56 416 61"/>
+    <path class="dg-accent" d="M416 61 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="180" y="46">MAC_SOUNDS is keyed by name</text>
+
+    <!-- hop 2: category to whatever the local system calls it -->
+    <path class="dg-accent" d="M376 146 Q398 150 420 142"/>
+    <path class="dg-accent" d="M420 142 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="380" y="134">hop 2</text>
+
+    <path class="dg-accent" d="M350 178 Q378 200 418 222"/>
+    <path class="dg-accent" d="M418 222 l-5 -9 m5 9 l-10 0"/>
+
+    <!-- the guard, when every candidate misses -->
+    <path class="dg-fill" d="M26 202 L353 199 Q359 200 358 206 L360 268 Q359 275 352 274 L30 276 Q23 275 24 268 L25 207 Q25 202 26 202 Z"/>
+    <text class="dg-text" x="44" y="226">nothing resolves</text>
+    <text class="dg-note" x="44" y="246">a descriptive string, not an exception</text>
+    <text class="dg-note" x="44" y="264">Could not play sound 'sosumi' …</text>
+
+    <path class="dg-accent" stroke-dasharray="5 6" d="M424 250 Q394 256 364 250"/>
+    <path class="dg-accent" d="M364 250 l9 -4 m-9 4 l9 5"/>
+  </g>
+</svg>

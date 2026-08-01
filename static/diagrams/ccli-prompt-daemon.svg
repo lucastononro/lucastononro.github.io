@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" role="img"
+     aria-label="Round trip: Cmd+K, zsh widget, unix socket, warm daemon, Anthropic API, command lands in BUFFER unexecuted, human presses Enter">
+  <!-- Hand-drawn on purpose: every box is a wobbly path, not a rect, and every
+       edge overshoots slightly. Colours come from the page via CSS classes. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- keystroke -->
+    <path class="dg-fill" d="M22 40 L152 37 Q158 38 157 44 L159 88 Q158 95 151 94 L26 96 Q19 95 20 88 L21 45 Q21 40 22 40 Z"/>
+    <text class="dg-text" x="42" y="62">Cmd+K</text>
+    <text class="dg-note" x="42" y="79">or Esc then K</text>
+
+    <!-- widget -->
+    <path class="dg-fill" d="M232 38 L344 36 Q350 37 349 43 L351 87 Q350 94 343 93 L236 95 Q229 94 230 87 L231 44 Q231 39 232 38 Z"/>
+    <text class="dg-text" x="244" y="62">zle widget</text>
+    <text class="dg-note" x="244" y="79">reads your ask</text>
+
+    <!-- socket -->
+    <path class="dg-fill" d="M424 39 L556 37 Q562 38 561 44 L563 88 Q562 95 555 94 L428 96 Q421 95 422 88 L423 45 Q423 40 424 39 Z"/>
+    <text class="dg-text" x="444" y="62">unix socket</text>
+    <text class="dg-note" x="444" y="79">0600, your user</text>
+
+    <!-- daemon -->
+    <path class="dg-fill" d="M624 38 L736 36 Q742 37 741 43 L743 87 Q742 94 735 93 L628 95 Q621 94 622 87 L623 44 Q623 39 624 38 Z"/>
+    <text class="dg-text" x="644" y="62">daemon</text>
+    <text class="dg-note" x="644" y="79">warm HTTPS</text>
+
+    <!-- api -->
+    <path class="dg-fill" d="M576 176 L736 174 Q742 175 741 181 L743 225 Q742 232 735 231 L580 233 Q573 232 574 225 L575 182 Q575 177 576 176 Z"/>
+    <text class="dg-text" x="594" y="200">/v1/messages</text>
+    <text class="dg-note" x="594" y="217">haiku 4.5</text>
+
+    <!-- buffer -->
+    <path class="dg-fill" d="M302 177 L465 175 Q471 176 470 182 L472 226 Q471 233 464 232 L306 234 Q299 233 300 226 L301 183 Q301 178 302 177 Z"/>
+    <text class="dg-text" x="320" y="200">$BUFFER</text>
+    <text class="dg-note" x="320" y="217">the command, unrun</text>
+
+    <!-- the human -->
+    <path class="dg-fill" d="M24 177 L191 175 Q197 176 196 182 L198 226 Q197 233 190 232 L28 234 Q21 233 22 226 L23 183 Q23 178 24 177 Z"/>
+    <text class="dg-text" x="42" y="200">you press Enter</text>
+    <text class="dg-note" x="42" y="217">the step that runs</text>
+
+    <!-- arrows, drawn with a little sag -->
+    <path class="dg-accent" d="M162 66 Q196 61 224 66"/>
+    <path class="dg-accent" d="M224 66 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M356 66 Q390 71 416 66"/>
+    <path class="dg-accent" d="M416 66 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M567 66 Q592 61 616 66"/>
+    <path class="dg-accent" d="M616 66 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- daemon down to the API -->
+    <path class="dg-accent" d="M682 99 Q692 137 678 170"/>
+    <path class="dg-accent" d="M678 170 l-6 -8 m6 8 l5 -8"/>
+
+    <!-- the answer coming back, right to left -->
+    <path class="dg-accent" stroke-dasharray="5 6" d="M570 204 Q536 211 482 204"/>
+    <path class="dg-accent" d="M482 204 l9 -4 m-9 4 l9 5"/>
+
+    <path class="dg-accent" d="M296 204 Q262 198 208 204"/>
+    <path class="dg-accent" d="M208 204 l9 -4 m-9 4 l9 5"/>
+
+    <text class="dg-note" x="22" y="126">the daemon outlives the keystroke — one warm connection, thirty idle minutes</text>
+    <text class="dg-note" x="300" y="256">errors come back as # … and print above the prompt</text>
+    <text class="dg-note" x="22" y="282">everything above only types — pressing Enter is the only thing that runs it</text>
+  </g>
+</svg>

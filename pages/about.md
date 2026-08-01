@@ -7,8 +7,9 @@ description: Who writes this and how the site is built.
 I am **Lucas Tonon** — an AI engineer working on machine learning, data science,
 software engineering and research. I enjoy math and pizza.
 
-A notebook, not a publication. Posts are short on purpose. The bar is: *would
-this have saved me a day two months ago?*
+A notebook, not a publication. Posts run as long as they need to and no longer;
+every claim in them should be traceable to a file in a repository you can clone.
+The bar is: *would this have saved me a day two months ago?*
 
 One feed, four categories, filter as you like. **skill** is a tool I built for
 coding agents. **agents** is a bigger project. **talks** is me on someone else's

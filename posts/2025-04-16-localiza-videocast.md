@@ -13,6 +13,10 @@ No grand thesis came out of it, which I think is the correct outcome. The intere
 
 [Revolução Digital: Como a AI está transformando nosso mundo (in Portuguese)](https://open.spotify.com/episode/5465KG3EKwhkNid5OVFkyw)
 
+## Concrete accounts are scarce
+
+I said no grand thesis came out of it, and I'd hold that up as the point rather than apologise for it. Accounts of what a company actually puts into production with LLMs are harder to come by than accounts of what the technology is supposed to mean, because the specifics are less quotable and they date within a year. Both of those are reasons to say them out loud anyway. Naming the situations and the products also costs something, which is the other argument for doing it: you cannot describe a deployment you only half understand, and the grander register lets you get away with precisely that.
+
 ---
 
 The useful part of these conversations is hearing colleagues describe the same tools from a different seat.

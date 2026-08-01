@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img"
+     aria-label="The agent on the host drives xdotool inside a container, an Xvfb framebuffer is captured by scrot and recorded by ffmpeg, and artifacts land back on the host">
+  <!-- Hand-drawn on purpose: every box is a wobbly path, not a rect, and every
+       edge overshoots slightly. Colours come from the page via CSS classes. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- container boundary: dashed, because nothing crosses it except files -->
+    <path class="dg-stroke" stroke-dasharray="6 7" d="M174 24 L612 21 Q618 22 617 28 L619 274 Q618 282 611 281 L176 283 Q169 282 170 274 L171 29 Q171 24 174 24 Z"/>
+    <text class="dg-note" x="188" y="42">docker container — never on your screen</text>
+
+    <!-- the agent, on the host -->
+    <path class="dg-fill" d="M22 98 L148 95 Q154 96 153 102 L155 146 Q154 153 147 152 L24 154 Q17 153 18 146 L19 103 Q19 98 22 98 Z"/>
+    <text class="dg-text" x="40" y="121">the agent</text>
+    <text class="dg-note" x="40" y="138">on your host</text>
+
+    <!-- input -->
+    <path class="dg-fill" d="M198 60 L322 57 Q328 58 327 64 L329 108 Q328 115 321 114 L200 116 Q193 115 194 108 L195 65 Q195 60 198 60 Z"/>
+    <text class="dg-text" x="214" y="83">xdotool</text>
+    <text class="dg-note" x="214" y="100">moves the cursor</text>
+
+    <!-- the framebuffer itself -->
+    <path class="dg-fill" d="M374 110 L538 107 Q544 108 543 114 L545 164 Q544 171 537 170 L376 172 Q369 171 370 164 L371 115 Q371 110 374 110 Z"/>
+    <text class="dg-text" x="392" y="134">Xvfb :99</text>
+    <text class="dg-note" x="392" y="151">1280x720 framebuffer</text>
+
+    <!-- perception -->
+    <path class="dg-fill" d="M198 202 L322 199 Q328 200 327 206 L329 250 Q328 257 321 256 L200 258 Q193 257 194 250 L195 207 Q195 202 198 202 Z"/>
+    <text class="dg-text" x="214" y="225">scrot</text>
+    <text class="dg-note" x="214" y="242">shots/*.png</text>
+
+    <!-- the recorder -->
+    <path class="dg-fill" d="M402 202 L568 199 Q574 200 573 206 L575 250 Q574 257 567 256 L404 258 Q397 257 398 250 L399 207 Q399 202 402 202 Z"/>
+    <text class="dg-text" x="420" y="225">ffmpeg x11grab</text>
+    <text class="dg-note" x="420" y="242">15 fps, real time</text>
+
+    <!-- artifacts, back on the host -->
+    <path class="dg-fill" d="M634 202 L736 199 Q742 200 741 206 L743 250 Q742 257 735 256 L636 258 Q629 257 630 250 L631 207 Q631 202 634 202 Z"/>
+    <text class="dg-text" x="650" y="225">evidence/</text>
+    <text class="dg-note" x="650" y="242">mp4 · shots</text>
+    <text class="dg-note" x="634" y="276">bind mount</text>
+
+    <!-- arrows, drawn with a little sag -->
+    <path class="dg-accent" d="M157 118 Q178 116 192 88"/>
+    <path class="dg-accent" d="M192 88 l-3 10 m3 -10 l-10 2"/>
+
+    <path class="dg-accent" d="M329 88 Q356 96 368 128"/>
+    <path class="dg-accent" d="M368 128 l-10 -3 m10 3 l-3 -10"/>
+
+    <path class="dg-accent" d="M388 173 Q352 178 318 198"/>
+    <path class="dg-accent" d="M318 198 l6 -8 m-6 8 l10 2"/>
+
+    <!-- the framebuffer is recorded whatever else is happening -->
+    <path class="dg-accent" d="M462 173 Q466 185 462 196"/>
+    <path class="dg-accent" d="M462 196 l-5 -8 m5 8 l5 -8"/>
+    <text class="dg-note" x="474" y="190">records everything</text>
+
+    <path class="dg-accent" d="M577 228 Q600 233 626 228"/>
+    <path class="dg-accent" d="M626 228 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- the look edge: the only thing the agent gets back is a PNG -->
+    <path class="dg-accent" stroke-dasharray="5 6" d="M192 228 Q120 232 86 158"/>
+    <path class="dg-accent" d="M86 158 l8 6 m-8 -6 l-1 10"/>
+
+    <text class="dg-note" x="22" y="306">screenshot → look → move a real cursor → screenshot; the actions themselves print nothing</text>
+  </g>
+</svg>

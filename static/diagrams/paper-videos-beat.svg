@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" role="img"
+     aria-label="Timing diagram: two consecutive narrated beats, each mp3 padded with 0.25s of leading and 0.9s of trailing silence plus a 0.2s segment tail, giving about 1.35 seconds of silence between the end of one beat's speech and the start of the next">
+  <!-- Hand-drawn on purpose: wobbly paths, not rects. Colours come from the
+       page via the dg-* classes so the drawing follows the theme. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- the headline measurement: speech-end to speech-start -->
+    <text class="dg-note" x="252" y="42">≈1.35s of silence = 0.9 + 0.2 + 0.25</text>
+    <path class="dg-accent" stroke-dasharray="5 6" d="M268 52 Q335 57 402 52"/>
+    <path class="dg-accent" d="M268 52 l9 -4 m-9 4 l9 5"/>
+    <path class="dg-accent" d="M402 52 l-9 -4 m9 4 l-9 5"/>
+    <path class="dg-accent" stroke-dasharray="5 6" d="M268 57 Q265 71 268 84"/>
+    <path class="dg-accent" stroke-dasharray="5 6" d="M402 57 Q405 71 402 84"/>
+
+    <!-- beat-001 segment -->
+    <path class="dg-fill" d="M27 88 L366 85 Q372 86 371 92 L373 136 Q372 143 365 142 L31 144 Q24 143 25 136 L26 93 Q26 88 27 88 Z"/>
+    <path class="dg-stroke" d="M58 87 Q55 112 59 142"/>
+    <path class="dg-stroke" d="M268 86 Q271 113 267 143"/>
+    <path class="dg-stroke" d="M336 87 Q333 112 337 142"/>
+    <text class="dg-text" x="82" y="112">narration mp3</text>
+    <text class="dg-note" x="82" y="130">beat-001 · 8–40 words</text>
+
+    <!-- beat-002 segment, butted straight up against it -->
+    <path class="dg-fill" d="M371 87 L707 85 Q713 86 712 92 L714 135 Q713 142 706 141 L375 143 Q368 142 369 135 L370 92 Q370 87 371 87 Z"/>
+    <path class="dg-stroke" d="M402 87 Q399 112 403 141"/>
+    <path class="dg-stroke" d="M612 86 Q615 113 611 142"/>
+    <path class="dg-stroke" d="M680 87 Q677 112 681 141"/>
+    <text class="dg-text" x="426" y="112">narration mp3</text>
+    <text class="dg-note" x="426" y="130">beat-002 · first word 0.25s</text>
+
+    <!-- dimension leaders down to the four padding cells -->
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M42 146 Q40 152 42 158"/>
+    <text class="dg-note" x="22" y="172">0.25s lead</text>
+
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M302 146 Q300 152 302 158"/>
+    <text class="dg-note" x="272" y="172">0.9s trail</text>
+
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M352 146 Q350 168 352 180"/>
+    <text class="dg-note" x="300" y="194">0.2s segment tail</text>
+
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M386 146 Q388 176 386 202"/>
+    <text class="dg-note" x="396" y="206">0.25s lead</text>
+
+    <path class="dg-stroke" stroke-dasharray="5 6" d="M646 146 Q648 152 646 158"/>
+    <text class="dg-note" x="584" y="172">same pads, every beat</text>
+
+    <text class="dg-note" x="24" y="240">narrate.ts pads the mp3 with ffmpeg; every word timestamp shifts +0.25s so captions stay in sync</text>
+    <text class="dg-note" x="24" y="262">durationFrames = ceil((last word end + 0.9 + 0.2) × 30) — beat-001 lands on 214 frames</text>
+  </g>
+</svg>

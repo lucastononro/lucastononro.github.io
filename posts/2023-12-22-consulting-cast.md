@@ -11,6 +11,10 @@ The conversation was about what advanced analytics and AI actually do to strateg
 
 [Consulting Cast — UFRJ (in Portuguese)](https://open.spotify.com/episode/6vX9wZ4sz7IRfiNohFFtol)
 
+## Explaining it without the jargon
+
+The claim I'd make for an hour like this is a small one. I said the conversation wasn't about AI as a technology trend for a slide, and the reason that is hard to hold to is that the slide vocabulary does a lot of load-bearing work in this field. Take it away, in front of students and consultants who will ask what you actually mean, and you find out quickly which parts of the job you understand and which parts you have only heard described. Building the thing does not test that. Being made to explain it does.
+
 ---
 
 Good questions, which is most of what makes a podcast worth listening to. Mine were the easy part.

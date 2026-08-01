@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 318" role="img"
+     aria-label="Loop: voice in, whisper-1, gpt-4 with hand-written function schemas, a switch statement in the browser, a Vue method that moves the interface, the result pushed back into the chat history, and the model asked again">
+  <!-- Hand-drawn on purpose: every box is a wobbly path, not a rect, and every
+       edge overshoots slightly. Colours come from the page via CSS classes. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- voice in -->
+    <path class="dg-fill" d="M22 40 L163 37 Q169 38 168 44 L170 88 Q169 95 162 94 L26 96 Q19 95 20 88 L21 45 Q21 40 22 40 Z"/>
+    <text class="dg-text" x="42" y="62">you, talking</text>
+    <text class="dg-note" x="42" y="79">MediaRecorder</text>
+
+    <!-- transcription -->
+    <path class="dg-fill" d="M240 38 L381 35 Q387 36 386 42 L388 87 Q387 94 380 93 L244 95 Q237 94 238 87 L239 43 Q239 38 240 38 Z"/>
+    <text class="dg-text" x="260" y="62">whisper-1</text>
+    <text class="dg-note" x="260" y="79">/chat/transcribe</text>
+
+    <!-- the model -->
+    <path class="dg-fill" d="M458 39 L619 36 Q625 37 624 43 L626 89 Q625 96 618 95 L462 97 Q455 96 456 89 L457 44 Q457 39 458 39 Z"/>
+    <text class="dg-text" x="478" y="62">gpt-4-32k</text>
+    <text class="dg-note" x="478" y="79">functions=[…]</text>
+
+    <!-- the switch -->
+    <path class="dg-fill" d="M40 176 L207 173 Q213 174 212 180 L214 225 Q213 232 206 231 L44 233 Q37 232 38 225 L39 181 Q39 176 40 176 Z"/>
+    <text class="dg-text" x="60" y="200">switch, 11 cases</text>
+    <text class="dg-note" x="60" y="217">handleFunctionCall</text>
+
+    <!-- the interface moves -->
+    <path class="dg-fill" d="M300 177 L473 174 Q479 175 478 181 L480 227 Q479 234 472 233 L304 235 Q297 234 298 227 L299 182 Q299 177 300 177 Z"/>
+    <text class="dg-text" x="320" y="200">a Vue method</text>
+    <text class="dg-note" x="320" y="217">@action: breadcrumb</text>
+
+    <!-- the result -->
+    <path class="dg-fill" d="M560 176 L735 173 Q741 174 740 180 L742 225 Q741 232 734 231 L564 233 Q557 232 558 225 L559 181 Q559 176 560 176 Z"/>
+    <text class="dg-text" x="580" y="200">role: &quot;function&quot;</text>
+    <text class="dg-note" x="580" y="217">back into history</text>
+
+    <!-- arrows, drawn with a little sag -->
+    <path class="dg-accent" d="M171 66 Q205 61 234 66"/>
+    <path class="dg-accent" d="M234 66 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M389 66 Q423 71 452 66"/>
+    <path class="dg-accent" d="M452 66 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- out of the model, down and left into the browser -->
+    <path class="dg-accent" d="M520 99 Q524 133 400 141 Q225 149 130 170"/>
+    <path class="dg-accent" d="M130 170 l1 -10 m-1 10 l9 -3"/>
+
+    <path class="dg-accent" d="M216 204 Q256 199 294 204"/>
+    <path class="dg-accent" d="M294 204 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M482 204 Q516 209 554 204"/>
+    <path class="dg-accent" d="M554 204 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- and round again -->
+    <path class="dg-accent" stroke-dasharray="5 6" d="M700 172 Q744 130 688 112 Q654 99 626 90"/>
+    <path class="dg-accent" d="M626 90 l10 -1 m-10 1 l8 8"/>
+    <text class="dg-note" x="596" y="148">ask it again</text>
+
+    <text class="dg-note" x="22" y="126">top row: FastAPI — bottom row: one Vue file</text>
+
+    <text class="dg-note" x="22" y="272">The tools are interface actions, not computations, so the loop closes in the browser.</text>
+    <text class="dg-note" x="22" y="294">Breadcrumbs only come back when the model calls get_user_actions.</text>
+  </g>
+</svg>
