@@ -5,9 +5,23 @@ date: 2026-07-29
 tags: [skill]
 ---
 
-A good engineer attaching a PR does two things: describes the change, and shows it working. Agents are fine at the first and structurally incapable of the second — no screen.
+Start with the output, because the output is the argument. This is a pull request on my own repo, and everything under the **Evidence** heading was produced and posted by an agent:
 
-[pr-review-evidence](https://github.com/lucastononro/pr-review-evidence) gives them one. A real X11 desktop in a container, driven computer-use style, recorded while it works. Nothing appears on your monitor. Out comes `evidence.mp4`, `shots/*.png` and a provenance `manifest.json`. Seven bash scripts, 541 lines, and Docker.
+![PR #12's evidence section: the release-asset links the uploader printed, then the stills rendering inline](/images/pr-12-pr-body.jpg)
+
+And this is the video it attached — 72 seconds, three chapters, served here from the same file GitHub is serving there:
+
+[The evidence on PR #12. A real cursor, real keystrokes, a desktop that never existed.](/video/pr-12-evidence.mp4)
+
+Watch the cursor. It travels, it hovers, the badge renders, a filter chip highlights. That is not a screencast of a browser tab; it is a recording of a whole desktop that came into existence for seventy-two seconds inside a container, and it never touched my screen.
+
+## Why this is worth having
+
+A good engineer attaching a PR does two things: describes the change, and shows it working. Agents have always been fine at the first and structurally incapable of the second, for the dull reason that they have no screen. So the second half arrived as prose — *"I verified the modal comes up clean"* — and I either took that on faith or opened the browser and repeated the work myself, which amounts to having had no account of it at all.
+
+[pr-review-evidence](https://github.com/lucastononro/pr-review-evidence) closes that specific gap. It gives an agent a real X11 desktop in a container, lets it drive the thing computer-use style, and records the framebuffer while it works. Out comes `evidence.mp4`, `shots/*.png`, and a `manifest.json` carrying provenance you can check against the repo. Seven bash scripts, 541 lines, and Docker.
+
+The reason this is different from a claim is that the video *is* the check rather than a description of one. Nothing in the loop lets the agent narrate a step it didn't take: `click` and `type` print nothing at all, so the only way it learns what happened is to take another screenshot — the same frame a reviewer ends up looking at. The chapter titles aren't authored either; they're read back out of the log of commands actually sent to the desktop. An agent using this cannot tell you about a click it never looked at.
 
 @diagram(pr-review-evidence-loop) The only thing that crosses back out of the container is files.
 
@@ -139,17 +153,9 @@ I know release assets are the right answer because I shipped the wrong one first
 
 The repo contains three small apps under `examples/` whose only job is to be something to record: `demo-webpage` (a greeting card and a counter), `launch-checklist` (tick items, watch a progress bar fill), and `task-tracker` (a small Vite SPA). Every feature added to them landed as a real PR with evidence attached by the skill, so the examples are readable rather than described — the merged PRs are the documentation.
 
-[PR #12](https://github.com/lucastononro/pr-review-evidence/pull/12) is the one I'd read. It adds priority levels and a filter bar to the task tracker, and its evidence block is exactly what the uploader printed — nothing was tidied by hand:
+[PR #12](https://github.com/lucastononro/pr-review-evidence/pull/12), the one at the top of this post, is the one I'd read in full. Its three chapters were read back out of the action log rather than typed: *"1. Add a normal task, then a HIGH one"*, *"2. NEW: High priority filter"*, *"3. Complete a task, filter Active"*. Three deliberately named stills — `high-badge.png`, `filter-high.png`, `active-filter.png` — and the manifest beside them. The body also names the local session, `evidence/task-priorities-20260730T144730Z/`, which is the branch slug and the UTC stamp doing their job.
 
-![PR #12's evidence section: the release-asset links the uploader emitted, then the stills rendering inline](/images/pr-12-pr-body.jpg)
-
-Three chapters, read back out of the action log rather than typed: *"1. Add a normal task, then a HIGH one"*, *"2. NEW: High priority filter"*, *"3. Complete a task, filter Active"*. Three deliberately named stills — `high-badge.png`, `filter-high.png`, `active-filter.png` — and the manifest beside them. The body also names the local session, `evidence/task-priorities-20260730T144730Z/`, which is the branch slug and the UTC stamp doing their job.
-
-Here is the video from that release, served from this site rather than from GitHub:
-
-[The evidence attached to PR #12. Real cursor, real keystrokes, recorded on a desktop that never existed.](/video/pr-12-evidence.mp4)
-
-Note the discrepancy: the PR body I wrote says "~40s" and the manifest says `"duration_s": 72`. The manifest is the one derived from `ffprobe` on the actual file, and I am the one who guessed. That is the argument for deriving the description from the artefact, made at my own expense.
+One discrepancy in that screenshot is worth pointing at, since it makes the case better than I can: the body says "~40s" and the manifest says `"duration_s": 72`. The manifest was derived with `ffprobe` from the actual file. The "~40s" is me, typing an estimate into a text box. Guess which number I'd trust in a review.
 
 That PR also carries a one-line change to `vite.config.ts` adding `allowedHosts`, because the dev server refused requests with a `host.docker.internal` Host header. It is the container seam biting in the most ordinary way possible, and I like that it's in the diff rather than in a troubleshooting page.
 
@@ -164,11 +170,11 @@ evidence-log.sh e2e-tests npm test
 
 It works inside a visual session, and standalone with no session and no Docker at all — `finalize` then writes `"video": null` with `"capture": {"mode": "logs"}`, and the uploader ships the log files with markdown links beside the stills. Some changes are proved by an exit code, and pretending otherwise would mean recording a video of a terminal.
 
-## The gap tests leave
+## What generalises, and what doesn't
 
-Before this, an agent's account of manual verification was prose. It told me the archive modal came up clean, and I either took its word or opened the browser and repeated the work myself, which amounts to having no account at all. Recording the framebuffer collapses claim and artefact into one object; the video isn't a description of the check, it is the check. The silent commands are what hold that together. `click` and `type` print nothing, so an agent cannot report on a click it never looked at, and the only channel back is a screenshot — the frame a reviewer sees.
+The transferable idea is duller than the desktop, and it is the manifest rather than the video: keep host-checkable provenance apart from self-declared fields instead of averaging them into one blob a reader has to trust wholesale. `source` comes from `git` and `gh` on your machine; `agent` is whatever the harness said about itself. Any tool emitting machine-generated evidence has that same split to make, and most of them quietly don't.
 
-The part that travels is duller than the desktop. Chapters are read back out of the log of what was actually sent, so the caption cannot drift from the event, and the manifest keeps host-checkable provenance apart from self-declared fields rather than averaging them into one blob. Any tool emitting machine-generated evidence has that same split to make. The scope is narrow: a recording shows one path through a UI, and a well-paced one can conceal as much as it proves.
+The honest limits are worth stating too. A recording shows one path through a UI, and a well-paced one can conceal as much as it proves — the playbook's advice about pacing is, read uncharitably, advice on making a demo look good. It tells you the modal opened this once, on this commit, for this agent. That is a great deal more than prose, and considerably less than a test suite.
 
 ## What's left, and the invitation
 
