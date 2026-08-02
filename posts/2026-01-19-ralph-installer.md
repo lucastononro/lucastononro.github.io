@@ -1,5 +1,5 @@
 ---
-title: "ralph-installer: five files and a stopping condition"
+title: "ralph-installer: make a loop anywhere"
 dek: One line of bash runs the loop; the state files around it are the actual work.
 date: 2026-01-19
 tags: [skill]
