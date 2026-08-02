@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img"
+     aria-label="Loop: the same prompt in, one story implemented, checks run, state written to disk, loop back with the prompt unchanged">
+  <!-- Hand-drawn on purpose: every box is a wobbly path, not a rect, and every
+       edge overshoots slightly. Colors come from the page via CSS classes. -->
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">
+
+    <!-- the prompt, unchanged -->
+    <path class="dg-fill" d="M22 37 L152 34 Q158 35 157 41 L159 85 Q158 92 151 91 L26 93 Q19 92 20 85 L21 42 Q21 37 22 37 Z"/>
+    <text class="dg-text" x="42" y="59">prompt.md</text>
+    <text class="dg-note" x="42" y="76">never edited</text>
+
+    <!-- fresh agent -->
+    <path class="dg-fill" d="M232 35 L344 33 Q350 34 349 40 L351 84 Q350 91 343 90 L236 92 Q229 91 230 84 L231 41 Q231 36 232 35 Z"/>
+    <text class="dg-text" x="252" y="59">fresh agent</text>
+    <text class="dg-note" x="252" y="76">one story</text>
+
+    <!-- checks -->
+    <path class="dg-fill" d="M424 36 L556 34 Q562 35 561 41 L563 85 Q562 92 555 91 L428 93 Q421 92 422 85 L423 42 Q423 37 424 36 Z"/>
+    <text class="dg-text" x="444" y="59">typecheck, test</text>
+    <text class="dg-note" x="444" y="76">then commit</text>
+
+    <!-- state on disk -->
+    <path class="dg-fill" d="M226 159 L365 157 Q371 158 370 164 L372 208 Q371 215 364 214 L230 216 Q223 215 224 208 L225 165 Q225 160 226 159 Z"/>
+    <text class="dg-text" x="246" y="183">prd.json</text>
+    <text class="dg-note" x="246" y="200">+ progress.txt</text>
+
+    <!-- stopping condition -->
+    <path class="dg-fill" d="M424 160 L556 158 Q562 159 561 165 L563 209 Q562 216 555 215 L428 217 Q421 216 422 209 L423 166 Q423 161 424 160 Z"/>
+    <text class="dg-text" x="444" y="184">COMPLETE?</text>
+    <text class="dg-note" x="444" y="201">or max iters</text>
+
+    <!-- arrows, drawn with a little sag -->
+    <path class="dg-accent" d="M162 63 Q196 58 222 63"/>
+    <path class="dg-accent" d="M222 63 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M356 63 Q390 68 414 63"/>
+    <path class="dg-accent" d="M414 63 l-9 -4 m9 4 l-9 5"/>
+
+    <!-- checks down and back to the files on disk -->
+    <path class="dg-accent" d="M492 97 Q495 129 400 136 Q330 141 300 151"/>
+    <path class="dg-accent" d="M300 151 l1 -10 m-1 10 l9 -3"/>
+
+    <path class="dg-accent" d="M376 187 Q396 182 414 187"/>
+    <path class="dg-accent" d="M414 187 l-9 -4 m9 4 l-9 5"/>
+
+    <path class="dg-accent" d="M565 187 Q596 192 620 187"/>
+    <path class="dg-accent" d="M620 187 l-9 -4 m9 4 l-9 5"/>
+    <text class="dg-note" x="630" y="192">exit 0</text>
+
+    <!-- loop back with the prompt untouched -->
+    <path class="dg-accent" stroke-dasharray="5 6" d="M488 220 Q488 262 270 264 Q60 266 62 96"/>
+    <path class="dg-accent" d="M62 96 l-5 9 m5 -9 l7 6"/>
+    <text class="dg-note" x="140" y="288">the prompt goes in again byte for byte — only the repo changed</text>
+
+    <text class="dg-note" x="88" y="130">no memory between passes</text>
+  </g>
+</svg>
