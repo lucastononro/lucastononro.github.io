@@ -1,5 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#1d1913"/>
-  <rect x="5" y="10" width="22" height="12" rx="6" fill="none" stroke="#f7f2e8" stroke-width="1.6" opacity="0.5"/>
-  <circle cx="11" cy="16" r="4.2" fill="#b4462a"/>
+  <!-- Transparent background; the track flips with the tab bar's theme. -->
+  <style>
+    .track { stroke: #1d1913; }
+    @media (prefers-color-scheme: dark) { .track { stroke: #efe7d7; } }
+  </style>
+  <rect class="track" x="2.5" y="8.5" width="27" height="15" rx="7.5" fill="none" stroke-width="2.6"/>
+  <circle cx="10" cy="16" r="5.2" fill="#b4462a"/>
 </svg>

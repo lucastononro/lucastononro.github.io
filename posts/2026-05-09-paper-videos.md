@@ -116,6 +116,20 @@ The gallery keeps what didn't survive alongside what did:
 
 ![The home gallery: one card per folder in `videos/`, with duration and beat / block counts. Some carry a gold `✓ rendered` pill; the rest are drafts at `0 beats · 0 blocks`, several still titled `(unknown — will be filled by paper-extractor)`.](/images/paper-videos-gallery.jpg)
 
+## Running it yourself
+
+Two paid accounts and one script. You need a Claude Code login (Pro/Max or API credits — it's the orchestrator *and* the chat backend) and an ElevenLabs key for narration; the free tier covers short demos. Everything else is handled:
+
+```bash
+git clone https://github.com/lucastononro/paper-videos && cd paper-videos
+./install.sh             # idempotent — re-run any time
+claude /login            # once; the claude CLI itself comes from docs.claude.com/claude-code
+$EDITOR .env             # paste ELEVENLABS_API_KEY
+./run.sh                 # editor at localhost:5173
+```
+
+`install.sh` checks Node 20+, installs `uv` and ffmpeg if missing, runs `npm install`, `uv sync` (Manim + Marker + PyMuPDF) and `npx remotion browser ensure`, and puts TinyTeX in user space — the step you'll be tempted to skip with `--quick`, right up until your first equation renders as yellow boxes. Then open the gallery, click **+ New video**, give it an arXiv id or just a topic, and watch the timeline fill in. The only secret in the whole setup is the ElevenLabs key in a gitignored `.env`; Claude Code brings its own OAuth session and arXiv needs nothing.
+
 ## The unit is the design
 
 The beat is not a formatting convention. It's the decision that sets the cost of being wrong, and everything else here is downstream of it. A pipeline whose smallest replaceable piece is a thirty-second monologue has to be right early, so the effort migrates into planning. Make the smallest piece four seconds of audio and one animation, and being wrong forty times is an ordinary afternoon. The partial manifest can truncate at the first unfinished beat only because beats don't depend on each other. A thread can be confined to a crop because beat 87 is something you can name and re-run.
