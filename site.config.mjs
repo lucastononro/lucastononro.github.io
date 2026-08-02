@@ -11,12 +11,15 @@ export const site = {
 
   author: {
     name: 'Lucas Tonon',
-    // Straight from the GitHub profile — edit here, not in the templates.
+    // Edit here, not in the templates.
     bio:
       'AI engineer working on machine learning, data science, software ' +
-      'engineering and research. Enjoys math and pizza.',
+      'engineering and research — currently a researcher in LLMs at Vetto.ai. ' +
+      'Enjoys math and pizza.',
     email: 'tonon@vetto.ai',
     github: 'lucastononro',
+    linkedin: 'lucastononro',
+    x: 'ltononro',
   },
 
   // Where the site lives. `base` is the path prefix — empty for a user site

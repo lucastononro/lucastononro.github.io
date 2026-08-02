@@ -206,6 +206,23 @@ button { font: inherit; color: inherit; }
 }
 .nav a:hover { color: var(--ink); background-size: 100% 1px; }
 
+/* ---------------------------------------------------------- social icons -- */
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-left: 0.2rem;
+}
+.nav-icons a {
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  transition: color 0.2s, transform 0.3s var(--ease);
+}
+.nav-icons a:hover { color: var(--accent); transform: translateY(-1px); }
+.nav-icons svg { width: 1.05rem; height: 1.05rem; }
+
 /* ------------------------------------------------- the Tonon/Tonoff switch -- */
 
 .tonon {
@@ -1418,6 +1435,8 @@ a.pager-item:hover .pager-title { color: var(--accent); }
   body { font-size: 1.12rem; }
   .masthead { gap: 0.7rem; padding: 0.85rem 1.1rem; }
   .nav { gap: 0.85rem; font-size: 0.8rem; }
+  .nav-icons { gap: 0.6rem; margin-left: 0; }
+  .nav-icons svg { width: 0.95rem; height: 0.95rem; }
   .wordmark-text { font-size: 1.2rem; }
   .wordmark-mark { width: 1rem; height: 1rem; }
   .tonon-track { width: 5.3rem; height: 1.7rem; font-size: 0.6rem; letter-spacing: 0.03em; }

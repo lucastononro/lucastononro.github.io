@@ -5,7 +5,8 @@ description: Who writes this and how the site is built.
 ---
 
 I am **Lucas Tonon** — an AI engineer working on machine learning, data science,
-software engineering and research. I enjoy math and pizza.
+software engineering and research. Currently at [Vetto.ai](https://vetto.ai) as
+a researcher in LLMs. I enjoy math and pizza.
 
 A notebook, not a publication. Posts run as long as they need to and no longer;
 every claim in them should be traceable to a file in a repository you can clone.
@@ -39,6 +40,8 @@ cookie banner, because there are no cookies.
 ## Elsewhere
 
 - GitHub — [@lucastononro](https://github.com/lucastononro)
+- LinkedIn — [in/lucastononro](https://www.linkedin.com/in/lucastononro)
+- X — [@ltononro](https://x.com/ltononro)
 - Email — [tonon@vetto.ai](mailto:tonon@vetto.ai)
 
 Corrections and arguments are both welcome, and the second is more useful.
