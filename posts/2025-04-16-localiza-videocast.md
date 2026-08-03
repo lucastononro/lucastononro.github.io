@@ -13,10 +13,6 @@ No grand thesis came out of it. I think that's the correct outcome. The interest
 
 [Revolução Digital: Como a AI está transformando nosso mundo (in Portuguese)](https://open.spotify.com/episode/5465KG3EKwhkNid5OVFkyw)
 
-## Concrete accounts are scarce
-
-No grand thesis is the point, not the apology. Accounts of what a company actually ships with LLMs are much rarer than accounts of what the technology is supposed to mean — the specifics are less quotable, and they date within a year. Both are reasons to say them out loud anyway. Naming the real situations and products also has a useful side effect: you can't describe a deployment you only half understand. The grander register lets you get away with exactly that.
-
 ---
 
 The useful part of these conversations is hearing colleagues describe the same tools from a different seat.
