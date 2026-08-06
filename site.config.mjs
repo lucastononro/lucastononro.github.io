@@ -40,6 +40,27 @@ export const site = {
 
   /** Which category the nav link points at. */
   navCategory: 'skill',
+
+  /**
+   * Comments, by way of giscus. Every thread is a GitHub Discussion in this
+   * same repository, so there is no database, no moderation queue and nothing
+   * to keep running — deleting a comment is deleting a Discussion reply.
+   * Readers need a GitHub account; that is the whole price of admission.
+   *
+   * `enabled: false` takes the box off every post without touching a template.
+   */
+  comments: {
+    enabled: true,
+    repo: 'lucastononro/lucastononro.github.io',
+    repoId: 'R_kgDOTqPBOQ',
+    // An Announcement-type category: only I can open a thread, which is
+    // exactly what a comment section is.
+    category: 'Announcements',
+    categoryId: 'DIC_kwDOTqPBOc4DC0_h',
+    // One discussion per post path, created lazily by the first commenter.
+    mapping: 'pathname',
+    lang: 'en',
+  },
 }
 
 /** Join a site-relative path onto the base path. */

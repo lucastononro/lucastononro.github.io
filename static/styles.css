@@ -1316,6 +1316,34 @@ a.pager-item:hover {
 }
 a.pager-item:hover .pager-title { color: var(--accent); }
 
+/* ------------------------------------------------------------ comments ---- */
+/* The box itself is an iframe styled by giscus-{light,dark}.css; everything
+   here is the frame around it, set to the same measure as the post. */
+
+.comments {
+  max-width: var(--measure);
+  margin: 0 auto clamp(3rem, 7vw, 5rem);
+}
+.comments-note {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink-3);
+  margin: 0.9rem 0 1.8rem;
+  max-width: 32rem;
+}
+.comments-note a { color: var(--ink-2); text-decoration-color: var(--rule); }
+.comments-note a:hover { color: var(--accent); }
+
+/* Hold the space the frame will take, so the footer does not jump when giscus
+   finishes loading. */
+.giscus { min-height: 14rem; }
+.giscus noscript {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink-3);
+}
+
 /* ----------------------------------------------------------------- math --- */
 
 .math-block {

@@ -13,6 +13,9 @@
   const current = () =>
     root.dataset.theme || (systemPrefersDark() ? 'dark' : 'light')
 
+  // Filled in by the comments block below, if this page has one.
+  let paintComments = () => {}
+
   const switches = [...document.querySelectorAll('.tonon')]
   if (switches.length) {
     const sync = () => {
@@ -23,6 +26,7 @@
         sw.setAttribute('aria-label', on ? 'Tonon: lights are on. Switch to dark.'
                                          : 'Tonoff: lights are off. Switch to light.')
       }
+      paintComments()
     }
     sync()
     for (const sw of switches) {
@@ -37,6 +41,53 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (!root.dataset.theme) sync()
     })
+  }
+
+  // -- Comments -------------------------------------------------------------
+  //
+  // giscus lives in an iframe and cannot see the page's CSS, so it gets its own
+  // stylesheet by URL — one per theme, both written by the build. The script is
+  // injected rather than sitting in the HTML so the frame opens in the right
+  // theme rather than flashing the wrong one, and so nothing reaches
+  // giscus.app on pages without a comment section.
+
+  const mount = document.querySelector('[data-giscus]')
+  if (mount) {
+    const { themeLight, themeDark, ...config } = mount.dataset
+    const themeFor = () => (current() === 'dark' ? themeDark : themeLight)
+
+    const script = document.createElement('script')
+    script.src = 'https://giscus.app/client.js'
+    script.crossOrigin = 'anonymous'
+    script.async = true
+    Object.assign(script.dataset, {
+      repo: config.repo,
+      repoId: config.repoId,
+      category: config.category,
+      categoryId: config.categoryId,
+      mapping: config.mapping,
+      lang: config.lang,
+      // Refuse to bind a thread to anything but this exact page.
+      strict: '1',
+      reactionsEnabled: '1',
+      emitMetadata: '0',
+      inputPosition: 'top',
+      theme: themeFor(),
+      // Nothing is fetched until the reader is near the bottom of the post.
+      loading: 'lazy',
+    })
+    mount.appendChild(script)
+
+    // Repaint on every flick of the switch. The frame only exists once giscus
+    // has loaded, so this is a no-op until then — which is fine, because it
+    // opens in the current theme anyway.
+    paintComments = () => {
+      const frame = document.querySelector('iframe.giscus-frame')
+      frame?.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme: themeFor() } } },
+        'https://giscus.app',
+      )
+    }
   }
 
   // -- Feed filter ----------------------------------------------------------
