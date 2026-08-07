@@ -12,6 +12,7 @@ import {
   homePage, postPage, listPage, prosePage, notFoundPage, runtime,
 } from './lib/templates.mjs'
 import { rssFeed, sitemap, robots } from './lib/feed.mjs'
+import { giscusTheme, themes } from './lib/giscus-theme.mjs'
 
 const root = path.dirname(fileURLToPath(import.meta.url))
 const dist = path.join(root, 'dist')
@@ -102,6 +103,12 @@ async function build() {
       html,
       canonical: abs(`/${slug}/`),
     })))
+  }
+
+  if (site.comments?.enabled) {
+    for (const [name, palette] of Object.entries(themes)) {
+      await write(`/giscus-${name}.css`, giscusTheme(palette))
+    }
   }
 
   await write('/404.html', notFoundPage())
