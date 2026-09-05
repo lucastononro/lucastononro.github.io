@@ -1,45 +1,51 @@
 ---
 title: "After the White Rabbit: taking a puzzle deck into 3D"
-dek: A playable Wonderland adventure, built with Codex, Blender and Three.js. The puzzles came first. Making them work in a place you can walk around took the work.
+dek: A browser adventure inspired by Unlock!, built with Codex, Blender and Three.js. How we adapted the puzzles and fixed the models that got in their way.
 date: 2026-09-05
 tags: [agents]
 game: white-rabbit
 ---
 
-I wanted to walk through this game. Follow the rabbit, get lost between appointments, look at an object from another side and have something click. Rooms were fine where the story called for them. Spending the whole adventure in one room wasn't.
+I wanted a version of this game I could walk around in. Follow the rabbit through Wonderland, explore between puzzles and get close enough to inspect a clue. A room was fine when it fit the story. I just didn't want the whole thing stuck in one.
 
-The starting point was *Unlock! Heroic Adventures: In Pursuit of the White Rabbit* and its [French solution booklet](https://www.nos-jeux-de-societe.fr/wp-content/uploads/2023/08/Solution-Unlock-heroic-adventure-a-la-poursuite-du-lapin-blanc.pdf). That link contains the solutions, so leave it for after playing. I worked with Codex to turn the progression into a first-person browser adventure. The environments, models and interface are original; the puzzle logic follows the game closely. This is an independent fan adaptation, with no affiliation to Space Cowboys.
+## What is Unlock!?
+
+[Unlock!](https://www.spacecowboys-games.com/game/unlock/) is a series of cooperative escape-room card games from Space Cowboys. You play alone or with other people around a table, using a deck and a free companion app. The cards show locations, objects and clues. You look for hidden details, work out which objects belong together and solve puzzles to advance the story. The app checks codes, runs interactive puzzles and gives you hints. It also keeps time, with adventures usually designed for about an hour.
+
+*In Pursuit of the White Rabbit* is one of the three adventures in [Unlock! Heroic Adventures](https://store.asmodee.com/products/unlock-heroic-adventures). It takes Alice through Wonderland and its strange inhabitants. That gave this project both its story and its puzzle progression. I wanted to keep the deductions, then give you a world where you could make them by looking around and handling objects.
+
+I worked with Codex from the [French solution booklet](https://www.nos-jeux-de-societe.fr/wp-content/uploads/2023/08/Solution-Unlock-heroic-adventure-a-la-poursuite-du-lapin-blanc.pdf). Save that link for after playing. It contains the answers. We made original environments, models and an interface for a single-player, first-person browser game. The puzzle logic follows the tabletop adventure closely. This is an independent fan adaptation with no affiliation to Space Cowboys.
 
 ## A place between the puzzles
 
-The hall is an interior because scale is the point there: a table can be out of reach, and a perfectly good door can be too small. Beyond it, the appointments are spread through a wooded valley. There are bridges, a pepper-filled cottage and a tea clearing. The Queen's grounds split into different activities, and the final construction has a place of its own.
+The hall stays indoors because its puzzles depend on scale. A table can be out of reach, and a door can be too small. Beyond it, you follow paths through a wooded valley to the bridges, the pepper-filled cottage and the tea clearing. The Queen's grounds have separate areas to explore before you reach the final construction.
 
-That gave us a useful constraint. Walking should help you notice something, remember a place, or approach a clue. It shouldn't just stretch the time between two input boxes. Small objects are discovered by getting close; an optional Explore menu helps you walk back to landmarks. Your journal keeps the evidence. There is no countdown, and a wrong answer doesn't punish you.
+I wanted a reason to walk somewhere. Small objects become discoverable when you get close, and some clues need a different viewing angle. The Explore menu helps you return to landmarks, while the journal records what you've found. I also wanted time to look around, so this version has no countdown or penalty for a wrong answer.
 
 ## The rabbit had to behave like a rabbit
 
-The first correction I cared about was the rabbit. A bunny bouncing as one solid object gets old quickly. The finished character has separate idle, hop and watch-check animations authored in Blender. The ears move with the head, and the pocket watch stays attached to the paw. He follows a route, stops to check the time and waits when you fall behind.
+The rabbit was one of my first complaints. Bouncing the whole model up and down wasn't enough. We made separate animations in Blender for standing idle, hopping and checking his watch. His ears move with his head, and the pocket watch stays attached to his paw. He follows a route and waits when you fall behind.
 
-It's a stylized character. We weren't trying to pass it off as a real animal. The work was in making the parts belong to one body and making his movement fit the scene. The cook, Hatter and Queen also have small movements, so reaching an appointment feels like finding somebody there.
+The model is stylized, but the movement still has to make sense. Getting the ears and watch to follow the right body parts took attention. The cook, Hatter and Queen also have small animations when you meet them.
 
 ## A correct answer can still be a broken puzzle
 
-The fidelity check caught more than wrong numbers. An early sign diagram practically drew its solution for you. Some journal entries explained the later clock puzzle before you'd had to make the connection. We replaced those shortcuts with shuffled messages, readable clocks and colored arrows that you actually trace.
+When we checked the puzzles against the original, some were giving too much away. An early sign diagram drew most of its own solution. The journal explained the clock puzzle before you had to make the connection. We removed those explanations and revised the clues so you have to compare the messages and clocks yourself. The sign puzzle now asks you to trace its colored arrows.
 
-The geometry was harder. A croquet route could accept the intended sequence while the animated hedgehog rolled straight through an obstacle. We changed the lawn and checked each straight shot against the same geometry used to draw it. A blocked shot now stops where it should.
+The croquet puzzle had a different problem. It accepted the intended sequence even though the hedgehog rolled through an obstacle. We changed the lawn and made the shot checks use the visible geometry. A blocked shot now stops at the obstacle.
 
-The guards exposed another problem: an incidental modeling difference counted as an extra clue. The tart had the opposite issue; the pastry hid part of the crumb outline, so the intended shape was difficult to recognize. We adjusted the uniforms, cut the missing wedge into the pastry and moved the crumbs into view. Even the gardeners needed a better inspection angle because a sign covered their tunic numbers. Those fixes mattered more than another decorative tree.
+The guards were harder to model than they looked. An accidental difference between their uniforms became an extra clue, so we had to check every variation. At the tart, the pastry hid part of the crumb outline you needed to recognize. We cut the missing slice into the model and moved the crumbs into view. A sign also covered the gardeners' tunic numbers. These were small modeling mistakes that made the puzzles unfair.
 
-The final house needed its own pass. Selecting the right list of pieces wasn't enough. You can now place the individual parts, turn the bridges over, remove a mistake and test whether the structure holds. The last readings depend on where you stand.
+For the final house, we replaced a list of selected pieces with a construction you assemble. You place each part, turn the bridges over, remove mistakes and test whether it holds. The last readings depend on where you stand.
 
 ## Keeping the game while changing the medium
 
-Some translations are direct: turn a letter, change your height, compare uniforms, remember what the Queen asked. Others need a replacement for something the cards do. Matching the gardeners becomes a tool chest with matching seals. Recoloring a card header becomes painting the roses in front of you. French sound puzzles have English equivalents.
+Changing your height and comparing uniforms both work in 3D. Other puzzles rely on the cards themselves, so we had to adapt them. Matching the gardeners becomes a tool chest with matching seals. Recoloring a card header becomes painting the roses in front of you. French sound puzzles have English equivalents.
 
-We documented those differences in the [fidelity audit](https://github.com/lucastononro/lucastononro.github.io/blob/main/games/white-rabbit/docs/FIDELITY-AUDIT.md), rather than calling the adaptation an exact copy. That document also contains spoilers.
+The [fidelity audit](https://github.com/lucastononro/lucastononro.github.io/blob/main/games/white-rabbit/docs/FIDELITY-AUDIT.md) records those changes and compares the puzzles with the original. It contains spoilers too.
 
-On a phone, turn it sideways. The left joystick walks; the right pad looks around, with Interact and Explore beside it. Both thumbs can work at once. Puzzle buttons are larger, and the camera leaves room for the panel beside a clue. Phones start with reduced graphics, and progress stays in the current browser.
+On a phone, turn it sideways. Walk with the left joystick and look around with the right pad. Interact and Explore sit beside it, and both thumbs can work at once. Phone mode uses larger puzzle buttons and reduced graphics. The camera leaves space for a puzzle panel beside the clue. Your progress saves in the browser.
 
-The automated checks cover answers, progression, saved progress, reachable paths, animation attachments, construction rules and touch input. Browser checks cover the changed puzzles, the ending and the landscape layout. They don't tell us how a first-time player will feel about every stretch of the adventure, and the phone layout checks aren't a substitute for testing every handset.
+We checked the puzzle answers and progression, saves, walking routes, animation attachments, construction rules and touch input with automated tests. We also played through the changed puzzles and ending in the browser and checked phone layouts. We haven't tested on a physical phone yet, and I'd still like to hear where a first-time player gets stuck.
 
-[Play After the White Rabbit](/games/white-rabbit/). If a clue feels unfair, tell me where you were and what you could see. That's much more useful than “the puzzle is broken.”
+[Play After the White Rabbit](/games/white-rabbit/). If a clue feels unfair, tell me where you were and what you could see.
