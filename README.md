@@ -109,3 +109,9 @@ Client-side JavaScript does three things and nothing else: the switch, the feed
 filter, and swapping a video facade for an iframe when you press play. The
 reading-progress bar, the margin-note layout, the staggered page load and the
 theme itself are all CSS.
+
+## Playable projects
+
+After the White Rabbit lives in `games/white-rabbit/`. Install its dependencies with `npm ci --prefix games/white-rabbit` after installing the site's dependencies. The normal site build includes the Vite game at `/games/white-rabbit/`. Its post appears at `/after-the-white-rabbit/`, in the home feed, RSS and agents category.
+
+Run `npm test --prefix games/white-rabbit` for the game rules and touch controls, and `node --test tests/site-game.test.mjs` after a site build for publishing checks. Pull requests run both before deployment. Blender is only needed when regenerating models; the checked-in GLB files are sufficient to play or publish.

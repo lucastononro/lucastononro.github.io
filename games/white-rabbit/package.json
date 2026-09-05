@@ -1,0 +1,19 @@
+{
+  "name": "after-the-white-rabbit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/*.test.js",
+    "assets": "/Applications/Blender.app/Contents/MacOS/Blender --background --python scripts/build_world.py && /Applications/Blender.app/Contents/MacOS/Blender --background --python scripts/build_rabbit.py"
+  },
+  "dependencies": {
+    "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}

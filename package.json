@@ -7,7 +7,8 @@
   "scripts": {
     "build": "node build.mjs",
     "dev": "node serve.mjs",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test:publishing": "node --test tests/site-game.test.mjs"
   },
   "engines": {
     "node": ">=20"

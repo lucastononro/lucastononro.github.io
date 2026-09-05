@@ -1,0 +1,7 @@
+node_modules/
+dist/
+assets/blender/
+tmp/
+evidence/
+*.blend1
+.DS_Store
