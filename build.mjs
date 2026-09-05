@@ -3,6 +3,7 @@
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
 import { site, u, abs, categoryCounts } from './site.config.mjs'
@@ -117,6 +118,10 @@ async function build() {
   await write('/robots.txt', robots())
 
   await copyStatic()
+
+  const gameRoot = path.join(root, 'games/white-rabbit')
+  execFileSync(process.execPath, [path.join(gameRoot, 'node_modules/vite/bin/vite.js'), 'build'], { cwd: gameRoot, stdio: 'inherit' })
+  await fs.cp(path.join(gameRoot, 'dist'), path.join(dist, 'games/white-rabbit'), { recursive: true })
 
   const ms = Number(process.hrtime.bigint() - started) / 1e6
   console.log(

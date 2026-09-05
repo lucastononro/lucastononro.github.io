@@ -1503,3 +1503,7 @@ a.pager-item:hover .pager-title { color: var(--accent); }
   a { text-decoration: underline; }
   pre { border: 1px solid #ccc; background: #fafafa !important; }
 }
+
+/* The playable project opens this post before the making-of text. */
+.game-launch{margin:0 0 3rem;grid-column:1 / -1;border:1px solid var(--rule, #85766340);background:#102422;color:#eee6d1}.game-poster{position:relative;display:block;text-decoration:none!important;overflow:hidden}.game-poster img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}.game-start{position:absolute;right:6%;bottom:12%;display:flex;align-items:center;gap:36px;padding:17px 24px;background:#eaddb9;color:#143027;font-family:'Alegreya Sans',sans-serif;font-weight:700;font-size:19px;box-shadow:0 6px 35px #0005}.game-poster:hover .game-start{background:#fff0c9}.game-poster:focus-visible{outline:3px solid #cba96a;outline-offset:5px}.game-start>span{font-size:25px}.game-launch-caption{padding:18px 24px;display:flex;flex-direction:column;gap:4px;font-family:'Alegreya Sans',sans-serif}.game-launch-caption strong{font-size:22px}.game-launch-caption span{font-size:15px;color:#bfcab6}.game-launch-caption small{font-size:13px;color:#a2b39f;margin-top:5px}
+@media(max-width:600px){.game-start{font-size:16px;padding:12px 16px;right:5%;bottom:10%;gap:18px}.game-launch-caption{padding:14px 18px}.game-launch-caption strong{font-size:20px}}

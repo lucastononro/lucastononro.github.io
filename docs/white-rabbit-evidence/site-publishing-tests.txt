@@ -1,0 +1,15 @@
+
+> ablations@1.0.0 test:publishing
+> node --test tests/site-game.test.mjs
+
+✔ home, category, RSS and sitemap expose the playable post (1.679584ms)
+✔ the game opens the post before the title and making-of prose (1.381666ms)
+✔ the production game has local subdirectory assets and every model (3.096542ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 91.567958

@@ -29,6 +29,10 @@ jobs:
 
       - run: npm ci
 
+      - run: npm ci --prefix games/white-rabbit
+
+      - run: npm test --prefix games/white-rabbit
+
       - run: npm run build
 
       - uses: actions/configure-pages@v5

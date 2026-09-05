@@ -1,0 +1,34 @@
+
+> after-the-white-rabbit@1.0.0 test
+> node --test tests/*.test.js
+
+✔ all source-derived locks accept their intended answers and reject wrong ones (1.317708ms)
+✔ chapter gates remain closed until their preceding spatial puzzle is complete (0.304875ms)
+✔ full adventure state round-trips without losing inventory or its ending (1.205042ms)
+✔ save corruption starts a playable clean game (0.300458ms)
+✔ solving twice never duplicates a journal entry or collectible (0.125917ms)
+✔ English decree has exactly the three intended absent letters (0.152541ms)
+✔ every Blender room has geometry and all required gameplay hotspots (9.061875ms)
+✔ the valley opens its gates only after the corresponding puzzles (32.800959ms)
+✔ connected outdoor regions share reachable corridors (1.438709ms)
+✔ interactive Blender props keep their own geometry and reasonable bounds (137.40725ms)
+✔ the White Rabbit exports three articulated animation clips (7.545708ms)
+✔ the rabbit follows its route while its watch stays attached to its paw (25.663375ms)
+✔ every courtyard interaction is reachable through the hedge openings (57.592333ms)
+✔ the croquet geometry admits exactly the source route in three distinct rebounds (0.975458ms)
+✔ the kings require the correct pieces and both matching bridge faces downward (0.197125ms)
+✔ sign trails reject skipped arrows and allow returning to a closed loop’s start (0.227167ms)
+✔ the new clues preserve source discoveries without leaking later answers (0.28525ms)
+✔ Blender exports the solitary mushroom with 33 spots and nine individual house pieces (48.631ms)
+✔ guard comparison preserves the same sash and the seven intended differing details (31.529208ms)
+✔ phone detection respects coarse touch input and a player override (0.879375ms)
+✔ joystick has a rest zone, analog speed and capped diagonal movement (0.91875ms)
+✔ two thumbs operate independently and cancel safely on interruption or rotation (4.439833ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 466.625625

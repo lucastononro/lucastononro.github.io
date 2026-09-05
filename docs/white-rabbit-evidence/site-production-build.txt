@@ -1,0 +1,19 @@
+
+> ablations@1.0.0 build
+> node build.mjs
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 29 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                           5.26 kB │ gzip:   2.08 kB
+dist/assets/index-CPVSAirT.css           26.26 kB │ gzip:   6.83 kB
+dist/assets/postprocessing-BNAnfmDO.js   17.77 kB │ gzip:   4.33 kB
+dist/assets/index-9TWxnwUi.js           154.38 kB │ gzip:  53.27 kB
+dist/assets/engine-BtMLPnzg.js          588.40 kB │ gzip: 148.20 kB
+✓ built in 1.30s
+
+  Tonon Journey → dist/
+  12 posts · 3 tags · 19 pages · 2285 ms
+  serving from https://lucastononro.github.io/
