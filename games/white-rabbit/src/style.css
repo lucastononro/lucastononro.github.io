@@ -16,12 +16,155 @@
 #move-pad{left:max(26px,env(safe-area-inset-left));bottom:24px;width:126px;height:126px}#move-knob{width:52px;height:52px;border:1px solid #e3ce8e9c;border-radius:50%;background:#acbe9159;pointer-events:none}#move-pad small,#look-pad small{position:absolute;bottom:12px;font-size:8px;letter-spacing:.16em;pointer-events:none}
 #right-controls{position:absolute;right:max(20px,env(safe-area-inset-right));bottom:20px;width:205px;height:146px;pointer-events:none}#right-controls>button{pointer-events:auto;touch-action:none}#look-pad{right:0;bottom:0;width:106px;height:106px}#look-pad>span{font-size:32px;opacity:.7}#look-pad.held{background:#b0bd8655}#touch-action,#touch-explore{position:absolute;border:1px solid #d1bc7f70;background:#143b32eb;border-radius:28px;height:52px;font-size:12px;min-width:92px}#touch-action{left:0;bottom:13px;color:#f3dfab}#touch-action.ready{background:#dac18b;color:#18382b;box-shadow:0 0 18px #d8ba7333}#touch-explore{left:15px;top:13px;height:44px;min-width:84px;font-size:11px}#touch-fullscreen{position:absolute;top:61px;right:max(20px,env(safe-area-inset-right));width:44px;height:44px;font-size:25px;pointer-events:auto}
 .touch .controls-hint,.touch #nearby-toggle,.touch kbd{display:none}.touch .hud-top{padding:10px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left))}.touch .hud-top nav{gap:12px}.touch .hud-icon{height:44px;width:44px}.touch .hud-control{min-height:44px}.touch .chapter-label>span{font-size:24px}.touch .chapter-label p{font-size:19px}.touch .chapter-label small{font-size:6px}.touch #objective{margin:0 32px;width:230px}.touch #objective small{font-size:7px}.touch #objective p{font-size:11px;margin-top:5px;line-height:1.5}.touch .hud-bottom{bottom:15px;left:185px;right:240px;align-items:center}.touch .size-meter{left:0;bottom:0;transform:none;position:relative}.touch .size-meter>span{display:none}.touch .size-meter strong{font-size:24px}.touch .hud-bottom>.hud-control{margin-left:auto;font-size:11px}.touch .hud-bottom kbd{display:none}
-.touch button{min-height:44px}.touch .close-button{width:44px;height:44px;right:5px;top:4px}.touch .round-button{width:44px;height:44px}.touch #modal-backdrop{padding:8px max(10px,env(safe-area-inset-right)) 8px 10px;align-items:center}.touch #modal{padding:32px 20px 20px;width:min(430px,48vw);max-height:calc(100dvh - 16px)}.touch #modal.wide,.touch #modal.center{width:min(680px,96vw)}.touch #modal.center{margin:auto}.touch h2{font-size:29px;margin:6px 0 12px}.touch .modal-description{font-size:12px;line-height:1.65;margin-bottom:14px}.touch .answer-form{margin-top:16px;gap:6px}.touch .answer-form input{font-size:22px;padding:10px;min-height:46px}.touch .answer-form button{padding:10px 12px}.touch .hint-row{margin-top:18px;gap:12px;padding-top:7px}.touch .hint-row>span{font-size:8px}.touch .story-list{max-height:145px}.touch .story-line{font-size:11px;padding:4px 8px}.touch .story-line button{min-width:38px;min-height:40px}.touch .story-line>div{display:flex}.touch .story-list+.answer-form{margin-top:10px}.touch .appointment-piece{grid-template-columns:66px 1fr 44px;gap:12px;padding:6px 0}.touch .appointment-piece .clock-ui{width:66px}.touch .appointment-piece p{font-size:13px}.touch .appointment-piece button{width:44px}.touch .seal-grid{margin:14px 0;gap:6px}.touch .seal-grid button{padding:8px}.touch .alphabet button{font-size:22px;min-height:44px}
-.touch #manipulation,.touch #manipulation.comparison-mode,.touch #manipulation.tool-mode{left:auto;right:max(8px,env(safe-area-inset-right));top:8px;bottom:8px;transform:none;width:min(350px,43vw);max-height:calc(100dvh - 16px);padding:18px 15px;text-align:left;overflow:auto}.touch #manipulation h2{font-size:26px}.touch #manipulation-description{font-size:12px;line-height:1.65}.touch #manipulation-actions{justify-content:flex-start;gap:6px}.touch #manipulation-actions button{font-size:11px;padding:8px 12px;min-height:44px}.touch #leave-manipulation{font-size:11px;width:100%;justify-content:center;border-top:1px solid var(--line);margin-top:12px;padding:10px}
-.touch #manipulation.tool-mode{top:76px;bottom:170px;max-height:calc(100dvh - 246px);width:310px;min-height:74px;padding:10px 14px}.touch #manipulation.tool-mode h2{font-size:20px}.touch #manipulation.tool-mode #manipulation-description{font-size:11px}.touch #manipulation.tool-mode .eyebrow{display:none}.touch #toast{bottom:13px;padding:9px 15px;font-size:11px;max-width:55vw}.touch #grain{display:none}.touch .title-content{top:49%;left:7%;width:70%;transform:translateY(-40%)}.touch #title-screen{padding:15px 5%}.touch h1{font-size:clamp(48px,12vh,84px);margin-bottom:13px}.touch .title-content>.eyebrow{font-size:8px;margin:8px 0 12px}.touch .title-description{font-size:11px;line-height:1.6;margin-bottom:14px}.touch .title-description br{display:none}.touch .title-meta{margin-top:8px}.touch .title-bottom{bottom:10px}.touch .bottom-note,.touch .scene-caption{display:none}.touch .title-bottom .text-button{margin-left:auto}.touch #new-game{display:inline-flex;margin-left:15px}.touch .wordmark-sub{display:none}.touch .wordmark{font-size:9px;letter-spacing:.15em}.touch .primary-button{padding:12px 18px;min-height:44px}.touch .controls-grid{grid-template-columns:95px 1fr;gap:12px}
-@media(max-height:380px) and (orientation:landscape){.touch .title-description,.touch .title-meta{display:none}.touch .title-content{top:53%}.touch h1{font-size:54px}.touch #objective{max-width:200px}.touch #objective p{font-size:10px}.touch #manipulation.tool-mode{top:60px;bottom:153px;max-height:calc(100dvh - 213px)}}
-@media(orientation:portrait){.touch .title-content{width:86%;top:46%}.touch h1{font-size:18vw}.touch #modal,.touch #modal.wide{width:96vw}.touch .title-description{font-size:13px;margin:24px 0}.touch .title-description br{display:block}.touch .title-meta{margin-top:20px}.touch #new-game{display:block;margin-left:0}}
+.touch #toast{bottom:13px;padding:9px 15px;font-size:11px;max-width:55vw}.touch #grain{display:none}.touch .title-content{top:49%;left:7%;width:70%;transform:translateY(-40%)}.touch #title-screen{padding:15px 5%}.touch h1{font-size:clamp(48px,12vh,84px);margin-bottom:13px}.touch .title-content>.eyebrow{font-size:8px;margin:8px 0 12px}.touch .title-description{font-size:11px;line-height:1.6;margin-bottom:14px}.touch .title-description br{display:none}.touch .title-meta{margin-top:8px}.touch .title-bottom{bottom:10px}.touch .bottom-note,.touch .scene-caption{display:none}.touch .title-bottom .text-button{margin-left:auto}.touch #new-game{display:inline-flex;margin-left:15px}.touch .wordmark-sub{display:none}.touch .wordmark{font-size:9px;letter-spacing:.15em}.touch .primary-button{padding:12px 18px;min-height:44px}.touch .controls-grid{grid-template-columns:95px 1fr;gap:12px}
+@media(max-height:380px) and (orientation:landscape){.touch .title-description,.touch .title-meta{display:none}.touch .title-content{top:53%}.touch h1{font-size:54px}.touch #objective{max-width:200px}.touch #objective p{font-size:10px}}
+@media(orientation:portrait){.touch .title-content{width:86%;top:46%}.touch h1{font-size:18vw}.touch .title-description{font-size:13px;margin:24px 0}.touch .title-description br{display:block}.touch .title-meta{margin-top:20px}.touch #new-game{display:block;margin-left:0}}
 
 .back-to-post{display:block;padding:15px;border:1px solid var(--line);font-size:12px;color:var(--gold)}
 
 .dialog-open #crosshair,.dialog-open #interaction{visibility:hidden}
+
+/* Puzzle sheets use one scroll area. Their toolbar stays above the keyboard. */
+#dialog-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:-18px 22px 18px 0}
+#view-clue{border:1px solid var(--line);padding:11px 14px;font-size:12px;color:var(--gold)}
+#modal-backdrop.clue-view{backdrop-filter:none;background:none}
+#modal-backdrop.clue-view #modal{background:transparent;border-color:transparent;box-shadow:none;align-self:flex-start}
+#modal-backdrop.clue-view #modal-content{display:none}
+#modal-backdrop.clue-view #dialog-toolbar{background:#142a27f5;border:1px solid var(--line);padding:6px 48px 6px 8px;margin:0}
+#modal-backdrop.clue-view .close-button{top:49px;right:50px}
+.touch{--thumb-left:max(20px,env(safe-area-inset-left));--thumb-right:max(16px,env(safe-area-inset-right))}
+.touch #modal-backdrop{
+  top:var(--dialog-top,0px);bottom:auto;height:var(--dialog-height,100dvh);
+  padding:0;align-items:stretch;background:#071a17b8;backdrop-filter:none;
+}
+.touch #modal,.touch #modal.wide,.touch #modal.center{
+  display:flex;flex-direction:column;align-self:stretch;margin:0;
+  width:100%;max-width:none;max-height:100%;height:100%;padding:0;overflow:hidden;
+  border:0;background:#142a27fa;
+}
+.touch #dialog-toolbar{
+  display:flex;flex:none;justify-content:flex-end;align-items:center;gap:12px;
+  min-height:58px;margin:0;padding:5px max(16px,env(safe-area-inset-right)) 5px max(16px,env(safe-area-inset-left));
+  background:#10241f;border-bottom:1px solid var(--line);z-index:2;
+}
+.touch #close-modal,.touch #modal-backdrop.clue-view #close-modal{
+  position:static;width:auto;height:48px;min-width:94px;flex:none;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:30px;color:var(--cream);border:1px solid var(--line);border-radius:4px;
+}
+.touch #close-modal::after{content:'Close';font:14px 'DM Sans',sans-serif}
+.touch #view-clue{min-height:48px;margin-right:auto;font-size:14px;border-radius:4px}
+.touch #modal-content{
+  overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;touch-action:pan-y;
+  min-height:0;width:100%;padding:14px max(24px,env(safe-area-inset-right)) 28px max(24px,env(safe-area-inset-left));
+  scrollbar-width:thin;scrollbar-color:#738475 #142a27;
+}
+.touch #modal h2{font-size:32px;margin:6px 0 14px}
+.touch #modal .eyebrow{font-size:10px;margin-top:4px}
+.touch .modal-description,.touch .hint-text,.touch .spoken-transcript,
+.touch .empty-message{font-size:15px;line-height:1.65}
+.touch .modal-description{margin-bottom:18px}
+.touch #modal button,.touch #modal summary{touch-action:manipulation;min-height:48px}
+.touch #modal summary{padding:12px 0}
+.touch #modal .action-button,.touch #modal .answer-form button,.touch .route-actions button,
+.touch .trial-options button,.touch .pause-actions button,.touch .back-to-post{font-size:14px;padding:13px 18px;white-space:normal}
+.touch .answer-form{margin-top:20px;gap:12px;align-items:stretch}
+.touch .answer-form input{font-size:22px;min-height:50px;padding:12px 16px;scroll-margin:16px}
+.touch .answer-form input::placeholder{font-size:14px;letter-spacing:0}
+.touch .answer-form button{min-width:112px}
+.touch .answer-feedback{font-size:14px;min-height:20px}
+.touch .hint-row{font-size:12px;margin-top:20px;gap:16px;padding-top:8px}
+.touch .hint-row>span{font-size:12px}
+.touch .hint-row button{font-size:14px;padding:10px 14px;flex-shrink:0}
+.touch .story-list{max-height:none;overflow:visible;gap:8px;padding:0}
+.touch .story-line{font-size:14px;padding:8px 12px;gap:16px}
+.touch .story-line>div{display:flex;flex:none;gap:6px}
+.touch .story-line button{min-width:48px;min-height:48px;border:1px solid var(--line);font-size:21px}
+.touch .appointment-piece{grid-template-columns:84px 1fr 52px;gap:20px;padding:12px 0}
+.touch .appointment-piece .clock-ui{width:84px}
+.touch .appointment-piece p{font-size:17px}
+.touch .appointment-piece small{font-size:12px}
+.touch .appointment-piece button{width:52px;font-size:19px}
+.touch .journal-entry small{font-size:10px}
+.touch .journal-entry p,.touch .inventory-item p,.touch .controls-grid{font-size:14px}
+.touch .inventory-item h3{font-size:16px}
+.touch .nearby-item{font-size:15px;align-items:center;gap:20px;padding:15px}
+.touch .nearby-item small{font-size:12px;flex:none}
+.touch .settings-row{font-size:15px;padding:14px 0}
+.touch .settings-row select{font-size:16px;min-height:48px;max-width:58%}
+.touch .settings-row input[type=checkbox]{width:24px;height:24px}
+.touch .settings-row input[type=range]{height:44px;max-width:48%}
+.touch #modal .source-note{font-size:12px}
+.touch .seal-grid{gap:12px}
+.touch .seal-grid button,.touch .alphabet button{min-height:52px}
+.touch #modal-backdrop.clue-view{background:transparent;pointer-events:none}
+.touch #modal-backdrop.clue-view #modal{align-self:flex-start;height:auto;background:transparent;pointer-events:none}
+.touch #modal-backdrop.clue-view #dialog-toolbar{padding:5px max(16px,env(safe-area-inset-right)) 5px max(16px,env(safe-area-inset-left));margin:0;border:0;border-bottom:1px solid var(--line);pointer-events:auto}
+.touch #modal-backdrop.clue-view #modal-content{display:none}
+
+/* Fixed inspection buttons share the side panel with readable instructions. */
+.touch #manipulation,.touch #manipulation.comparison-mode{
+  left:auto;right:max(8px,env(safe-area-inset-right));transform:none;text-align:left;overflow:auto;
+  width:min(370px,45vw);top:8px;bottom:8px;max-height:calc(100dvh - 16px);
+  padding:16px;overscroll-behavior:contain;touch-action:pan-y;
+}
+.touch #manipulation h2{font-size:28px;line-height:1.1;margin:6px 0 12px}
+.touch #manipulation-description{font-size:14px;line-height:1.65;margin-bottom:16px}
+.touch #manipulation-actions{gap:10px}
+.touch #manipulation-actions button{font-size:14px;min-height:48px;padding:12px 14px;white-space:normal}
+.touch #manipulation-actions .answer-form{max-width:none;width:100%;gap:8px}
+.touch #manipulation-actions .answer-form button{min-width:80px}
+.touch #leave-manipulation{position:sticky;bottom:-16px;background:#112823;padding:14px;margin-top:16px;font-size:14px;min-height:48px;border:1px solid var(--line)}
+/* Fanning and painting need both thumb pads. Their instructions sit between them. */
+.touch #manipulation.tool-mode{
+  left:calc(var(--thumb-left) + 144px);right:calc(var(--thumb-right) + 212px);
+  top:auto;bottom:12px;width:auto;min-width:0;min-height:0;
+  max-height:calc(100dvh - 96px);padding:14px;overflow:auto;
+}
+.touch #manipulation.tool-mode h2{font-size:24px}
+.touch #manipulation.tool-mode #manipulation-description{font-size:14px;margin-bottom:12px}
+.touch #manipulation.tool-mode #leave-manipulation{bottom:-14px}
+.touch #manipulation.tool-mode .eyebrow{display:none}
+
+.touch #move-pad{left:var(--thumb-left);bottom:22px;width:126px;height:126px;pointer-events:auto;min-height:126px}
+.touch #look-pad{width:116px;height:116px;min-height:116px}
+.touch #right-controls{right:var(--thumb-right);bottom:20px;width:218px;height:160px}
+.touch #touch-action{min-width:94px;height:56px;font-size:14px;left:0;bottom:11px}
+.touch #touch-explore{left:6px;top:8px;min-width:90px;height:48px;font-size:13px}
+.touch #touch-run{position:absolute;left:calc(var(--thumb-left) + 17px);bottom:158px;min-width:92px;height:44px;border:1px solid #d1bc7f70;border-radius:24px;background:#143b32eb;font-size:13px;pointer-events:auto;touch-action:manipulation}
+.touch #touch-run[aria-pressed=true]{background:#dac18b;color:#18382b}
+.touch #move-pad small,.touch #look-pad small{font-size:10px;letter-spacing:.13em}
+@media(max-height:380px) and (orientation:landscape){
+  .touch #objective{display:none}
+  .touch #manipulation.tool-mode{top:auto;bottom:8px;max-height:calc(100dvh - 72px)}
+  .touch #dialog-toolbar{min-height:54px;padding-top:3px;padding-bottom:3px}
+}
+@media(max-width:700px) and (orientation:landscape){
+  .touch{--thumb-left:max(12px,env(safe-area-inset-left));--thumb-right:max(12px,env(safe-area-inset-right))}
+  .touch #right-controls{width:190px}
+  .touch #look-pad{width:100px;height:112px;min-height:112px}
+  .touch #touch-action{min-width:84px;font-size:13px}
+  .touch #touch-explore{min-width:80px;font-size:12px}
+  .touch #manipulation.tool-mode{left:150px;right:212px;max-height:calc(100dvh - 68px)}
+  .touch #manipulation.tool-mode h2{font-size:22px}
+  .touch #manipulation.tool-mode #manipulation-description{font-size:13px}
+  .touch .hud-bottom{left:165px;right:212px}
+  .touch .hud-bottom .size-meter>div{display:none}
+}
+.touch.dialog-open #hud{visibility:hidden}
+body:not(.touch) #view-clue{display:none}
+#tool-guide{display:none}
+.touch #manipulation.tool-mode #tool-guide{display:block;min-height:44px;width:100%;margin-bottom:12px;border:1px solid var(--line);font-size:13px;color:var(--gold);padding:10px}
+.touch #manipulation.tool-mode.tool-collapsed{display:flex;gap:8px;padding:10px}
+.touch #manipulation.tool-mode.tool-collapsed>div{display:none}
+.touch #manipulation.tool-mode.tool-collapsed #tool-guide,.touch #manipulation.tool-mode.tool-collapsed #leave-manipulation{flex:1;position:static;width:auto;min-height:44px;margin:0;padding:8px;font-size:13px}
+
+.touch button{min-height:44px}
+.touch .round-button{width:44px;height:44px}
+.touch.manipulating #interaction{visibility:hidden}
+.touch #modal-content{overflow-anchor:none}
+.touch #manipulation,.touch #manipulation.comparison-mode,.touch #manipulation.tool-mode{display:flex;flex-direction:column;overflow:hidden}
+.touch #manipulation-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+.touch #manipulation #leave-manipulation{position:static;flex:none;margin-top:12px}
+.touch #manipulation.tool-mode #tool-guide{flex:none}
+.touch #manipulation.tool-mode.tool-collapsed{flex-direction:row}

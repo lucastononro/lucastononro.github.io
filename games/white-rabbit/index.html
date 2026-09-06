@@ -19,11 +19,12 @@
  <button id="nearby-toggle" class="nearby-toggle" title="Keyboard accessible nearby objects">Explore nearby <kbd>Tab</kbd></button>
  <div id="touch-controls">
   <button id="move-pad" aria-label="Movement joystick: drag to walk"><span id="move-knob"></span><small>WALK</small></button>
+  <button id="touch-run" aria-label="Toggle running" aria-pressed="false">Walk</button>
   <div id="right-controls"><button id="touch-explore" aria-label="Choose nearby object">Explore</button><button id="touch-action" aria-label="Interact with focused object">Interact</button><button id="look-pad" aria-label="Look control: drag to turn"><span>✧</span><small>LOOK</small></button></div>
   <button id="touch-fullscreen" aria-label="Enter full screen">⛶</button>
  </div>
 </div>
-<div id="modal-backdrop" class="hidden"><section id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button id="close-modal" class="close-button" aria-label="Close dialog">×</button><div id="modal-content"></div></section></div>
+<div id="modal-backdrop" class="hidden"><section id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div id="dialog-toolbar"><button id="view-clue" class="hidden" aria-pressed="false">Look at the clue</button><button id="close-modal" class="close-button" aria-label="Close dialog">×</button></div><div id="modal-content"></div></section></div>
 <div id="manipulation" class="hidden"><div><p class="eyebrow" id="manipulation-label"></p><h2 id="manipulation-title"></h2><p id="manipulation-description"></p></div><div id="manipulation-actions"></div><button id="leave-manipulation" class="text-button">Step back <kbd>Esc</kbd></button></div>
 <div id="rotate-device" class="hidden" role="dialog" aria-modal="true" aria-label="Rotate your phone"><div class="rotate-symbol">▯</div><h2>Turn the dream sideways.</h2><p>Play in landscape.<br/>Left thumb to walk. Right thumb to look and interact.</p><button id="rotate-fullscreen" class="primary-button">Try full screen <span>⛶</span></button><small>Rotate your phone if this browser cannot lock the screen.</small></div>
 <div id="toast" role="status" aria-live="polite"></div>

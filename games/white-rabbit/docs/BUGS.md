@@ -1,0 +1,38 @@
+# Playtest repairs
+
+The first public version was commit `8b41bef`. A player reported these failures before finishing the adventure. Our answer checks and checkpoint review had missed problems with the objects and controls between answers. We published too early.
+
+## Reported failures and follow-up fixes
+
+| Failure | Cause | Repair |
+| --- | --- | --- |
+| Hall doors overlap and their frames look broken | All five panels began at floor level, with overlapping widths. The frame geometry twisted around the arches. | The doors have separate positions, arched panels and continuous frames. Examining the missing-letter clue shows the full arrangement. Exported bounds are checked for overlap. |
+| Door 6 looks passable at the wrong size | A tall model was governed by a hard-coded small-size check. Clicking it opened a popup without crossing a doorway. | A small opening sits at floor level. Clearance uses the player's body dimensions. The matching key opens a hinged leaf, then the player walks into the passage. Only size 11 fits. |
+| The triangular lock is unclear and refuses a collected key | A tiny text glyph represented the keyway. An extra height-55 condition also blocked the key. | A three-sided keyway sits in a brass plate attached to the moving leaf. A collected key can turn it at any height. |
+| Cake shrinks and the bottle grows | Both menus offered every size. | Cake only offers larger marks; the bottle only offers smaller marks. Both remain available for recovery from a wrong choice. |
+| Closing the missing-feet popup immediately reopens it | The passage check fired every frame while the player stood inside. | An entry latch opens the puzzle on crossing the threshold. Closing it permits movement again; leaving and re-entering can trigger it again. |
+| Old saves have the right size but the wrong completion flag | The earlier menus could produce size 55 through the bottle or size 11 through cake. | Collecting the high key at size 55 records the growth discovery. Crossing the small doorway records the shrink discovery. Existing version-1 progress and inventory are retained. |
+| A hall revisit leaves later chapters at the wrong size | Hall resizing persisted across journal travel, even after the mushroom was solved. | Outdoor loading restores 33 once the mushroom is solved. Before that discovery it restores 11, as the source requires. |
+| Phone popups are hard to read and operate | Small controls, a narrow panel and a scrollable book inside a scrollable popup. The keyboard's reduced height was not accounted for. | Phone reading panels use the full width, larger controls, one content scroll region and a pinned Close/Look at the clue toolbar. Dialog height follows the visual viewport. Tool instructions can collapse while both thumb pads remain available. |
+| Phone movement feels twitchy and slow | Abrupt joystick response, high look sensitivity, no run control and a penalty at the small size. | The stick has a smooth response, turning is gentler, Run is a separate toggle and outdoor speed no longer depends on size. |
+| Travel slows down when rendering slows | The frame delta was capped at 50 ms. Assisted movement also discarded unused travel when it reached a short waypoint. | The frame budget is now up to 250 ms. Short collision steps prevent jumping through thin obstacles. Assisted walking spends the remaining distance across consecutive waypoints. Unit checks compare travel at 60, 15 and 5 frames per second. |
+| Too many separate static meshes add rendering work | Valley rocks, bridge planks and other stationary decoration each submitted separate draws. | Compatible opaque decoration is batched in spatial chunks. Animated objects, clue roots, transparent materials and custom shaders stay separate. The actual-valley check verifies at least 130 fewer static draws. |
+| Collected objects intercept clicks behind them | Raycasts stopped at invisible hotspot ancestors. | Hidden meshes are skipped. Visible opaque walls still block interaction. |
+| The fan works through kitchen walls or assisted walking stops beside the cottage | Distance to the kitchen's bounding box accepted the sides and back as valid approaches. | Fanning requires the open front entrance. Assisted walking targets that entrance, and the tool UI offers an approach action when needed. |
+| The caterpillar's close-up leaves the smoke clue out of view | Camera framing considered the character hotspot but not the separate smoke geometry. | The examination bounds include the smoke digits. |
+| Residents look rigid and the caterpillar covers its clock | Static shapes and minimal procedural movement did not give the characters readable poses. | Separate Blender assets provide articulated frog, caterpillar, hedgehog, cook, Hatter and Queen animations. The rabbit retains its authored idle, hop and watch actions. Clocks and other clue props stay in their original hotspot roots. |
+| New character faces and actions are hidden by old props | The kitchen title crossed the cook's face, the spare tea hat covered the Hatter, and the stirring hand sat below the cauldron top. | The kitchen title is on the counter front. The spare hat and its 10/6 tag sit at the opposite end of the tea table. The cook's head and stirring hand are higher, with a longer spoon reaching into the pot. Camera ray checks sample both eyes, mouth and hand across the animation. |
+| A castle wall covers part of the court approach | The west wall crossed the north half of the east road. The hedge opening was narrow and the path around the maze was hard to follow. | The wall now ends before the road, the hedge opening is wider, and a connected path leads around the maze. Geometry checks use the exported meshes and walking route. A separate final-build browser check walked through the entrance. |
+| Explore cannot approach the cat's elevated eyes | The route search required the player to get within touching distance of a clue mounted above eye level. | This visual clue uses a ground-level approach while retaining the elevated viewing target. Collectible objects such as the high key keep their height requirements. The recorded approach reached the clue. |
+
+## Evidence and limits
+
+The door and phone before images were captured from the unchanged earlier commit. They are not reconstructed mockups. The blog pairs them with repaired views. Blender inspection renders are labeled as model renders rather than browser screenshots.
+
+The repair playthrough began with a fresh save and used the ordinary game UI. After further fixes and rebuilds, recording resumed from that same ordinary saved progress. It used no development checkpoints. The edited walkthrough is therefore a demonstration of progression across the repair pass, not an uninterrupted recording of one immutable build.
+
+The recorded progression completed the hall, appointments, crossing, court puzzles, house construction and both viewing rings. The final production snapshot also verified the elevated cat-eyes approach and the exit, showing 25 puzzles solved with no hints. This used known answers; it does not measure a first-time player's difficulty or pace. See [TESTING.md](TESTING.md) for the exact verification scope.
+
+Phone checks use browser viewports and synthetic touch events. No physical handset was tested. The reduced-height keyboard check does not emulate an iOS or Android keyboard. The movement changes do not establish a frame-rate guarantee on phone hardware.
+
+The source still calls for size 11 at the beginning of chapter two. The mushroom restores size 33. This story rule is separate from travel speed.
