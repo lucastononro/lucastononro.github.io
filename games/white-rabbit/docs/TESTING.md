@@ -1,6 +1,6 @@
 # Verification
 
-The most recently confirmed game test run has 45 passing checks. The recorded repair playthrough reached the ending through the ordinary game UI. This document separates that run from the earlier checkpoint checks, which missed the failures listed in [BUGS.md](BUGS.md). The site build and four publishing checks also pass.
+The most recently confirmed game test run has 51 passing checks. The recorded repair playthrough reached the ending through the ordinary game UI. This document separates that run from the earlier checkpoint checks, which missed the failures listed in [BUGS.md](BUGS.md). The site build and four publishing checks also pass.
 
 ## Automated coverage
 
@@ -53,12 +53,24 @@ To repeat the progression check, use the normal Begin a new dream action in a se
 
 ## Visual finale rebuild
 
-The current game adds three geometry and construction checks, bringing the game suite to 45 tests. Four site checks cover discovery, game-first placement, the production bundle and the inline study/walkthrough. The latter checks all 27 comparison entries, both recordings, local evidence images and the old walkthrough URL's redirect.
+That rebuild added three geometry and construction checks, bringing the game suite to 45 tests at the time. Four site checks cover discovery, game-first placement, the production bundle and the inline study/walkthrough. The latter checks all 27 comparison entries, both recordings, local evidence images and the old walkthrough URL's redirect.
 
 Targeted runtime review used `?review=tower&at=assembly` and `?review=tower&after=assembly&at=amber_view` or `ivory_view`. These checkpoints disable saving. The rebuilt assembly accepts pieces in arbitrary order, including a roof before its supports. Clicking a real painted piece and a real socket places the same mesh. The structure check rejects bridges facing upward. Both manual viewing controls produce readable, vertically stacked digits. Wrong readings leave the panel open; correct submitted readings add their respective inventory entry.
 
 The phone layout checks include 844 × 390, 667 × 375 and a reduced 844 × 210 viewport. Camera dragging, scrolling the panel, answer submission and Step back remain available. The game follows `visualViewport` for keyboard space; these checks do not emulate an operating-system keyboard or physical touch hardware.
 
-The new finale recording begins at a chapter-four development checkpoint. It supplements the older full repair playthrough, whose final chapter predates the manual viewpoint rebuild. It must not be described as a second fresh-save full playthrough.
+The archived finale recording begins at a chapter-four development checkpoint. It originally supplemented the older full repair playthrough, whose final chapter predates the manual viewpoint rebuild. It must not be described as a second fresh-save full playthrough.
 
 Capture session: `evidence/rabbit-visual-finale-20260906T020507Z/`. The checkpoint omits the earlier gardeners-match history flag, so its ending shows 24 solved. The normal-game full repair run above shows 25. The new clip is an edited finale demonstration with real desktop input, no audio and no injected progress after its starting checkpoint.
+
+## Door disclosure and diagonal recording repair
+
+Six additional game checks bring the suite to 51. Five exercise straight diagonal paths, collision-safe shortcuts, touching blocked corners, a thin obstacle between grid nodes and the short angular turn across the wraparound point. The sixth casts 750 sight rays at the exported hall cutout from several player heights and side angles. The locked doorway must cover them; the open leaf must leave the passage clear.
+
+A separate browser check approached the biscuit, grew to 55, collected the high key, shrank to 11 and unlocked Door 6. Holding W crossed the repaired opening and displayed the missing-feet puzzle. A native canvas still records the casing from above and to one side, next to the player's two original screenshots in the blog.
+
+The new 52-second share edit uses seven fresh takes at 1280 by 720 with game audio. The outdoor walks use visible local buttons that hold synthetic keydown events through the ordinary listeners, then release them with keyup. They do not set the camera position or use Explore. The opening diagonal held W and D for four seconds. All 471 sampled frames retained both keys, the camera heading stayed fixed, and both coordinates changed along one straight line. One deliberate right turn followed, then a short forward approach. Puzzle takes use the ordinary buttons and pointer dragging. Explore positioned the player between some hall takes, outside the edit. Chapter checkpoints disable saving.
+
+The MP4 decodes without errors and played to the end in the native browser. The playback report records dropped frames rather than claiming a zero-drop guarantee. Source key/position traces and edit points accompany the release. The rejected 62-second Explore recording remains unchanged as a labeled failure example. Its selection and inadequate review are documented as a GPT-6 Astra workflow failure. The separate finale player was removed from the post; the older 24-minute walkthrough remains.
+
+The post was checked at 390 by 844, 844 by 390 and 1280 by 720. All 87 rabbit-related images load with matching intrinsic dimension attributes, preserved proportions and no horizontal page overflow. Comparison images use contained letterboxing. These remain browser viewport checks, not physical handset tests.

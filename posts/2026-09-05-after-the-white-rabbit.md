@@ -8,7 +8,7 @@ game: white-rabbit
 
 I wanted a version of this game I could walk around in. Follow the rabbit through Wonderland, explore between puzzles and get close enough to inspect a clue. A room was fine when it fit the story. I just didn't want the whole thing stuck in one.
 
-<figure id="gameplay-recording" class="video"><video class="video-file" aria-label="Fresh gameplay recording at 60 frames per second" controls playsinline preload="metadata" poster="/images/white-rabbit-smooth-gameplay.jpg" width="1280" height="720"><source src="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-smooth-gameplay/after-the-white-rabbit-smooth-gameplay.mp4" type="video/mp4"></video><figcaption>A fresh 62-second gameplay recording at 60 FPS, with game audio. Played at normal speed from chapter checkpoints; pop-up menus are omitted. Contains puzzle spoilers. <a href="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-smooth-gameplay/after-the-white-rabbit-smooth-gameplay.mp4">Download the MP4 to share.</a></figcaption></figure>
+<figure id="gameplay-recording" class="video"><video class="video-file" aria-label="New gameplay recording with continuous diagonal walking" controls playsinline preload="metadata" poster="/images/white-rabbit-gameplay.jpg" width="1280" height="720"><source src="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-diagonal-gameplay/after-the-white-rabbit-gameplay.mp4" type="video/mp4"></video><figcaption>Fresh gameplay at normal speed, with game audio and continuous diagonal walking. Recorded from chapter checkpoints; pop-up menus are omitted. Contains puzzle spoilers. <a href="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-diagonal-gameplay/after-the-white-rabbit-gameplay.mp4">Download the MP4 to share.</a></figcaption></figure>
 
 ## What is Unlock!?
 
@@ -55,6 +55,21 @@ The original adventure asks Alice to shrink for this passage. The size rule was 
 <figure><img src="/images/white-rabbit-repairs/doors-after.png" alt="The repaired hall doors, with separate frames and a small passage at floor level." loading="lazy" width="1280" height="720"><figcaption>The repaired hall doors, with separate frames and a small passage at floor level.</figcaption></figure>
 
 *After. The opening has to explain why shrinking helps before the game asks you to do it.*
+
+### The wall gave away the answer
+
+Then I noticed something even simpler. Door 6 had a hole behind it. Door 9 had a solid wall. I could pick the right door by looking at the unfinished geometry, without comparing the key and locks at all.
+
+<div class="study-images">
+<figure><img src="/images/white-rabbit-repairs/door-hole-reported.png" alt="My screenshot of Door 6, with the rectangular wall opening visible above and behind its arch." loading="lazy" width="840" height="876"><figcaption>My bug report. The gap behind Door 6 gives away which door leads somewhere.</figcaption></figure>
+<figure><img src="/images/white-rabbit-repairs/door-solid-reported.png" alt="My comparison screenshot of Door 9 against an uninterrupted wall." loading="lazy" width="846" height="942"><figcaption>Door 9 has no matching gap. Comparing the scenery was enough to skip the deduction.</figcaption></figure>
+</div>
+
+We rebuilt the casings in Blender. All five doors now have the same fitted jambs and arched interior, with solid wood covering the corners of the rectangular opening. Door 6 still opens into a passage after you unlock it.
+
+<figure><img src="/images/white-rabbit-repairs/door-reveal-after.png" alt="The repaired Door 6 viewed from above and to one side, with a solid casing covering the wall cutout." loading="lazy" width="1280" height="720"><figcaption>The repaired model in the game, viewed from above and to one side. The casing covers the cutout while the leaf remains hinged.</figcaption></figure>
+
+This was another accidental clue we had introduced. A correct answer check cannot catch that. We added checks from several player heights and side angles, including one through the passage after the leaf opens. The screenshots belong in the bug log too, because the first repair had left this problem behind.
 
 The cake and bottle had another basic mistake. Both menus offered every size, so cake could shrink you and a drink could make you grow. Cake now offers larger sizes; the bottle offers smaller ones. Both stay available, so choosing the wrong size doesn't leave you stuck. This went into the [bug log](https://github.com/lucastononro/lucastononro.github.io/blob/main/games/white-rabbit/docs/BUGS.md) with the door failures and the rest of the repair pass.
 
@@ -207,17 +222,29 @@ Some original tasks run in the companion app. For those, the crop shows the rele
 
 <section class="puzzle-study" id="puzzle-study-27"><h4>27. Reading the finished house</h4><div class="puzzle-compare"><div><h5>Original · <a href="https://www.nos-jeux-de-societe.fr/wp-content/uploads/2023/08/Solution-Unlock-heroic-adventure-a-la-poursuite-du-lapin-blanc.pdf#page=7">PDF p. 7</a></h5><figure class="comparison-shot"><a href="/images/white-rabbit-study/original-27.webp" aria-label="Enlarge original image for puzzle 27"><img src="/images/white-rabbit-study/original-27.webp" alt="Both viewing angles and the cat&#x27;s eye-color clue." loading="lazy" decoding="async" width="521" height="476"></a><figcaption>Both viewing angles and the cat&#x27;s eye-color clue.</figcaption></figure><p>Align both sides; order by eye color.</p></div><div><h5>Our 3D adaptation</h5><figure class="comparison-shot"><a href="/images/white-rabbit-study/adapted-27.webp" aria-label="Enlarge adapted image for puzzle 27"><img src="/images/white-rabbit-study/adapted-27.webp" alt="The amber strokes align across our folded surfaces." loading="lazy" decoding="async" width="1280" height="720"></a><figcaption>The amber strokes align across our folded surfaces.</figcaption></figure><p>The old rings moved the camera to the answer and recorded it. The rebuild puts paint on the folded, ribbed surfaces themselves. You adjust your viewpoint and eye height, then enter your reading. The ribs make our architectural object differ from folded paper; they give its paint depth instead of a floating overlay.</p></div></div></section>
 
-## Recording the game properly
+## Getting the recording wrong, twice
 
-The first short video was laggy. It came from a 15 FPS recording made in a software-rendered browser. Exporting that footage at 30 FPS repeated the existing frames, so the movement still looked choppy.
+The first short video was laggy. It came from a 15 FPS recording made in a software-rendered browser. Exporting it at 30 FPS repeated the existing frames, so the movement still looked choppy.
 
-We recorded again in a native browser, this time at 60 FPS. Another problem showed up while capturing: resizing the browser panel changed the video's dimensions halfway through a take. We fixed the recording viewport at 1280 × 720 and let only the preview resize. The new clip above uses fresh footage, keeps gameplay at normal speed and includes the game's own sound. The older solution recordings below remain as the record of those earlier playthroughs.
+We recorded again in a native browser at 60 FPS. Resizing the browser panel changed the video's dimensions halfway through a take, so we fixed the capture at 1280 by 720 and let only the preview resize. That solved a recording problem. The next video still looked wrong.
+
+### GPT-6 Astra could finish a recording and miss how bad the walking looked
+
+I asked for something I could share. GPT-6 Astra used the Explore menu's assisted walking, then treated the frame-rate and playback checks as evidence that the video was ready. The camera kept zigzagging. I rejected it.
+
+The route planner only moved between four grid neighbors, alternating short forward and sideways steps. The camera turned toward each step. The game already accepted W and D together, but the agent had chosen assisted travel for filming instead of holding both directions. It also failed to catch the result in its review. Smoothly playing a bad route was still a bad video.
+
+<figure id="navigation-failure" class="video"><video class="video-file" aria-label="Rejected one-minute recording showing zigzag assisted walking" controls playsinline preload="none" poster="/images/white-rabbit-smooth-gameplay.jpg" width="1280" height="720"><source src="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-smooth-gameplay/after-the-white-rabbit-smooth-gameplay.mp4" type="video/mp4"></video><figcaption>Rejected 62-second recording. Watch the opening walk and the later outdoor approach for the repeated changes of direction. Kept here as an example of GPT-6 Astra choosing the wrong controls for the recording and accepting its own result too soon.</figcaption></figure>
+
+We changed assisted walking to allow diagonals and join visible stretches into straight paths, while checking the route against obstacles. Turning also takes the shorter direction when an angle crosses the wraparound point.
+
+For the replacement at the top of this post, the agent used visible local recording buttons that hold movement keys together through the game's normal input handlers. These are synthetic key events, not a human playthrough. The outdoor takes use those held keys; puzzle shots use the game's interaction controls. Chapter checkpoints set up each take. No camera positions were scripted during the walks.
+
+The replacement keeps the original pace and game sound. We checked the actual movement as well as the video: both keys remain down throughout the diagonal, both position coordinates change together, and the camera holds its direction until the deliberate turn. The old clip stays here because it shows a failure that passing frame-rate checks did not catch.
 
 ## Full walkthrough
 
-The recordings and every chapter's solution are here on the same page. The first clip demonstrates the rebuilt finale. It starts from a chapter-four development checkpoint, with saving disabled. The earlier full run follows it and documents the preceding repair pass.
-
-<figure class="video"><video class="video-file" controls playsinline preload="none" poster="/images/white-rabbit-study/assembly-new.png" aria-label="Updated visual finale walkthrough"><source src="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-visual-finale/finale.mp4" type="video/mp4"></video><figcaption>Updated finale. Selecting pieces, correcting the construction, finding both viewing angles and finishing the game. Pauses are cut. No audio. <a href="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-visual-finale/finale.mp4">Open the finale recording</a>.</figcaption></figure>
+The 24-minute repair playthrough and every chapter's written solution are here on the same page. The recording documents that earlier repair pass.
 
 #### Earlier full repair playthrough
 
@@ -228,7 +255,7 @@ The recordings and every chapter's solution are here on the same page. The first
 <figcaption>Recorded desktop playthrough with on-screen captions and no audio. Pauses and repeated travel are cut. <a href="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-repair-walkthrough/walkthrough.mp4">Open the video</a>.</figcaption>
 </figure>
 
-We started with a fresh save and played every puzzle through the ordinary controls. The run found more bugs, so we repaired them and resumed that saved game after rebuilding. This is an edited demonstration across that repair pass. The kitchen, Hatter and court entrance received further visual fixes after their first appearances in the video. This video predates the visual finale rebuild. Its last chapter shows the earlier interaction. The new finale demonstration above and the written steps below cover the current version.
+We started with a fresh save and played every puzzle through the ordinary controls. The run found more bugs, so we repaired them and resumed that saved game after rebuilding. This is an edited demonstration across that repair pass. The kitchen, Hatter and court entrance received further visual fixes after their first appearances in the video. This video predates the visual finale rebuild. Its last chapter shows the earlier interaction. The written steps below cover the current version of the finale.
 
 The recording uses Low graphics and software rendering. It is not a phone performance test or a timed first attempt. The written steps below explain each deduction; read the chapter you need.
 
