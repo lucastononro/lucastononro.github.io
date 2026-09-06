@@ -966,7 +966,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
 }
 
 figure { margin: 2.3em 0; }
-figure img { border: 1px solid var(--rule); border-radius: 3px; width: 100%; }
+figure img { border: 1px solid var(--rule); border-radius: 3px; width: 100%; height: auto; }
 figcaption {
   margin-top: 0.6rem;
   font-family: var(--sans);
