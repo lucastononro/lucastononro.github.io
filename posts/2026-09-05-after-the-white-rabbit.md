@@ -8,14 +8,6 @@ game: white-rabbit
 
 I wanted a version of this game I could walk around in. Follow the rabbit through Wonderland, explore between puzzles and get close enough to inspect a clue. A room was fine when it fit the story. I just didn't want the whole thing stuck in one.
 
-<figure class="video" id="game-highlights">
-<video class="video-file" controls playsinline preload="none" width="1280" height="720" poster="/images/white-rabbit-study/highlights-poster.jpg" aria-label="After the White Rabbit, 64-second gameplay highlights">
-<source src="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-highlights/after-the-white-rabbit-highlights.mp4" type="video/mp4">
-<a href="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-highlights/after-the-white-rabbit-highlights.mp4">Download the gameplay highlights</a>.
-</video>
-<figcaption>A minute in Wonderland. Clips from the recorded playthrough, with the rebuilt house from the later finale recording. Some puzzle mechanics are visible. No audio. <a href="https://github.com/lucastononro/lucastononro.github.io/releases/download/white-rabbit-highlights/after-the-white-rabbit-highlights.mp4">Download the 64-second video to share</a>.</figcaption>
-</figure>
-
 ## What is Unlock!?
 
 [Unlock!](https://www.spacecowboys-games.com/game/unlock/) is a series of cooperative escape-room card games from Space Cowboys. You play alone or with other people around a table, using a deck and a free companion app. The cards show locations, objects and clues. You look for hidden details, work out which objects belong together and solve puzzles to advance the story. The app checks codes, runs interactive puzzles and gives you hints. It also keeps time, with adventures usually designed for about an hour.

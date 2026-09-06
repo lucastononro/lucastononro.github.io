@@ -25,7 +25,8 @@ test('the main post has every comparison and the visible walkthrough, with the o
  const post=read('after-the-white-rabbit/index.html'),old=read('white-rabbit-walkthrough/index.html');
  assert.match(post,/id="full-walkthrough"/);assert.equal((post.match(/class="puzzle-study"/g)||[]).length,27);
  assert.match(post,/source-perspective.png/);assert.match(post,/pdf#page=7/);
- assert.equal((post.match(/<video[^>]*controls[^>]*playsinline/g)||[]).length,3);
+ assert.equal((post.match(/<video[^>]*controls[^>]*playsinline/g)||[]).length,2);
+ assert.doesNotMatch(post,/game-highlights|white-rabbit-highlights/);
  for(const section of post.matchAll(/<section class="puzzle-study"[\s\S]*?<\/section>/g)){
   assert.match(section[0],/original-\d{2}\.webp/);assert.match(section[0],/adapted-\d{2}\.webp/);
  }
