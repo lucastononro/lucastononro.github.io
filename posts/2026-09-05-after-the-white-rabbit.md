@@ -1,5 +1,5 @@
 ---
-title: "After the White Rabbit: taking a puzzle deck into 3D"
+title: "after the white rabbit: an Unlock! adventure from tabletop to 3D"
 dek: A browser adventure inspired by Unlock!, built with Codex, Blender and Three.js. How we adapted the puzzles and fixed the models that got in their way.
 date: 2026-09-05
 tags: [agents]
