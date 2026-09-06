@@ -27,6 +27,7 @@ test('the main post has every comparison and the visible walkthrough, with the o
  assert.match(post,/source-perspective.png/);assert.match(post,/pdf#page=7/);
  assert.equal((post.match(/<video[^>]*controls[^>]*playsinline/g)||[]).length,2);
  for(const release of ['white-rabbit-repair-walkthrough/walkthrough','white-rabbit-visual-finale/finale'])assert.ok(post.includes('releases/download/'+release+'.mp4'));
+ for(const image of post.matchAll(/<img[^>]+src="\/images\/white-rabbit[^>]+>/g)){assert.match(image[0],/width="[1-9][0-9]*"/);assert.match(image[0],/height="[1-9][0-9]*"/)}
  assert.doesNotMatch(post,/<details>/);for(const n of ['I','II','III','IV'])assert.ok(post.includes('Chapter '+n+' ·'));
  assert.match(old,/<meta http-equiv="refresh" content="0;url=\/after-the-white-rabbit\/#full-walkthrough">/);
  for(const match of post.matchAll(/(?:src|poster)="(\/images\/[^"?#]+)"/g))assert.ok(existsSync(resolve('dist','.'+match[1])),match[1]);

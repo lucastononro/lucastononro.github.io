@@ -44,13 +44,13 @@ We published too early. Codex reported passing checks, and I still ran into over
 
 The doors made that gap obvious. Their panels overlapped, and parts of the arches looked broken. Door 6 looked big enough to walk through at a size the game refused. Its triangular lock was a tiny symbol, and a separate height condition could stop a collected key from working. Knowing the intended solution wasn't enough to tell whether I was stuck on a puzzle or a bug.
 
-![The first release, with overlapping door panels and broken-looking arches.](/images/white-rabbit-repairs/doors-before.png)
+<figure><img src="/images/white-rabbit-repairs/doors-before.png" alt="The first release, with overlapping door panels and broken-looking arches." loading="lazy" width="1280" height="720"><figcaption>The first release, with overlapping door panels and broken-looking arches.</figcaption></figure>
 
 *Before. This is the original published build, captured again without changing its models.*
 
 The original adventure asks Alice to shrink for this passage. The size rule was faithful, but our model gave the wrong evidence. We separated the doors and rebuilt the small opening to match the player's body. The triangular keyway is now part of a brass plate attached to the door. Once unlocked, the leaf swings open and you walk into the passage to leave the hall. The geometry and the interaction need to agree.
 
-![The repaired hall doors, with separate frames and a small passage at floor level.](/images/white-rabbit-repairs/doors-after.png)
+<figure><img src="/images/white-rabbit-repairs/doors-after.png" alt="The repaired hall doors, with separate frames and a small passage at floor level." loading="lazy" width="1280" height="720"><figcaption>The repaired hall doors, with separate frames and a small passage at floor level.</figcaption></figure>
 
 *After. The opening has to explain why shrinking helps before the game asks you to do it.*
 
@@ -60,19 +60,19 @@ The cake and bottle had another basic mistake. Both menus offered every size, so
 
 The first phone layout was hard to read and use. The book had small controls and a scrollable list inside a scrollable popup. That cost space in landscape and made it easy to scroll the wrong part of the page.
 
-![The first phone popup, with a narrow reading panel and small book controls.](/images/white-rabbit-repairs/phone-before.png)
+<figure><img src="/images/white-rabbit-repairs/phone-before.png" alt="The first phone popup, with a narrow reading panel and small book controls." loading="lazy" width="1280" height="720"><figcaption>The first phone popup, with a narrow reading panel and small book controls.</figcaption></figure>
 
 *Before, in the browser's 844 by 390 phone layout.*
 
 We gave phone puzzles the full width, enlarged the buttons and removed the extra scroll region. Close stays in a pinned toolbar. A separate Look at the clue button lets you switch back to the scene without losing your place in the puzzle.
 
-![The revised phone popup, with a pinned toolbar and larger book controls.](/images/white-rabbit-repairs/phone-after.png)
+<figure><img src="/images/white-rabbit-repairs/phone-after.png" alt="The revised phone popup, with a pinned toolbar and larger book controls." loading="lazy" width="1280" height="720"><figcaption>The revised phone popup, with a pinned toolbar and larger book controls.</figcaption></figure>
 
 *After, at the same game viewport size.*
 
 The keyboard needs room too. We added a check with the available height reduced to 210 pixels, then made the answer field and submit button reachable in that space. This is a browser layout check, not evidence from a physical phone.
 
-![The answer field and submit button visible in a shortened phone viewport.](/images/white-rabbit-repairs/phone-keyboard-space.png)
+<figure><img src="/images/white-rabbit-repairs/phone-keyboard-space.png" alt="The answer field and submit button visible in a shortened phone viewport." loading="lazy" width="1280" height="720"><figcaption>The answer field and submit button visible in a shortened phone viewport.</figcaption></figure>
 
 *Reduced-height check with sample input. The keyboard itself is not being emulated.*
 
@@ -82,11 +82,11 @@ The residents needed another Blender pass as well. The frog and caterpillar were
 
 The cook was a useful lesson in checking animation inside the scene. Her new face sat behind the old kitchen sign, and her stirring hand dipped below the pot's solid top. We moved the sign onto the counter front, raised the hand and lengthened the spoon. A spare hat also hid the Hatter's face. We moved that prop to the other end of the table and kept its price tag.
 
-![The frog messenger rebuilt in Blender, with separate limbs and facial features.](/images/white-rabbit-repairs/frog.png)
+<figure><img src="/images/white-rabbit-repairs/frog.png" alt="The frog messenger rebuilt in Blender, with separate limbs and facial features." loading="lazy" width="900" height="900"><figcaption>The frog messenger rebuilt in Blender, with separate limbs and facial features.</figcaption></figure>
 
 *Blender model view of the revised frog. His speaking motion uses the mouth and throat; his body no longer has to bounce to suggest life.*
 
-![The cook's raised stirring hand and face clear the cauldron in the Blender inspection render.](/images/white-rabbit-repairs/cook-blender.png)
+<figure><img src="/images/white-rabbit-repairs/cook-blender.png" alt="The cook&#x27;s raised stirring hand and face clear the cauldron in the Blender inspection render." loading="lazy" width="1280" height="720"><figcaption>The cook&#x27;s raised stirring hand and face clear the cauldron in the Blender inspection render.</figcaption></figure>
 
 *Blender inspection render. The spoon still reaches inside the pot while the hand stays above its rim.*
 
@@ -98,11 +98,11 @@ Slow rendering exposed a separate walking bug. The game counted at most 50 milli
 
 The court's approach had a wall across part of the road. We pulled that wall back and widened the hedge opening. The source of this one was embarrassingly familiar. The visible world and the walking rules had been built separately.
 
-![A castle wall covering part of the road into the court during the repair playthrough.](/images/white-rabbit-repairs/court-road-before.png)
+<figure><img src="/images/white-rabbit-repairs/court-road-before.png" alt="A castle wall covering part of the road into the court during the repair playthrough." loading="lazy" width="1280" height="720"><figcaption>A castle wall covering part of the road into the court during the repair playthrough.</figcaption></figure>
 
 *Caught during the recording. This is an intermediate build in the repair pass, not the first published release.*
 
-![The repaired approach, with the road visible through the court entrance.](/images/white-rabbit-repairs/court-road-after.png)
+<figure><img src="/images/white-rabbit-repairs/court-road-after.png" alt="The repaired approach, with the road visible through the court entrance." loading="lazy" width="1280" height="720"><figcaption>The repaired approach, with the road visible through the court entrance.</figcaption></figure>
 
 *The final entrance checked in the game. The path continues around the low maze.*
 
@@ -128,7 +128,7 @@ The automated checks cover puzzle answers, progression, saves, walking routes, a
 
 The last puzzle made the limits of our first adaptation obvious. Clicking a floor ring moved the camera to an exact view and recorded its number. A separate set of painted strips appeared after construction. You could finish without doing much looking.
 
-![The earlier final puzzle, with a floating amber number and an automatic viewpoint.](/images/white-rabbit-walkthrough/amber.png)
+<figure><img src="/images/white-rabbit-walkthrough/amber.png" alt="The earlier final puzzle, with a floating amber number and an automatic viewpoint." loading="lazy" width="1280" height="720"><figcaption>The earlier final puzzle, with a floating amber number and an automatic viewpoint.</figcaption></figure>
 
 *Before. Captured from the earlier repair build. The ring supplied the view and recorded the answer without asking you to read it.*
 
@@ -139,11 +139,11 @@ Our first attempt at the replacement used flatter folds. The number stayed too r
 The ribs are our own architectural choice. They give the paint changes in depth and let it break apart as you move. We still use fixed sockets, so this does not reproduce the dexterity of balancing paper. The booklet's written sequence has nine items while its numbered diagram has eight; we follow the written sequence.
 
 <div class="study-images">
-<figure><img src="/images/white-rabbit-study/source-perspective.png" alt="The original solution's two views of the folded house." loading="lazy"><figcaption>Original perspective diagram, cropped from <a href="https://www.nos-jeux-de-societe.fr/wp-content/uploads/2023/08/Solution-Unlock-heroic-adventure-a-la-poursuite-du-lapin-blanc.pdf#page=7">the supplied solution, PDF page 7</a>. Artwork credited to Space Cowboys.</figcaption></figure>
-<figure><img src="/images/white-rabbit-study/amber-aligned.png" alt="The rebuilt house with its amber paint aligned by the player." loading="lazy"><figcaption>Our rebuilt surfaces in the browser. The paint belongs to the pieces and obeys the scene's depth.</figcaption></figure>
+<figure><img src="/images/white-rabbit-study/source-perspective.png" alt="The original solution's two views of the folded house." loading="lazy" width="568" height="310"><figcaption>Original perspective diagram, cropped from <a href="https://www.nos-jeux-de-societe.fr/wp-content/uploads/2023/08/Solution-Unlock-heroic-adventure-a-la-poursuite-du-lapin-blanc.pdf#page=7">the supplied solution, PDF page 7</a>. Artwork credited to Space Cowboys.</figcaption></figure>
+<figure><img src="/images/white-rabbit-study/amber-aligned.png" alt="The rebuilt house with its amber paint aligned by the player." loading="lazy" width="1280" height="720"><figcaption>Our rebuilt surfaces in the browser. The paint belongs to the pieces and obeys the scene's depth.</figcaption></figure>
 </div>
 
-![The painted surfaces viewed before alignment.](/images/white-rabbit-study/amber-offset.png)
+<figure><img src="/images/white-rabbit-study/amber-offset.png" alt="The painted surfaces viewed before alignment." loading="lazy" width="1280" height="720"><figcaption>The painted surfaces viewed before alignment.</figcaption></figure>
 
 *Before adjusting the viewpoint. Dragging the scene or using the two sliders changes where you look from.*
 
@@ -265,9 +265,9 @@ Look at the doors together. Their arrangement forms an **A**. Add it to the plaq
 
 The key opens the lock; the bottle gives you enough clearance to pass through. Only size 11 fits this doorway. The cake can only raise your size and the bottle can only lower it. You can revisit both if you choose an intermediate mark by mistake.
 
-![The repaired door with its triangular keyway.](/images/white-rabbit-walkthrough/triangle.png)
+<figure><img src="/images/white-rabbit-walkthrough/triangle.png" alt="The repaired door with its triangular keyway." loading="lazy" width="1280" height="720"><figcaption>The repaired door with its triangular keyway.</figcaption></figure>
 
-![Alice at the small opening after shrinking.](/images/white-rabbit-walkthrough/passage.png)
+<figure><img src="/images/white-rabbit-walkthrough/passage.png" alt="Alice at the small opening after shrinking." loading="lazy" width="1280" height="720"><figcaption>Alice at the small opening after shrinking.</figcaption></figure>
 
 #### Find your missing measure
 
@@ -281,7 +281,7 @@ After you pass through the doorway, the full measure is 89 and the dial by your 
 
 Keep the **3:10** appointment with the caterpillar. The smoke forms two pairs of stacked rings. Enter **88**.
 
-![The caterpillar examination includes the stacked smoke rings.](/images/white-rabbit-repairs/caterpillar-framing-after.png)
+<figure><img src="/images/white-rabbit-repairs/caterpillar-framing-after.png" alt="The caterpillar examination includes the stacked smoke rings." loading="lazy" width="1280" height="720"><figcaption>The caterpillar examination includes the stacked smoke rings.</figcaption></figure>
 
 Follow his advice to the solitary violet mushroom among the roots west of his grove. Inspect it and choose **Taste both sides of the mushroom**. This restores your size to **33** and gives you the first message. You arrive in the woods small because this discovery completes the size puzzle.
 
@@ -297,13 +297,13 @@ With the fan collected, inspect the kitchen. Stand at the **open front of the co
 
 The smoke clears and the cook gives you the next message. Remember that **the cook bakes the Queen's tarts**. You will need that evidence later.
 
-![The final cook model after clearing the kitchen.](/images/white-rabbit-walkthrough/kitchen-after.png)
+<figure><img src="/images/white-rabbit-walkthrough/kitchen-after.png" alt="The final cook model after clearing the kitchen." loading="lazy" width="1280" height="720"><figcaption>The final cook model after clearing the kitchen.</figcaption></figure>
 
 #### Take tea with the Hatter
 
 Go to the **6:00** appointment. The cup accepts one letter. Say "tea" aloud and enter **T**. The hat's 10/6 price tag is a distraction. Take the last message.
 
-![The revised Hatter, with his face and cup visible.](/images/white-rabbit-repairs/hatter-after.png)
+<figure><img src="/images/white-rabbit-repairs/hatter-after.png" alt="The revised Hatter, with his face and cup visible." loading="lazy" width="1280" height="720"><figcaption>The revised Hatter, with his face and cup visible.</figcaption></figure>
 
 #### Read the four clock hands
 
@@ -318,7 +318,7 @@ After all four meetings, inspect The rabbit's lost minutes. Arrange the messages
 
 The sentence tells you to read the numeral under the minute hand at each appointment. On these clocks the top mark is 0. Enter **2580**.
 
-![The four messages in appointment order.](/images/white-rabbit-walkthrough/clocks.png)
+<figure><img src="/images/white-rabbit-walkthrough/clocks.png" alt="The four messages in appointment order." loading="lazy" width="1280" height="720"><figcaption>The four messages in appointment order.</figcaption></figure>
 
 #### Trace the Cheshire crossing
 
@@ -335,7 +335,7 @@ The complete button routes are:
 
 Pink returns to its starting ring to close the loop. Read the shapes in the colored **E X I T** order: green, brown, amber, pink. Choose Read the crossing lock and enter **5210**.
 
-![The completed green trail draws a five.](/images/white-rabbit-walkthrough/green-trail.png)
+<figure><img src="/images/white-rabbit-walkthrough/green-trail.png" alt="The completed green trail draws a five." loading="lazy" width="1280" height="720"><figcaption>The completed green trail draws a five.</figcaption></figure>
 
 The Queen's road is open. Follow the path east to her grounds.
 
@@ -379,13 +379,13 @@ Compare Guard on duty with Suspicious guard. There are **seven differences**:
 | Heart emblem direction | Upright | Inverted |
 | Bottom jacket trim | Red | Gold |
 
-![The original guard.](/images/white-rabbit-walkthrough/guard.png)
+<figure><img src="/images/white-rabbit-walkthrough/guard.png" alt="The original guard." loading="lazy" width="1280" height="720"><figcaption>The original guard.</figcaption></figure>
 
-![The disguised guard, with seven altered details.](/images/white-rabbit-walkthrough/impostor.png)
+<figure><img src="/images/white-rabbit-walkthrough/impostor.png" alt="The disguised guard, with seven altered details." loading="lazy" width="1280" height="720"><figcaption>The disguised guard, with seven altered details.</figcaption></figure>
 
 Choose **I have compared them** when you finish. The game needs both the tart observation and the uniform inspection before the hearing.
 
-![The tart and heart-shaped trail of crumbs.](/images/white-rabbit-walkthrough/tart.png)
+<figure><img src="/images/white-rabbit-walkthrough/tart.png" alt="The tart and heart-shaped trail of crumbs." loading="lazy" width="1280" height="720"><figcaption>The tart and heart-shaped trail of crumbs.</figcaption></figure>
 
 #### Answer the Queen
 
@@ -404,7 +404,7 @@ Inspect the croquet lawn. Choose **Cushion 4**, wait for the hedgehog to stop, t
 
 Those straight shots avoid the orange obstacles and use exactly three rebounds. If you hit a block, start the sequence again. Choose Collect your prize after reaching the flag to receive your own wooden effigy.
 
-![The hedgehog at the flag after three rebounds.](/images/white-rabbit-walkthrough/croquet.png)
+<figure><img src="/images/white-rabbit-walkthrough/croquet.png" alt="The hedgehog at the flag after three rebounds." loading="lazy" width="1280" height="720"><figcaption>The hedgehog at the flag after three rebounds.</figcaption></figure>
 
 #### Join the three wooden figures
 
@@ -416,7 +416,7 @@ Bring all three rewards to The wooden witnesses. Stack the figures from top to b
 
 Choose **Lower the heads**. With the heads out of the way, the painted fragments join into **54**. Choose Read the joined number and enter **54**.
 
-![The stacked figures after lowering their heads.](/images/white-rabbit-walkthrough/figures.png)
+<figure><img src="/images/white-rabbit-walkthrough/figures.png" alt="The stacked figures after lowering their heads." loading="lazy" width="1280" height="720"><figcaption>The stacked figures after lowering their heads.</figcaption></figure>
 
 #### Find the letters missing from the decree
 
@@ -446,7 +446,7 @@ Inspect the kings' instructions. Select a piece from the physical bench or its b
 
 Select each bridge and turn it until its engraved face points down. Selecting a placed piece and choosing an occupied socket swaps the two pieces. Return a selected piece to the bench if needed. Choose **Test the structure** when the arrangement is ready.
 
-![The new construction bench and position controls.](/images/white-rabbit-study/assembly-new.png)
+<figure><img src="/images/white-rabbit-study/assembly-new.png" alt="The new construction bench and position controls." loading="lazy" width="1280" height="720"><figcaption>The new construction bench and position controls.</figcaption></figure>
 
 #### Find the two viewing angles
 
@@ -454,14 +454,14 @@ Approach the amber floor mark and inspect that side. The camera begins away from
 
 Read the upper digit before the lower digit. The amber side reads **78**. Enter it and choose **Record this reading**. Merely opening this view does not record an answer.
 
-![The amber side aligned by adjusting the viewing position.](/images/white-rabbit-study/amber-aligned.png)
+<figure><img src="/images/white-rabbit-study/amber-aligned.png" alt="The amber side aligned by adjusting the viewing position." loading="lazy" width="1280" height="720"><figcaption>The amber side aligned by adjusting the viewing position.</figcaption></figure>
 
 Repeat from the ivory side. Its upper and lower digits read **32**. Record **32**.
 
-![The ivory side after alignment.](/images/white-rabbit-study/ivory-aligned.png)
+<figure><img src="/images/white-rabbit-study/ivory-aligned.png" alt="The ivory side after alignment." loading="lazy" width="1280" height="720"><figcaption>The ivory side after alignment.</figcaption></figure>
 
 The cat's left eye is amber. Use that color's reading first. Go to **The way home** and enter **7832** to finish.
 
-![The ending after all 25 puzzles.](/images/white-rabbit-walkthrough/ending.png)
+<figure><img src="/images/white-rabbit-walkthrough/ending.png" alt="The ending after all 25 puzzles." loading="lazy" width="1280" height="720"><figcaption>The ending after all 25 puzzles.</figcaption></figure>
 
 The recorded ending shows 25 puzzles solved. Its in-game minutes are not a wall-clock benchmark.
