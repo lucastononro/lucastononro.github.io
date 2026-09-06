@@ -9,6 +9,7 @@ import {has} from './puzzles.js';
 import {moveWithCollision,advancePath,inKitchenEntrance} from './movement.js';
 import {installSpatialPuzzles} from './spatial-puzzles.js';
 import {HOUSE_ORDER,LITTLE_DOOR,canPassLittleDoor} from './mechanics.js';
+import {installHouse,HOUSE_CENTER} from './house.js';
 import {RabbitActor} from './rabbit.js';
 import {installAnimals,updateAnimals} from './animals.js';
 import {installResidents,updateResidents} from './residents.js';
@@ -24,12 +25,13 @@ export class World{
   const pmrem=new THREE.PMREMGenerator(this.renderer);this.env=pmrem.fromScene(new RoomEnvironment(),.03).texture;pmrem.dispose();
   this.composer=new EffectComposer(this.renderer);this.composer.addPass(new RenderPass(this.scene,this.camera));this.bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.065,.35,1.4);this.composer.addPass(this.bloom);this.composer.addPass(new OutputPass());
   this.cache={};this.hotspots={};this.boxes={};this.ray=new THREE.Raycaster();this.keys=new Set();this.touchMove={x:0,y:0};this.pointer=new THREE.Vector2();this.previousTime=performance.now();this.elapsed=0;this.active=false;this.blocked=false;this.title=true;this.drag=false;this.yaw=0;this.pitch=0;this.sensitivity=1;this.height=1.7;this.targetHeight=1.7;this.effects=[];this.focusMode=null;this.highlight=null;this.stepTime=0;this.canvas=this.renderer.domElement;this.camera.position.set(6.8,3,9.5);this.camera.lookAt(0,2,-6);
-  this.canvas.addEventListener('pointerdown',e=>{if(this.focusMode==='signs'){this.dragDistance=0;return}if(e.button!==0||this.blocked||this.suspended||this.title)return;this.drag=true;this.dragDistance=0;this.canvas.setPointerCapture(e.pointerId);this.lastPointer={x:e.clientX,y:e.clientY};});
+  this.canvas.addEventListener('pointerdown',e=>{if(['signs','assembly'].includes(this.focusMode)){this.dragDistance=0;return}if(this.focusMode==='perspective'){this.drag=true;this.dragDistance=0;this.lastPointer={x:e.clientX,y:e.clientY};this.canvas.setPointerCapture(e.pointerId);return}if(e.button!==0||this.blocked||this.suspended||this.title)return;this.drag=true;this.dragDistance=0;this.canvas.setPointerCapture(e.pointerId);this.lastPointer={x:e.clientX,y:e.clientY};});
   this.canvas.addEventListener('pointermove',e=>{
+    if(this.focusMode==='perspective'&&this.drag&&!this.suspended){const dx=e.clientX-this.lastPointer.x,dy=e.clientY-this.lastPointer.y;this.dragDistance+=Math.abs(dx)+Math.abs(dy);this.setHouseView(this.houseView.side,this.houseView.angle+dx*.09,this.houseView.height+dy*.012);this.lastPointer={x:e.clientX,y:e.clientY};this.callbacks.onHouseView?.(this.houseView);return}
     if(this.blocked||this.suspended||this.title||this.focusMode&&!['paint','fan'].includes(this.focusMode))return;
     if(document.pointerLockElement===this.canvas||this.drag){const dx=document.pointerLockElement?e.movementX:e.clientX-this.lastPointer.x;const dy=document.pointerLockElement?e.movementY:e.clientY-this.lastPointer.y;this.yaw-=dx*.003*this.sensitivity;this.pitch=THREE.MathUtils.clamp(this.pitch-dy*.003*this.sensitivity,-1.5,1.5);this.dragDistance+=Math.abs(dx)+Math.abs(dy);this.lastPointer={x:e.clientX,y:e.clientY};}
   });
-  this.canvas.addEventListener('pointerup',e=>{const wasClick=(this.dragDistance||0)<7;this.drag=false;if(wasClick&&this.active&&(!this.blocked||this.focusMode==='signs')){if(this.focusMode)this.clickMode(e);else this.interactAt(e)}});
+  this.canvas.addEventListener('pointerup',e=>{const wasClick=(this.dragDistance||0)<7;this.drag=false;if(wasClick&&this.active&&(!this.blocked||['signs','assembly'].includes(this.focusMode))){if(this.focusMode)this.clickMode(e);else this.interactAt(e)}});
   this.canvas.addEventListener('contextmenu',e=>e.preventDefault());
   document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','ShiftLeft'].includes(e.code)){this.keys.add(e.code);e.preventDefault()}});
   document.addEventListener('keyup',e=>this.keys.delete(e.code));window.addEventListener('blur',()=>{this.keys.clear();this.drag=false});
@@ -87,25 +89,18 @@ export class World{
  placeEffigy(name,index){const part=this.effigyParts[['you','knave','gardener'].indexOf(name)];const y=3.14-index*.75;part.targetHeight=y;for(const [object,height] of [[part.body,y],[part.head,y+.61]])this.effigyTweens.push({object,target:new THREE.Vector3(8,height,1.5+index*.012)})}
  lowerEffigyHeads(){const heads=this.effigyParts.map(p=>p.head);this.effigyTweens=this.effigyTweens.filter(t=>!heads.includes(t.object));for(const {head,targetHeight} of this.effigyParts)this.effigyTweens.push({object:head,target:new THREE.Vector3(8,targetHeight-.04,1.32),hide:true})}
 
- createAnamorph(){
-  this.anamorph=new THREE.Group();this.anamorph.position.set(72,0,-75);this.scene.add(this.anamorph);
-  // Each slice is at a different depth. Projecting from the ring aligns the original image.
-  for(const [side,eye,color,content] of [['amber',new THREE.Vector3(-6,1.7,-2),'#ffb234','78'],['ivory',new THREE.Vector3(6,1.7,-2),'#fff3cd','32']]){
-   const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,512,512);ctx.fillStyle=color;ctx.font='bold 310px Georgia';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(content,256,270,490);
-   const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
-   for(let row=0;row<8;row++){
-    const scale=.83+(row%3)*.12;const center=new THREE.Vector3(0,2.7,-2);const pos=eye.clone().lerp(center,scale);const width=3.3*scale;const height=3.3/8*scale;pos.y+=(3.3/2-(row+.5)*3.3/8)*scale;
-    const tex=texture.clone();tex.repeat.set(1,1/8);tex.offset.set(0,1-(row+1)/8);tex.needsUpdate=true;
-    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.FrontSide,depthTest:false,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1}));mesh.position.copy(pos);mesh.rotation.y=side==='amber'?-Math.PI/2:Math.PI/2;mesh.renderOrder=8;this.anamorph.add(mesh);
-   }
-  }
+ createAnamorph(){installHouse(this)}
+ setHouseView(side,angle=18,height=2.9){
+  angle=THREE.MathUtils.clamp(angle,-32,32);height=THREE.MathUtils.clamp(height,.8,4.2);this.houseView={side,angle,height};
+  const a=angle*Math.PI/180;this.cameraTween=null;this.camera.position.set(72+(side==='amber'?-6:6)*Math.cos(a),height,-77+6*Math.sin(a));
+  this.camera.lookAt(HOUSE_CENTER.clone().add(new THREE.Vector3(72,0,-75)));
  }
+
  sync(state){
   this.state=state;this.valley?.sync(state);this.targetHeight=state.size/33*1.7;this.sensitivity=state.settings.sensitivity;
   if(this.hotspots.key)this.hotspots.key.visible=!state.inventory.includes('key');if(this.hotspots.fan)this.hotspots.fan.visible=!state.inventory.includes('fan');if(this.hotspots.brush)this.hotspots.brush.visible=!state.inventory.includes('brush');
   if(this.smoke)this.smoke.visible=!has(state,'kitchen');
   if(this.hotspots.roses&&has(state,'roses'))this.paintRoses(5);
-  if(this.anamorph)this.anamorph.visible=has(state,'assembly');
   if(this.hotspots.structure){this.hotspots.structure.visible=has(state,'assembly')||state.assembly.length>0;this.previewAssembly(has(state,'assembly')?HOUSE_ORDER:state.assembly,has(state,'assembly')?{'Black bridge':true,'Red bridge':true}:state.bridgeFaces)}
  }
  paintRoses(count){let i=0;this.hotspots.roses?.traverse(o=>{if(o.isMesh&&o.material?.name==='white'){if(i<count*5){o.material=o.material.clone();o.material.name='painted_rose';o.material.color.set('#bd2546')}i++}})}
@@ -152,7 +147,7 @@ export class World{
   const pos=custom?.position?new THREE.Vector3(...custom.position):target.clone().add(new THREE.Vector3(.8,Math.max(.2,size.y*.15),Math.max(2.8,size.y*1.2)));
   this.cameraTween={from:this.camera.position.clone(),to:pos,target,elapsed:0};
  }
- endExamine(){this.examining=false;this.updateComposition();if(this.focusBackup){this.camera.position.copy(this.focusBackup.position);this.yaw=this.focusBackup.yaw;this.pitch=this.focusBackup.pitch;this.focusBackup=null}this.cameraTween=null;this.focusMode=null;this.pause(false)}
+ endExamine(){this.examining=false;this.updateComposition();if(this.focusBackup){this.camera.position.copy(this.focusBackup.position);this.yaw=this.focusBackup.yaw;this.pitch=this.focusBackup.pitch;this.focusBackup=null}this.cameraTween=null;this.focusMode=null;this.houseView=null;this.selectedHousePiece=null;if(this.houseSlots)this.houseSlots.visible=false;if(this.hotspots.structure)this.previewAssembly(has(this.state,'assembly')?HOUSE_ORDER:this.state.assembly,this.state.bridgeFaces);this.pause(false)}
  beginMode(mode,id,custom){this.examine(id,custom);this.focusMode=mode}
  clickMode(e){this.callbacks.onModeClick?.(this.focusMode,e)}
  rotateLetter(turns){if(this.brassGlyph){this.brassGlyph.rotation.z=Math.PI/2-turns*Math.PI/2;this.glyphShadow.rotation.z=this.brassGlyph.rotation.z}}
@@ -172,7 +167,6 @@ export class World{
   this.brassGlyph=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:0xbe9850,metalness:.6,roughness:.36}));this.brassGlyph.position.set(4.55,1.95,4.03);this.brassGlyph.rotation.z=Math.PI/2;this.hotspots.shadow.add(this.brassGlyph);
   this.glyphShadow=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({color:0x263f32}));this.glyphShadow.position.set(5.18,1.95,3.98);this.glyphShadow.rotation.z=Math.PI/2;this.hotspots.shadow.add(this.glyphShadow);
  }
- viewRing(side){const x=side==='amber'?-6:6;this.examine(side+'_view',{position:[x,1.7,-2],target:[0,2.7,-2]})}
  animate(){
   requestAnimationFrame(this.animate);const now=performance.now();const dt=Math.min((now-this.previousTime)/1000,.25);this.previousTime=now;this.elapsed+=dt;
   if(this.title&&!this.blocked){this.camera.position.set(6.8+Math.sin(this.elapsed*.055)*.35,3+Math.sin(this.elapsed*.09)*.08,9.5);this.camera.lookAt(0,2,-6)}
@@ -187,7 +181,6 @@ export class World{
    const target=this.targetAt();if(target?.id!==this.highlight?.id){this.highlight=target;this.callbacks.onTarget?.(target)}
    if(this.room==='hall'&&has(this.state,'feet')&&this.pitch>1.1)this.callbacks.onLookUp?.();
    if(this.room==='hall'){const inside=this.camera.position.z< -12.2;if(inside&&!this.wasInsideLittleDoor&&!has(this.state,'feet'))this.callbacks.onDoorPass?.();this.wasInsideLittleDoor=inside;}
-   if(this.overworld&&has(this.state,'assembly'))for(const side of ['amber','ivory']){const x=side==='amber'?66:78;if(Math.hypot(this.camera.position.x-x,this.camera.position.z+77)<.8){const dir=new THREE.Vector3();this.camera.getWorldDirection(dir);if(dir.dot(new THREE.Vector3(72-x,1,0).normalize())>.8)this.callbacks.onView?.(side)}}
   }
   if(this.valley)this.valley.update(this.elapsed);if(this.heldTool&&this.toolSwing!==undefined){this.toolSwing+=dt*4;this.heldTool.rotation.z=-.4-Math.sin(Math.min(this.toolSwing,Math.PI))*.6;if(this.toolSwing>=Math.PI)this.toolSwing=undefined}
   if(this.overworld&&this.active&&!this.blocked&&!this.suspended&&!this.title){const region=regionAt(this.camera.position.x,this.camera.position.z);if(region!==this.room){this.room=region;this.callbacks.onRegion?.(region)}
@@ -199,6 +192,7 @@ export class World{
   if(this.smoke?.visible)this.smoke.children.forEach((p,i)=>{p.position.y=p.userData.origin.y+Math.sin(this.elapsed*.7+i)*.23;p.position.x=p.userData.origin.x+Math.sin(this.elapsed*.4+i)*.15});
   if(this.smokeDigits)this.smokeDigits.position.y=Math.sin(this.elapsed*.6)*.05;
   if(this.effigyTweens?.length){this.effigyTweens=this.effigyTweens.filter(t=>{t.object.position.lerp(t.target,1-Math.exp(-dt*10));if(t.object.position.distanceTo(t.target)<.015){t.object.position.copy(t.target);if(t.hide)t.object.visible=false;return false}return true})}
+  if(this.houseView&&this.focusMode==='perspective')this.setHouseView(this.houseView.side,this.houseView.angle,this.houseView.height);
   this.updateSpatial(dt,this.elapsed);
   updateAnimals(this,dt);updateResidents(this,dt);
 

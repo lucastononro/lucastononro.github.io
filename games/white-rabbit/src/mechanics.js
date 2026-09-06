@@ -22,9 +22,16 @@ export function traceSign(progress,trail,index){
  (progress[trail]??=[]).push(index);return true;
 }
 export const HOUSE_ORDER=['♠ 6','♠ 4','Black bridge','♥ 6','♥ 4','♥ 2','Red bridge','♥ 5','♥ 7'];
-export const HOUSE_SLOTS=[[-1.65,1.25,-2],[0,1.25,-2],[-.8,2.25,-2],[1.65,1.25,-2],[-.85,3.1,-2],[.85,3.1,-2],[0,4.15,-2],[-.38,4.95,-2],[.38,4.95,-2]];
+export const HOUSE_SLOTS=[[-1.65,1.02,-2],[0,1.02,-2],[0,1.73,-2],[1.65,1.02,-2],[-.83,2.44,-2],[.83,2.44,-2],[0,3.15,-2],[-.42,3.79,-2],[.42,3.79,-2]];
+export const HOUSE_SLOT_NAMES=['Lower left','Lower middle','Lower bridge','Lower right','Middle left','Middle right','Upper bridge','Top left','Top right'];
+export function placeHousePiece(order,piece,slot){
+ if(!HOUSE_ORDER.includes(piece)||!Number.isInteger(slot)||slot<0||slot>8)return [...order];
+ const next=Array.from({length:9},(_,i)=>order[i]||null),old=next.indexOf(piece),displaced=next[slot];
+ if(old>=0)next[old]=displaced;
+ next[slot]=piece;return next;
+}
 export function validateHouse(order,faces={}){
- if(order.length!==9)return {ok:false,reason:'The house needs nine pieces. There are still gaps.'};
+ if(order.length!==9||order.filter(Boolean).length!==9)return {ok:false,reason:'The house needs nine pieces. There are still gaps.'};
  if(order.some((piece,i)=>piece!==HOUSE_ORDER[i]))return {ok:false,reason:'The supports do not match the kings’ instructions. Check the sequence from the ground up.'};
  if(!faces['Black bridge']||!faces['Red bridge'])return {ok:false,reason:'A king is looking at the sky. Both engraved faces must point toward the matching marks beneath them.'};
  return {ok:true};

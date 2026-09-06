@@ -1,8 +1,9 @@
 import './style.css';
 import {TouchControls,usesTouchControls} from './touch.js';
 import {World,LABELS} from './world.js';
-import {APPOINTMENTS,SIGN_TRAILS,traceSign,HOUSE_ORDER,validateHouse,shotSegment,validateCroquet,SIZE_MARKS,canResize,canPassLittleDoor} from './mechanics.js';
+import {APPOINTMENTS,SIGN_TRAILS,traceSign,HOUSE_ORDER,validateHouse,shotSegment,validateCroquet,SIZE_MARKS,canResize,canPassLittleDoor,HOUSE_SLOT_NAMES,placeHousePiece} from './mechanics.js';
 import {Sound} from './audio.js';
+import {houseHit} from './house.js';
 import {speakAnimal} from './animals.js';
 import {reviewCheckpoint} from './review.js';
 import {hotspotRoom,REGION_OFFSETS} from './overworld.js';
@@ -33,7 +34,7 @@ function openPuzzle(id){
  if(id==='story'){storyPuzzle();return}if(id==='shadow'){shadowPuzzle();return}if(id==='biscuit'||id==='bottle'){heightPuzzle(id);return}if(id==='roses'){paintPuzzle();return}if(id==='trial'){trialPuzzle();return}if(id==='croquet'){croquetPuzzle();return}if(id==='effigies'){effigiesPuzzle();return}if(id==='assembly'){assemblyPuzzle();return}if(id==='signs'){signsPuzzle();return}if(id==='minutes'){minutesPuzzle();return}if(id==='messenger'){messengerPuzzle();return}if(id==='tea'){teaPuzzle();return}
  let extra='';
  if(id==='decree')extra=`<div class="alphabet">${'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(l=>`<button data-letter="${l}" aria-label="Mark letter ${l}">${l}</button>`).join('')}</div><p class="hint-text">Tap letters to cross them off as you find them. Enter the three left over.</p>`;
- if(id==='final_lock'&&(!state.inventory.includes('amber')||!state.inventory.includes('ivory'))){toast('Read the house from both marked viewpoints first.');return}
+ if(id==='final_lock'&&(!state.inventory.includes('amber')||!state.inventory.includes('ivory'))){toast('Record your reading of both colored sides first.');return}
  showModal(heading(p.eyebrow,p.title,p.description)+extra+answerMarkup(id==='arithmetic'?'The missing multiplier':id==='decree'?'Three missing letters':'Turn the lock…')+hintMarkup(id),{focus:id,wide:id==='signs'});currentPuzzle=id;
  if(id==='decree')$$('[data-letter]').forEach(b=>b.addEventListener('click',()=>{b.classList.toggle('present');sound.click()}));
  wireAnswer(id,()=>{
@@ -85,20 +86,38 @@ function effigiesPuzzle(){
  const put=n=>{if(order.includes(n))return;order.push(n);world.placeEffigy(n,order.length-1);sound.click();$('#manipulation-description').textContent=`From above: ${order.join(' → ')}`;if(order.length===3){$('#manipulation-actions').innerHTML='<button id="lower-heads">Lower the heads</button><button id="reset-figures">Rearrange the figures</button>';$('#reset-figures').onclick=effigiesPuzzle;$('#lower-heads').onclick=()=>{world.lowerEffigyHeads();$('#manipulation-description').textContent='The heads slide out of sight. Inspect the paint that remains.';$('#manipulation-actions').innerHTML='<button id="read-effigies">Read the joined number</button><button id="reset-figures">Rearrange the figures</button>';$('#read-effigies').onclick=read;$('#reset-figures').onclick=effigiesPuzzle;}}};
  showMode('effigies','effigies','Off with their heads','The paint is incomplete. Place an upper, middle and lower figure, then obey the command on the table.',[['You',()=>put('you')],['Knave',()=>put('knave')],['Gardener',()=>put('gardener')]],{position:[8,2.7,6.7],target:[8,2.4,1.5]});
 }
+let assemblyClick=null;
 function assemblyPuzzle(){
- if(has(state,'assembly')){info('The house is complete','Walk to the amber and ivory rings. Face the house. Its broken markings become two numbers from each side.');return}
- const placed=[...state.assembly];state.bridgeFaces??={};
- const description='Build from the ground up. The black king calls for 6, then 4. His face must point down, 8 against 8. Then red 6, 4, 2. The red king faces down, 9 against 9. Finish with red 5 and 7.';
- const update=()=>{state.assembly=[...placed];world.previewAssembly(placed,state.bridgeFaces);persist();$('#manipulation-description').textContent=`${placed.length} of 9 pieces. ${description}`;const controls=$('#manipulation-actions');controls.innerHTML='';
-  const button=(label,fn,disabled=false)=>{const b=document.createElement('button');b.textContent=label;b.disabled=disabled;b.onclick=fn;controls.append(b)};
-  for(const label of ['♥ 7','♠ 4','♥ 2','Red bridge','♠ 6','♥ 5','Black bridge','♥ 4','♥ 6'])button(label,()=>{placed.push(label);sound.tone(220+placed.length*40,.35,.1);update()},placed.includes(label)||placed.length===9);
-  for(const label of ['Black bridge','Red bridge'])if(placed.includes(label))button(`${label}: face ${state.bridgeFaces[label]?'down':'up'} ↻`,()=>{state.bridgeFaces[label]=!state.bridgeFaces[label];sound.click();update()});
-  button('Remove last piece',()=>{placed.pop();update()},!placed.length);button('Test the structure',()=>{const result=validateHouse(placed,state.bridgeFaces);if(result.ok){complete('assembly');closeMode();toast('The house holds. Walk around it and inspect the two colored sides.')}else{sound.fail();toast(result.reason)}});
+ const placed=Array.from({length:9},(_,i)=>state.assembly[i]||null);state.bridgeFaces??={};let selected=null,instructionOpen=false;
+ const description='Choose a piece on the bench, then a socket on the house. You can also use the buttons. The kings’ instructions describe the finished structure; place pieces in any order.';
+ const choose=piece=>{selected=piece;update()};
+ const place=slot=>{if(!selected)return toast('Choose a piece from the bench first.');placed.splice(0,9,...placeHousePiece(placed,selected,slot));sound.click();update()};
+ const update=()=>{
+  state.assembly=[...placed];world.selectedHousePiece=selected;world.previewAssembly(placed,state.bridgeFaces);persist();
+  $('#manipulation-description').textContent=description;const controls=$('#manipulation-actions');controls.innerHTML='';
+  const instruction=document.createElement('details');instruction.innerHTML='<summary>The kings’ instructions</summary><p>Across the ground: black 6, black 4, red 6. Above them lies the black king, his 8 facing the matching 8 below. The middle supports are red 4 and red 2. The red king rests above them, his 9 facing the matching 9. Red 5 and red 7 finish the roof.</p>';instruction.open=instructionOpen;instruction.ontoggle=()=>{instructionOpen=instruction.open};controls.append(instruction);
+  const group=className=>{const el=document.createElement('div');el.className=className;controls.append(el);return el};
+  const button=(parent,label,fn,active=false)=>{const b=document.createElement('button');b.textContent=label;b.onclick=fn;b.classList.toggle('selected',active);parent.append(b);return b};
+  const pieces=group('house-pieces');for(const label of ['♥ 7','♠ 4','♥ 2','Red bridge','♠ 6','♥ 5','Black bridge','♥ 4','♥ 6'])button(pieces,label,()=>choose(label),label===selected);
+  const status=document.createElement('p');status.className='house-selection';status.textContent=selected?'Holding '+selected:'Choose a piece';controls.append(status);
+  const slots=group('house-sockets');for(const i of [0,1,3,2,4,5,6,7,8])button(slots,HOUSE_SLOT_NAMES[i]+': '+(placed[i]||'empty'),()=>place(i));
+  if(selected?.includes('bridge'))button(controls,'Turn '+selected+' · face '+(state.bridgeFaces[selected]?'down':'up'),()=>{state.bridgeFaces[selected]=!state.bridgeFaces[selected];update()});
+  if(selected&&placed.includes(selected))button(controls,'Return '+selected+' to the bench',()=>{placed[placed.indexOf(selected)]=null;update()});
+  button(controls,'Test the structure',()=>{const result=validateHouse(placed,state.bridgeFaces);if(result.ok){complete('assembly');closeMode();toast('The house holds. Find a way to read the paint on either side.')}else{sound.fail();toast(result.reason)}});
  };
- showMode('assembly','assembly','The kings’ impossible house',description,[],{position:[4.2,4.2,5.2],target:[0,2.6,-2]});update();
+ showMode('assembly','assembly','The kings’ impossible house',description,[],{position:[4.8,5.4,8.6],target:[0,1.9,-.2]});
+ $('#manipulation').classList.add('house-mode');world.updateComposition();assemblyClick=hit=>{if(hit?.piece)choose(hit.piece);if(hit?.slot!==undefined)place(hit.slot)};update();
 }
+function perspectivePuzzle(side){
+ showMode('perspective',side+'_view',side==='amber'?'The amber markings':'The ivory markings','Drag across the house to move your viewpoint. Raise or lower your eye until the paint joins. Read the upper digit first.',[],{position:[side==='amber'?-6:6,2.9,0],target:[0,2.45,-2]});
+ $('#manipulation').classList.add('perspective-mode');world.updateComposition();world.setHouseView(side,28,3.5);
+ $('#manipulation-actions').innerHTML='<label class="view-adjust">Move around the house<input id="house-angle" aria-label="Move around the house" type="range" min="-32" max="32" step=".25" value="28"></label><label class="view-adjust">Raise or lower your eye<input id="house-height" aria-label="Raise or lower your eye" type="range" min=".8" max="4.2" step=".05" value="3.5"></label>'+answerMarkup('Two digits you can see',2);
+ const adjust=()=>world.setHouseView(side,+$('#house-angle').value,+$('#house-height').value);$('#house-angle').oninput=adjust;$('#house-height').oninput=adjust;
+ $('.answer-form button').textContent='Record this reading';$('.answer-form').onsubmit=e=>{e.preventDefault();if($('#answer').value.trim()===(side==='amber'?'78':'32')){viewFound(side);closeMode()}else{sound.fail();$('.answer-feedback').textContent='These marks do not form that reading. Try a small change in angle or eye height.'}};
+}
+
 function showMode(name,id,title,description,actions,custom){closeModal();touch?.reset();document.body.classList.add('manipulating');mode=name;$('#manipulation').classList.toggle('comparison-mode',['guards','croquet','effigies','assembly','signs','tart','gardeners','door'].includes(name));$('#manipulation-label').textContent='EXAMINING THE WORLD';$('#manipulation-title').textContent=title;$('#manipulation-description').textContent=description;$('#manipulation-actions').innerHTML='';actions.forEach(([label,fn])=>{const b=document.createElement('button');b.textContent=label;b.onclick=fn;$('#manipulation-actions').append(b)});$('#manipulation').classList.remove('hidden');world.beginMode(name,id,custom);$('#hud').classList.add('hidden')}
-function closeMode(resume=true){if(!mode)return;document.body.classList.remove('manipulating');if(mode==='croquet'&&world.ballPath)world.resetCroquet();signClick=null;world.equip(null);$('#manipulation').classList.remove('tool-mode');mode=null;$('#manipulation').classList.add('hidden');if(state.started)$('#hud').classList.remove('hidden');world.endExamine();if(!resume)world.pause(true)}
+function closeMode(resume=true){if(!mode)return;document.body.classList.remove('manipulating');if(mode==='croquet'&&world.ballPath)world.resetCroquet();signClick=null;world.equip(null);$('#manipulation').classList.remove('tool-mode','house-mode','perspective-mode');assemblyClick=null;mode=null;$('#manipulation').classList.add('hidden');if(state.started)$('#hud').classList.remove('hidden');world.endExamine();if(!resume)world.pause(true)}
 function clockSVG(h,m){const hand=(angle,length,width)=>`<line x1="50" y1="50" x2="${50+Math.sin(angle)*length}" y2="${50-Math.cos(angle)*length}" stroke="#293b30" stroke-width="${width}" stroke-linecap="round"/>`;return `<svg viewBox="0 0 100 100" role="img" aria-label="Clock showing ${h}:${String(m).padStart(2,'0')}"><circle cx="50" cy="50" r="47" fill="#cfba83"/><circle cx="50" cy="50" r="43" fill="#e8e0c5"/>${Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2;return `<text x="${50+Math.sin(a)*35}" y="${54-Math.cos(a)*35}" fill="#344331" font-size="9" text-anchor="middle">${i===0?'0':i}</text>`}).join('')}${hand((h+m/60)/12*Math.PI*2,21,3)}${hand(m/60*Math.PI*2,31,1.8)}<circle cx="50" cy="50" r="3" fill="#b3995d"/></svg>`}
 async function interact(id){
  if(transition)return;sound.click();const region=hotspotRoom(id);if(world.overworld&&region!==state.room){state.room=region;world.room=region;refresh()}
@@ -120,8 +139,8 @@ async function interact(id){
  if(id==='tart'){if(!has(state,'maze_court'))return toast('Open the tribunal path at the hedge dial first.');return tartPuzzle()}
  if(id==='guard_original'||id==='guard_impostor'){if(!has(state,'maze_court'))return toast('Open the tribunal path at the hedge dial first.');return inspectGuards()}
  if(id==='court_exit'){if(!has(state,'decree'))return toast('The Queen’s decree seals this door. Find the three missing letters.');return toast('The northern road is open. Walk through the gap behind the thrones and follow it to the tower.')}
- if(id==='structure')return has(state,'assembly')?info('A house made of angles','Walk to the two colored rings on the floor. Face the structure from each side. Its painted fragments should align.'):assemblyPuzzle();
- if(id==='amber_view'||id==='ivory_view'){if(!has(state,'assembly'))return toast('Assemble the house before reading its sides.');const side=id.split('_')[0];world.viewRing(side);viewFound(side);showMode('view',id,side==='amber'?'The amber side':'The ivory side','From this exact spot, the scattered strokes become whole.',[],{position:[side==='amber'?-6:6,1.7,-2],target:[0,2.7,-2]});return}
+ if(id==='structure')return has(state,'assembly')?info('Paint on folded surfaces','Move around the house. The colored floor marks identify its two sides. You can inspect a side to adjust your viewpoint.'):assemblyPuzzle();
+ if(id==='amber_view'||id==='ivory_view'){if(!has(state,'assembly'))return toast('Assemble the house before reading its sides.');return perspectivePuzzle(id.split('_')[0])}
  if(id==='forest_map')return worldMap();
  if(id==='bridge_note')return info('Three crossings','The stream divides the woods. Three timber bridges cross it. The old kitchen stands beyond the western bridge; the tea clearing lies beyond the eastern one.','A river inscription','bridge_note');
  if(id==='fan_note')return info('A misplaced fan','“I left my blue fan among the broken pillars. Perhaps the caterpillar remembers where.”','A note snagged on a branch','fan_note');
@@ -137,7 +156,7 @@ function doorPuzzle(){
  else if(!key)actions.push(['Look for the matching key',()=>{closeMode();toast('The little key rests on the high table.')}]);
  showMode('door','small_door','Door 6 · the triangular lock',description,actions,{position:[-2.4,.58,-9.6],target:[-2.4,.41,-11.48]});
 }
-function viewFound(side){if(!state.inventory.includes(side)){addItem(side);complete('view_'+side,ITEMS[side].description);toast(side==='amber'?'From the amber ring, the strokes align into 78.':'From the ivory ring, the strokes align into 32.')}}
+function viewFound(side){if(!state.inventory.includes(side)){addItem(side);complete('view_'+side,ITEMS[side].description);toast(side==='amber'?'You recorded the amber reading.':'You recorded the ivory reading.')}}
 async function changeRoom(room){
  if(transition)return;transition=true;closeModal();closeMode();world.pause(true);const ch=CHAPTERS.find(c=>c.room===room);const el=$('#chapter-transition');el.querySelector('.eyebrow').textContent=`CHAPTER ${ch.number}`;el.querySelector('h2').textContent=ch.title;el.querySelector('.chapter-subtitle').textContent=ch.subtitle;el.classList.remove('hidden');sound.chapter();
  try{if(room==='garden'){complete('ceiling','You looked up and found the way out. The rabbit is waiting in the garden.');if(!has(state,'mushroom'))state.size=11}state.room=room;await world.load(room,state);world.active=true;world.title=false;refresh();await new Promise(r=>setTimeout(r,1200));world.pause(false)}catch(e){toast('This place could not load. Try opening the game again.');console.error(e)}finally{el.classList.add('hidden');transition=false}
@@ -167,7 +186,7 @@ document.addEventListener('keydown',e=>{
 });
 setInterval(()=>{if(state.started&&!world?.title&&!world?.suspended&&!modalOpen&&!document.hidden&&!state.completed){state.minutes+=1/60;persist()}},1000);
 async function boot(){try{
- world=new World($('#world'),{onInteract:interact,onMessage:toast,onStep:()=>sound.step(),onTarget:hit=>{const el=$('#interaction');el.classList.toggle('hidden',!hit);$('#crosshair').classList.toggle('active',!!hit);$('#touch-action').classList.toggle('ready',!!hit);if(hit)el.querySelector('span').textContent=LABELS[hit.id]||'Examine'},onRegion:region=>{state.room=region;refresh();toast(CHAPTERS.find(c=>c.room===region).title)},onDiscover:id=>{state.discovered??=[];if(!state.discovered.includes(id)){state.discovered.push(id);persist()}},onModeClick:(name,e)=>{if(name==='paint')paintWorldRose(e);else if(name==='fan')$('#manipulation-actions button')?.click();else if(name==='signs'){const hit=world.signAt(e);if(hit)signClick?.(hit.trail,hit.index)}},onDoorPass:()=>{if(transition||modalOpen||mode||has(state,'feet'))return;complete('bottle');complete('door_passed','You walked through the little doorway. A strange measuring dial waits inside.');openPuzzle('feet')},onLookUp:()=>{if(!transition)changeRoom('garden')},onView:viewFound,onLock:locked=>{$('#mouse-lock').textContent=locked?'Mouse captured · Esc to release':'Capture mouse ↗'}});
+ world=new World($('#world'),{onInteract:interact,onMessage:toast,onStep:()=>sound.step(),onTarget:hit=>{const el=$('#interaction');el.classList.toggle('hidden',!hit);$('#crosshair').classList.toggle('active',!!hit);$('#touch-action').classList.toggle('ready',!!hit);if(hit)el.querySelector('span').textContent=LABELS[hit.id]||'Examine'},onRegion:region=>{state.room=region;refresh();toast(CHAPTERS.find(c=>c.room===region).title)},onDiscover:id=>{state.discovered??=[];if(!state.discovered.includes(id)){state.discovered.push(id);persist()}},onModeClick:(name,e)=>{if(name==='assembly')assemblyClick?.(houseHit(world,e));else if(name==='paint')paintWorldRose(e);else if(name==='fan')$('#manipulation-actions button')?.click();else if(name==='signs'){const hit=world.signAt(e);if(hit)signClick?.(hit.trail,hit.index)}},onDoorPass:()=>{if(transition||modalOpen||mode||has(state,'feet'))return;complete('bottle');complete('door_passed','You walked through the little doorway. A strange measuring dial waits inside.');openPuzzle('feet')},onLookUp:()=>{if(!transition)changeRoom('garden')},onHouseView:view=>{if($('#house-angle'))$('#house-angle').value=view.angle;if($('#house-height'))$('#house-height').value=view.height;},onLock:locked=>{$('#mouse-lock').textContent=locked?'Mouse captured · Esc to release':'Capture mouse ↗'}});
  touch=new TouchControls({getWorld:()=>world,getState:()=>state,onAction:()=>{if(mode==='paint')paintWorldRose();else if(mode==='fan')$('#manipulation-actions button')?.click();else if(world.highlight)world.interact();else toast('Aim at an object, or tap Explore to choose one nearby.')},onExplore:nearby,onMessage:toast});
  await world.load('hall',state);world.setQuality(state.settings.quality);$('#loading').classList.add('hidden');$('#title-screen').classList.remove('hidden');if(state.started){$('#begin').innerHTML='Continue your dream <span>↗</span>';$('#new-game').classList.remove('hidden')}
  // A stable readiness signal is useful to browser smoke tests without exposing game state.
