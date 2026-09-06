@@ -1512,6 +1512,11 @@ a.pager-item:hover .pager-title { color: var(--accent); }
 .spoiler-notice{border-left:3px solid var(--accent);padding:.8rem 1.1rem;background:var(--accent-soft);margin:3rem 0 1.5rem}
 .puzzle-study{border-top:1px solid var(--rule);margin:2rem 0;padding-top:1rem;scroll-margin-top:5rem}
 .puzzle-study h4{font-size:1.3rem;margin:0 0 1rem}.puzzle-study h5{font-family:'Alegreya Sans',sans-serif;font-size:.88rem;font-weight:700;margin:0 0 .5rem;color:var(--muted)}
-.puzzle-compare{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:1.5rem}.puzzle-compare p{font-size:1.05rem;line-height:1.65;margin:0}
+.puzzle-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}.puzzle-compare p{font-size:1.05rem;line-height:1.65;margin:0}
+.puzzle-compare .comparison-shot{margin:.75rem 0 1rem}
+.comparison-shot a{display:block;border-radius:3px;overflow:hidden}
+.comparison-shot a:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.comparison-shot img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:contain;background:#e9e6de}
+.comparison-shot figcaption{font-size:.88rem;line-height:1.45;min-height:3em}
 .study-images{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:2rem 0}.study-images figure{margin:0}.study-images img{width:100%;height:auto}.study-images figcaption{font-size:.9rem;line-height:1.5}
 @media(max-width:600px){.puzzle-compare,.study-images{grid-template-columns:1fr;gap:1rem}.puzzle-compare>div+div{border-left:2px solid var(--rule);padding-left:1rem}}
