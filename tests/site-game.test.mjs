@@ -27,11 +27,15 @@ test('the main post has every comparison and the visible walkthrough, with the o
  assert.match(post,/source-perspective.png/);assert.match(post,/pdf#page=7/);
  assert.equal((post.match(/<video[^>]*controls[^>]*playsinline/g)||[]).length,3);
  assert.match(post,/id="gameplay-recording"/);
+ assert.match(post,/id="navigation-failure"/);
+ assert.match(post,/GPT-6 Astra/);
+ assert.doesNotMatch(post,/white-rabbit-visual-finale|Updated finale/);
+ assert.match(post,/door-hole-reported\.png/);assert.match(post,/door-reveal-after\.png/);
  assert.doesNotMatch(post,/game-highlights|white-rabbit-highlights/);
  for(const section of post.matchAll(/<section class="puzzle-study"[\s\S]*?<\/section>/g)){
   assert.match(section[0],/original-\d{2}\.webp/);assert.match(section[0],/adapted-\d{2}\.webp/);
  }
- for(const release of ['white-rabbit-repair-walkthrough/walkthrough','white-rabbit-visual-finale/finale','white-rabbit-smooth-gameplay/after-the-white-rabbit-smooth-gameplay'])assert.ok(post.includes('releases/download/'+release+'.mp4'));
+ for(const release of ['white-rabbit-repair-walkthrough/walkthrough','white-rabbit-diagonal-gameplay/after-the-white-rabbit-gameplay','white-rabbit-smooth-gameplay/after-the-white-rabbit-smooth-gameplay'])assert.ok(post.includes('releases/download/'+release+'.mp4'));
  for(const image of post.matchAll(/<img[^>]+src="\/images\/white-rabbit[^>]+>/g)){assert.match(image[0],/width="[1-9][0-9]*"/);assert.match(image[0],/height="[1-9][0-9]*"/)}
  assert.doesNotMatch(post,/<details>/);for(const n of ['I','II','III','IV'])assert.ok(post.includes('Chapter '+n+' ·'));
  assert.match(old,/<meta http-equiv="refresh" content="0;url=\/after-the-white-rabbit\/#full-walkthrough">/);

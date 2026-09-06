@@ -7,6 +7,7 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {has} from './puzzles.js';
 import {moveWithCollision,advancePath,inKitchenEntrance} from './movement.js';
+import {findWalkingPath,dampHeading} from './navigation.js';
 import {installSpatialPuzzles} from './spatial-puzzles.js';
 import {HOUSE_ORDER,LITTLE_DOOR,canPassLittleDoor} from './mechanics.js';
 import {installHouse,HOUSE_CENTER} from './house.js';
@@ -126,16 +127,13 @@ export class World{
  nearby(){return Object.entries(this.hotspots).filter(([id,o])=>o.visible&&LABELS[id]&&this.boxes[id]?.distanceToPoint(this.camera.position)<5.8).map(([id])=>({id,label:LABELS[id],distance:this.boxes[id].distanceToPoint(this.camera.position)})).sort((a,b)=>a.distance-b.distance)}
  canFanKitchen(){return inKitchenEntrance(this.boxes.kitchen,this.camera.position)}
  navigate(id,done){
-  const b=this.boxes[id];if(!b)return;const center=b.getCenter(new THREE.Vector3());const step=.5;const start=[Math.round(this.camera.position.x/step),Math.round(this.camera.position.z/step)];
+  const b=this.boxes[id];if(!b)return;const center=b.getCenter(new THREE.Vector3());
   // The high cat eyes are a visual clue. Walk to a place below them; a hand's
   // reach test can never succeed at their height. Keep physical props unchanged.
   const approach=id==='cat_eyes'?b.clone():b;if(id==='cat_eyes')approach.min.y=approach.max.y=this.height;
-  const key=(x,z)=>x+','+z;const score=(x,z)=>Math.hypot(x*step-center.x,z*step-center.z)/step;const queue=[{p:start,g:0,f:score(...start)}];const visited=new Map([[key(...start),null]]);let goal=null;
-  for(let qi=0;queue.length&&qi<18000;qi++){queue.sort((a,b)=>a.f-b.f);const node=queue.shift();const [x,z]=node.p;const wp=new THREE.Vector3(x*step,this.height,z*step);if(id==='kitchen'?inKitchenEntrance(b,wp)&&wp.z>b.max.z+.7:approach.distanceToPoint(wp)<(id==='roses'?.75:2.5)&&z*step>center.z+.55){goal=[x,z];break}
-   for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,nz=z+dz,k=key(nx,nz);if(!visited.has(k)&&this.valid(nx*step,nz*step)){visited.set(k,[x,z]);queue.push({p:[nx,nz],g:node.g+1,f:node.g+1+score(nx,nz)})}}
-  }
-  if(!goal){this.callbacks.onMessage?.('A locked route or the river is in the way. Explore for another crossing.');return}
-  const path=[];for(let p=goal;p;p=visited.get(key(...p)))path.unshift(new THREE.Vector3(p[0]*step,this.height,p[1]*step));
+  const points=findWalkingPath({start:this.camera.position,target:center,valid:(x,z)=>this.valid(x,z),isGoal:p=>{const wp=new THREE.Vector3(p.x,this.height,p.z);return id==='kitchen'?inKitchenEntrance(b,wp)&&wp.z>b.max.z+.7:approach.distanceToPoint(wp)<(id==='roses'?.75:2.5)&&p.z>center.z+.55}});
+  if(!points){this.callbacks.onMessage?.('A locked route or the river is in the way. Explore for another crossing.');return}
+  const path=points.map(p=>new THREE.Vector3(p.x,this.height,p.z));
   this.navigation={path,index:0,id,done,center};this.callbacks.onMessage?.('Walking to '+(LABELS[id]||'the object')+'. Use the movement controls to stop.');
  }
  examine(id,custom){
@@ -173,7 +171,7 @@ export class World{
   if(this.cameraTween){const t=this.cameraTween;t.elapsed+=dt;const a=Math.min(t.elapsed/ .65,1);this.camera.position.lerpVectors(t.from,t.to,a*a*(3-2*a));this.camera.lookAt(t.target);if(a===1)this.cameraTween=null}
   if(this.active&&!this.blocked&&!this.suspended&&!this.title){
    this.height=THREE.MathUtils.damp(this.height,this.targetHeight,3,dt);
-   if(this.navigation){if(this.keys.size||this.touchMove.x||this.touchMove.y){this.navigation=null}else{const n=this.navigation;const travel=advancePath(this.camera.position,n,dt*(this.overworld?4:3.4));if(travel.heading!==null)this.yaw=THREE.MathUtils.damp(this.yaw,travel.heading,6,dt);if(travel.done){this.yaw=Math.atan2(this.camera.position.x-n.center.x,this.camera.position.z-n.center.z);this.navigation=null;n.done?.()}}}
+   if(this.navigation){if(this.keys.size||this.touchMove.x||this.touchMove.y){this.navigation=null}else{const n=this.navigation;const travel=advancePath(this.camera.position,n,dt*(this.overworld?4:3.4));if(travel.heading!==null)this.yaw=dampHeading(this.yaw,travel.heading,6,dt);if(travel.done){this.yaw=Math.atan2(this.camera.position.x-n.center.x,this.camera.position.z-n.center.z);this.navigation=null;n.done?.()}}}
    let forward=Number(this.keys.has('KeyW')||this.keys.has('ArrowUp'))-Number(this.keys.has('KeyS')||this.keys.has('ArrowDown'))+this.touchMove.y;let strafe=Number(this.keys.has('KeyD'))-Number(this.keys.has('KeyA'))+this.touchMove.x;
    if(this.keys.has('ArrowLeft'))this.yaw+=dt*1.3;if(this.keys.has('ArrowRight'))this.yaw-=dt*1.3;
    if(forward||strafe){const len=Math.max(1,Math.hypot(forward,strafe));forward/=len;strafe/=len;const running=this.keys.has('ShiftLeft')||this.touchRun;const speed=(this.overworld?(running?6:4):(running?4.3:2.6))*dt;const dx=(-Math.sin(this.yaw)*forward+Math.cos(this.yaw)*strafe)*speed;const dz=(-Math.cos(this.yaw)*forward-Math.sin(this.yaw)*strafe)*speed;const p=this.camera.position;moveWithCollision(p,dx,dz,(x,z)=>this.valid(x,z));this.stepTime+=dt;if(this.stepTime>.48){this.callbacks.onStep?.();this.stepTime=0}}

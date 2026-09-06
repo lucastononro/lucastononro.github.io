@@ -39,6 +39,24 @@ test('walking through the actual doorway requires both the key and a fitting bod
  world.state.size=11;assert.equal(world.valid(LITTLE_DOOR.x+1,-12.4),false);assert.equal(world.valid(LITTLE_DOOR.x,-14.5),false);
 });
 
+test('the locked door hides its wall opening from high and oblique views, then opens a real passage',async()=>{
+ const scene=await hall();scene.updateMatrixWorld(true);const ray=new THREE.Raycaster();
+ // Probe the rectangular wall cutout, including its corners above the arch.
+ // These lines exposed the passage in the player's two close-up screenshots.
+ for(const dx of [-2,-1,0,1,2])for(const y of [.57,1.7,2.83])for(const z of [-10.65,-9.5]){
+  const eye=new THREE.Vector3(LITTLE_DOOR.x+dx,y,z);
+  for(const tx of [-.39,-.2,0,.2,.39])for(const ty of [.05,.35,.6,.8,.855]){
+   const target=new THREE.Vector3(LITTLE_DOOR.x+tx,ty,-11.83);
+   ray.set(eye,target.clone().sub(eye).normalize());ray.far=eye.distanceTo(target)+.002;
+   assert.ok(ray.intersectObject(scene,true).length,`uncovered wall opening from ${eye.toArray()} to ${target.toArray()}`);
+  }
+ }
+ let leaf;scene.traverse(o=>{if(o.userData.doorLeaf==='small_door')leaf=o});
+ leaf.rotation.y=-Math.PI*.46;scene.updateMatrixWorld(true);
+ ray.set(new THREE.Vector3(LITTLE_DOOR.x,.4,-10.65),new THREE.Vector3(0,0,-1));ray.far=2;
+ assert.equal(ray.intersectObject(scene,true).length,0,'the repair must not plug the unlocked passage');
+});
+
 test('hidden collected objects do not intercept clicks on visible objects behind them',()=>{
  const world=Object.create(World.prototype);world.root=new THREE.Group();world.camera=new THREE.PerspectiveCamera(62,1,.01,20);world.ray=new THREE.Raycaster();
  const hidden=new THREE.Group();hidden.userData.hotspot='key';hidden.visible=false;const a=new THREE.Mesh(new THREE.BoxGeometry(1,1,.1));a.position.z=-1;hidden.add(a);world.root.add(hidden);

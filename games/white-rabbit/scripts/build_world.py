@@ -129,6 +129,21 @@ def lamp(x,z,y=3):
 
 def door(name,x,z,w,h,number='',mat='wood',parent=None,base=0,lock='',hinged=False):
     parent=parent or empty(name)
+    if hinged:
+        # All five doors have the same fitted casing. The reveal joins the
+        # wall to the leaf, sealing the rectangular wall cutout from above
+        # and from either side while leaving the arched passage usable.
+        outer=w/2+.16;spring=base+h-w/2;top=base+h+.16
+        back=z-.40;front=z-.025;depth=front-back
+        for side in [-1,1]:
+            box('door reveal jamb',(x+side*(outer+w/2)/2,(base+spring)/2,(back+front)/2),(outer-w/2,spring-base,depth),'wood',parent)
+        boundary=[(x-outer,spring),(x-w/2,spring)]
+        for i in range(1,25):
+            a=math.pi-i*math.pi/24;boundary.append((x+w/2*math.cos(a),spring+w/2*math.sin(a)))
+        boundary += [(x+outer,spring),(x+outer,top),(x-outer,top)]
+        n=len(boundary);vertices=[xyz((px,py,zz)) for zz in [back,front] for px,py in boundary]
+        faces=[tuple(reversed(range(n))),tuple(range(n,2*n))]+[(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)]
+        mesh_obj('door reveal lintel',vertices,faces,'wood',parent)
     leaf=parent
     if hinged:
         leaf=bpy.data.objects.new(name+'_leaf',None);bpy.context.collection.objects.link(leaf);leaf.parent=parent;leaf['doorLeaf']=name
@@ -346,6 +361,10 @@ for x in [-7,7]:
 for x in [-3.5,3.5,-7.5,7.5]:lamp(x,-11.4,3.7)
 g=empty('rabbit');rabbit((1.8,0,3),g,1.3);clockface('rabbit watch',2.3,.7,3.35,3,0,g,.18)
 export('hall')
+
+# Iterating on one room should not rewrite the other published environments.
+if os.environ.get('WHITE_RABBIT_BUILD_ROOM')=='hall':
+    raise SystemExit(0)
 
 clear()
 # APPOINTMENTS IN THE GARDEN.
