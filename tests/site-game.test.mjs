@@ -14,9 +14,19 @@ test('the game opens the post before the title and making-of prose',()=>{
 test('the production game has local subdirectory assets and every model',()=>{
  const html=read('games/white-rabbit/index.html');const paths=[...html.matchAll(/(?:src|href)="(\.\/[^"#]+)"/g)].map(m=>m[1]);assert.ok(paths.length>=4);
  for(const path of paths)assert.ok(existsSync(resolve('dist/games/white-rabbit',path)),path);
- for(const model of ['hall','garden','court','tower','white-rabbit'])assert.ok(existsSync(`dist/games/white-rabbit/models/${model}.glb`));
+ for(const model of ['hall','garden','court','tower','white-rabbit','woodland-animals','wonderland-residents'])assert.ok(existsSync(`dist/games/white-rabbit/models/${model}.glb`));
  const main=readdirSync('dist/games/white-rabbit/assets').find(name=>/^index-.*\.js$/.test(name));const js=read('games/white-rabbit/assets/'+main);
  assert.doesNotMatch(js,/Developer checkpoint|saves disabled|localhost:|\/Users\//);
  assert.ok(!existsSync('dist/games/white-rabbit/touch-review.html'));
  assert.match(html,/id="move-pad"/);assert.match(html,/id="look-pad"/);assert.match(html,/id="touch-action"/);assert.match(html,/id="rotate-device"/);
+});
+
+test('the spoiler appendix includes the recording and all referenced evidence images',()=>{
+ const post=read('after-the-white-rabbit/index.html');
+ assert.match(post,/href="\/white-rabbit-walkthrough\/"/);
+ const appendix=read('white-rabbit-walkthrough/index.html');
+ assert.match(appendix,/<video[^>]*controls[^>]*playsinline/);
+ assert.match(appendix,/releases\/download\/white-rabbit-repair-walkthrough\/walkthrough\.mp4/);
+ assert.equal((appendix.match(/<details>/g)||[]).length,4);
+ for(const html of [post,appendix])for(const match of html.matchAll(/(?:src|poster)="(\/images\/[^"?#]+)"/g))assert.ok(existsSync(resolve('dist','.'+match[1])),match[1]);
 });

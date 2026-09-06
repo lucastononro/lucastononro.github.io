@@ -1,4 +1,8 @@
 // Puzzle rules shared by the interface and the 3D mechanisms.
+export const SIZE_MARKS=[11,22,33,44,55];
+export const LITTLE_DOOR={x:-2.4,z:-11.48,width:.7,height:.82};
+export function canResize(item,current,target){return SIZE_MARKS.includes(target)&&(item==='biscuit'?target>current:item==='bottle'&&target<current)}
+export function canPassLittleDoor(size){return SIZE_MARKS.includes(size)&&size/33*1.85<LITTLE_DOOR.height&&size/33*.48<LITTLE_DOOR.width}
 export const APPOINTMENTS = [
  {id:'mushroom',h:3,m:10,title:'The mushroom',clue:'The hours follow each other…'},
  {id:'messenger',h:4,m:25,title:'The invitation',clue:'…but only the numeral on the clock…'},

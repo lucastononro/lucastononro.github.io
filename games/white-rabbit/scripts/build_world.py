@@ -59,9 +59,20 @@ def cylinder(name,p,r,h,mat,parent=None,top=None):
     return o
 
 def tube(name,pts,r,mat,parent=None):
-    pts=[Vector(xyz(p)) for p in pts]; verts=[]; faces=[]; n=8
+    # Transport the previous ring's normal along the path. Choosing a fresh
+    # axis at each point twisted the rings and tore the appearance of arches.
+    clean=[]
+    for p in pts:
+        v=Vector(xyz(p))
+        if not clean or (v-clean[-1]).length>1e-6: clean.append(v)
+    pts=clean; verts=[]; faces=[]; n=8; previous=None
     for i,p in enumerate(pts):
-        d=(pts[min(i+1,len(pts)-1)]-pts[max(i-1,0)]).normalized(); ref=Vector((0,0,1)) if abs(d.z)<.95 else Vector((1,0,0));a=d.cross(ref).normalized();b=d.cross(a).normalized()
+        d=(pts[min(i+1,len(pts)-1)]-pts[max(i-1,0)]).normalized()
+        if previous is None:
+            ref=Vector((0,0,1)) if abs(d.z)<.95 else Vector((1,0,0));a=d.cross(ref).normalized()
+        else: a=(previous-d*previous.dot(d)).normalized()
+        if a.length<1e-6: a=d.cross(Vector((0,1,0))).normalized()
+        b=d.cross(a).normalized();previous=a
         for j in range(n):verts.append(tuple(p+r*(a*math.cos(j*math.tau/n)+b*math.sin(j*math.tau/n))))
         if i:
             for j in range(n): faces.append(((i-1)*n+j,(i-1)*n+(j+1)%n,i*n+(j+1)%n,i*n+j))
@@ -116,13 +127,40 @@ def lamp(x,z,y=3):
     cylinder('lantern',(x,y+.18,z+.15),.2,.43,'glow');cylinder('lantern hat',(x,y+.44,z+.15),.29,.13,'brass',top=.08)
     for a in range(4):cylinder('lantern edge',(x+.2*math.cos(a*math.pi/2),y+.18,z+.15+.2*math.sin(a*math.pi/2)),.016,.45,'brass')
 
-def door(name,x,z,w,h,number='',mat='wood',parent=None):
-    parent=parent or empty(name);box('door panel',(x,h/2,z),(w,h,.16),mat,parent);arch('arched door frame',x,z+.13,w+.12,h+.2,'gold',parent)
-    box('door inset',(x,h*.43,z+.1),(w*.78,h*.66,.04),'panel',parent)
-    for dx in [-w*.39,w*.39]:box('door molding',(x+dx,h*.43,z+.135),(.025,h*.66,.03),'gold',parent)
-    for dy in [h*.1,h*.76]:box('door molding',(x,dy,z+.135),(w*.78,.025,.03),'gold',parent)
-    ball('door knob',(x+w*.28,h*.43,z+.2),(.06,.06,.05),'gold',parent)
-    if number: text_obj('door number',number,(x,h*.78,z+.17),.14,'cream',parent)
+def door(name,x,z,w,h,number='',mat='wood',parent=None,base=0,lock='',hinged=False):
+    parent=parent or empty(name)
+    leaf=parent
+    if hinged:
+        leaf=bpy.data.objects.new(name+'_leaf',None);bpy.context.collection.objects.link(leaf);leaf.parent=parent;leaf['doorLeaf']=name
+    # Fit the actual panel to its arch instead of letting a rectangular slab
+    # protrude above and through neighboring frames.
+    outline=[(x-w/2,base),(x+w/2,base)]
+    for i in range(25):
+        a=i*math.pi/24;outline.append((x+w/2*math.cos(a),base+h-w/2+w/2*math.sin(a)))
+    verts=[xyz((px,py,z+depth)) for depth in [-.08,.08] for px,py in outline];n=len(outline)
+    mesh_obj('door panel',verts,[tuple(reversed(range(n))),tuple(range(n,2*n))]+[(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],mat,leaf)
+    arch('arched door frame',x,z+.13,w+.12,h+.1,'gold',parent,base)
+    box('door inset',(x,base+h*.39,z+.1),(w*.74,h*.54,.035),'panel',leaf)
+    for dx in [-w*.38,w*.38]:box('door molding',(x+dx,base+h*.39,z+.135),(.025,h*.54,.025),'gold',leaf)
+    for dy in [h*.12,h*.66]:box('door molding',(x,base+dy,z+.135),(w*.76,.025,.025),'gold',leaf)
+    ball('door knob',(x+w*.27,base+h*.4,z+.2),(.055,.055,.045),'gold',leaf)
+    if number: text_obj('door number',number,(x,base+h*.75,z+.17),.16,'cream',leaf)
+    if lock=='triangle':
+        # Model the keyway itself, not a font glyph that can disappear or sit
+        # inside the door panel. Its three sides match the high-table key.
+        cx=x-.12;cy=base+h*.4;zz=z+.155
+        box('keyway plate',(cx,cy,zz),(.24,.26,.045),'brass',leaf)
+        points=[(cx,cy+.077,zz+.032),(cx-.071,cy-.052,zz+.032),(cx+.071,cy-.052,zz+.032)]
+        mesh_obj('triangular keyway',[xyz(p) for p in points],[(0,1,2)],'ink',leaf)
+        tube('triangular keyway edge',points+[points[0]],.01,'gold',leaf)
+    elif lock: text_obj('lock shape',lock,(x-.12,base+h*.4-.045,z+.16),.15,'gold',leaf)
+    if hinged:
+        # Keep the exported pivot on the hinge, with all decorations attached.
+        anchor=Vector(xyz((x-w/2,base,z)))
+        for child in leaf.children: child.location-=anchor
+        leaf.location=anchor
+        if name!='small_door':box('dark passage',(x,base+h*.45,z-.1),(w*.9,h*.9,.025),'dark',parent)
+        else:parent['passageHeight']=h;parent['passageWidth']=w
     return parent
 
 def cup(p,parent=None,mat='cream',s=1):
@@ -253,8 +291,17 @@ for x in [-9,9]:
     box('wall',(x,4,0),(.3,8,24),'teal');box('lower panel',(x*.983,.85,0),(.1,1.7,24),'panel')
     for y in [.12,1.65,1.76,7.5,7.7]:box('long molding',(x*.978,y,0),(.13,.07,24),'gold')
     for z in range(-11,13,3):box('wall pilaster',(x*.977,4,z),(.15,7.5,.16),'brass')
-box('back wall',(0,4,-12),(18,8,.35),'teal');box('back wainscot',(0,.8,-11.8),(18,1.6,.1),'panel')
-for y in [.12,1.65,1.76,7.5,7.7]:box('back molding',(0,y,-11.72),(18,.07,.12),'gold')
+for lo,hi in [(-9,-2.8),(-2,9)]:
+    box('back wall',((lo+hi)/2,4,-12),(hi-lo,8,.35),'teal')
+    box('back wainscot',((lo+hi)/2,.8,-11.8),(hi-lo,1.6,.1),'panel')
+    box('back molding',((lo+hi)/2,.12,-11.72),(hi-lo,.07,.12),'gold')
+box('wall above passage',(-2.4,4.43,-12),(.8,7.14,.35),'teal')
+box('panel above passage',(-2.4,1.25,-11.8),(.8,.7,.1),'panel')
+for y in [1.65,1.76,7.5,7.7]:box('back molding',(0,y,-11.72),(18,.07,.12),'gold')
+box('passage floor',(-2.4,-.02,-12.4),(.8,.06,2.8),'whitetile')
+for x in [-2.87,-1.93]:box('passage side',(x,1.8,-13.05),(.15,3.6,2),'teal')
+box('passage end',(-2.4,1.8,-14.1),(1.05,3.6,.15),'teal')
+ring('passage skylight',(-2.4,3.4,-12.8),.33,.03,'glow')
 for x in range(-8,9,2):
     box('back panel edge',(x,.85,-11.69),(.04,1.5,.06),'gold')
     if abs(x)>3:box('pilaster',(x,4.65,-11.73),(.14,5.65,.15),'brass')
@@ -273,12 +320,11 @@ for z in [-6,4]:
     cylinder('chandelier chain',(0,6.8,z),.025,2,'gold');ring('chandelier',(0,5.8,z),1.35,.07,'gold')
     for k in range(10):
         a=k/10*math.tau;x=math.cos(a)*1.35;zz=z+math.sin(a)*1.35;cylinder('candle',(x,6,zz),.06,.37,'cream');ball('flame',(x,6.25,zz),(.047,.095,.047),'glow')
-# Door arrangement forms an A when read as a whole.
-for x,h,w,num in [(-2.4,1.55,1.1,'2'),(2.4,1.55,1.1,'9'),(-1.55,3,1.05,'6'),(1.55,3,1.05,'4'),(0,4.7,1.05,'7')]:
-    d=door('small_door' if num=='6' else 'door_'+num,x,-11.48,w,h,num)
-    if num=='6':text_obj('triangle lock','△',(x-.2,.52,-11.23),.18,'gold',d)
-box('door crossbar',(0,2.1,-11.25),(2.4,.16,.15),'oak')
-text_obj('missing name','L I C E',(0,.36,-11.21),.3,'cream')
+# Five separate little doors rise along the two sides of an A. Their bases,
+# rather than their heights, move upward, leaving space between every frame.
+for x,base,num,lock in [(-2.4,0,'6','triangle'),(2.4,0,'9','□'),(-1.2,1.7,'2','○'),(1.2,1.7,'4','☆'),(0,3.4,'7','◊')]:
+    door('small_door' if num=='6' else 'door_'+num,x,-11.48,.7,.82,num,base=base,lock=lock,hinged=True)
+box('door crossbar',(0,2.1,-11.4),(1.45,.08,.07),'gold')
 # Main puzzle props.
 g=empty('story');table(-4.8,4,2.8,1.5,g);box('book cover',(-4.8,1.19,4),(1.6,.1,1.04),'red',g);box('open pages',(-4.8,1.27,4),(1.43,.07,.94),'ivory',g);plaque('story label','THE UNFINISHED STORY',(-4.8,1.8,3.67),2.5,g)
 for i in range(7):box('page script',(-4.8,1.315,3.7+i*.09),(1.15,.008,.012),'wood',g)
@@ -286,7 +332,7 @@ g=empty('shadow');pedestal((4.8,0,4),g);text_obj('rotating letter','M',(4.8,1.65
 g=empty('arithmetic');box('blackboard frame',(-5.1,2.35,-6.6),(3.15,2,.15),'gold',g);box('blackboard',(-5.1,2.35,-6.49),(3,1.85,.08),'dark',g)
 for i,t in enumerate(['4 × 5 = 12','4 × 6 = 13','4 × 7 = 14','4 × ? = 20']):text_obj('chalk equation',t,(-5.1,2.95-i*.38,-6.43),.24,'cream',g)
 for dx in [-1.3,1.3]:box('board leg',(-5.1+dx,1,-6.65),(.12,2,.12),'wood',g)
-g=empty('letter');plaque('name plaque','L I C E',(0,1.9,-10.92),1.5,g)
+g=empty('letter');plaque('name plaque','L I C E',(0,.9,-11.28),1.35,g)
 g=empty('biscuit');table(-5.5,-1.6,2,1.2,g);cylinder('plate',(-5.5,1.17,-1.6),.44,.05,'cream',g);cylinder('biscuit',(-5.5,1.24,-1.6),.3,.12,'oak',g);plaque('eat label','EAT ME',(-5.5,1.6,-1.8),1.3,g)
 g=empty('bottle');table(5.5,-1.6,2,1.2,g);cylinder('bottle',(5.5,1.42,-1.6),.21,.57,'blue',g,top=.12);cylinder('stopper',(5.5,1.76,-1.6),.1,.14,'gold',g);plaque('drink label','DRINK ME',(5.5,1.95,-1.85),1.6,g)
 g=empty('key');table(5.3,-7,3.1,1.8,y=3.2);ring('key loop',(5.3,3.39,-7),.2,.05,'gold',g);tube('key shaft',[(5.3,3.4,-7),(5.3,3.4,-6.37)],.045,'gold',g);tube('triangle key bit',[(5.3,3.4,-6.53),(5.5,3.4,-6.38),(5.3,3.4,-6.22),(5.3,3.4,-6.53)],.045,'gold',g)
@@ -336,13 +382,15 @@ for name,x,z,h,m in [('caterpillar',-6,0,3,10),('messenger',6,1,4,25),('kitchen'
         character('cook',x+.65,z-1.05,'cook',g)
         table(x,z,3,1.7,g);cylinder('cauldron',(x,1.45,z),.5,.6,'dark',g,top=.62);ring('cauldron lip',(x,1.77,z),.62,.045,'brass',g)
         for dx in [-.8,.8]:cylinder('pepper jar',(x+dx,1.3,z),.15,.34,'ivory',g)
-        plaque('kitchen sign','THE PEPPER KITCHEN',(x,2,z-.5),2.8,g)
+        # The title belongs on the counter, below the cook's face and stirring arm.
+        plaque('kitchen sign','THE PEPPER KITCHEN',(x,.85,z+.92),2.1,g)
     if name=='tea':
         character('hatter',x+1.2,z-1.2,'hatter',g)
         table(x,z,4,2,g);box('table runner',(x,1.15,z),(1.2,.02,1.95),'red',g)
         for dx in [-1.3,0,1.3]:cup((x+dx,1.16,z+.3),g)
         ball('teapot',(x,1.46,z-.35),(.32,.3,.29),'cream',g);tube('teapot spout',[(x+.23,1.4,z-.35),(x+.6,1.66,z-.35)],.06,'cream',g);ring('teapot handle',(x-.32,1.5,z-.35),.2,.04,'gold',g,True)
-        cylinder('hatter hat',(x+1.3,1.5,z-.35),.35,.65,'teal',g);cylinder('hat brim',(x+1.3,1.2,z-.35),.5,.06,'teal',g);plaque('hat tag','10/6',(x+1.3,1.56,z+.02),.5,g)
+        # Keep the tabletop distraction at the opposite end from the Hatter's face.
+        cylinder('hatter hat',(x-1.3,1.5,z-.35),.35,.65,'teal',g);cylinder('hat brim',(x-1.3,1.2,z-.35),.5,.06,'teal',g);plaque('hat tag','10/6',(x-1.3,1.56,z+.02),.5,g)
     offsets={'caterpillar':(-11,3),'messenger':(10,9),'kitchen':(-12,-14),'tea':(12,-10)}
     shift_new(before,*offsets[name])
 # Single fan in an alcove, physical collectible.
@@ -394,7 +442,11 @@ box('court ground',(0,-.12,0),(32,.24,34),'grass')
 for x in range(-3,4):
     for z in range(-14,14):box('court tiles',(x,.025,z),(.99,.05,.99),'whitetile' if (x+z)%2 else 'blacktile')
 for x in [-14,14]:
-    for z in [-9,9]:box('outer hedge',(x,1.5,z),(.8,3,13),'hedge')
+    # The west opening matches the six-metre road, plus shoulder clearance.
+    # Its old five-metre gap clipped both sides of the visible approach.
+    for side in [-1,1]:
+        center,depth=(9.55,11.9) if x<0 else (9,13)
+        box('outer hedge',(x,1.5,side*center),(.8,3,depth),'hedge')
 for x in [-8,8]:box('rear hedge',(x,1.5,-15),(12,3,.8),'hedge')
 for x in [-11,-6,6,11]:
     for z in [-12,11]:tree(x,z,1)
