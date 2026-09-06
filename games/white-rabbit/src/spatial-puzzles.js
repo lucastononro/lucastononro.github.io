@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {SIGN_TRAILS,HOUSE_ORDER,HOUSE_SLOTS,CROQUET_POINTS} from './mechanics.js';
+import {arrangeHouse} from './house.js';
 
 export function installSpatialPuzzles(World){Object.assign(World.prototype,{
  prepareSpatialPuzzles(){
@@ -44,9 +45,7 @@ export function installSpatialPuzzles(World){Object.assign(World.prototype,{
   bodies.forEach((body,i)=>{const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.repeat.set(1,1/3);texture.offset.y=1-(i+1)/3;const paint=new THREE.Mesh(new THREE.PlaneGeometry(.49,.75),new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false}));paint.name='permanent_figure_paint';paint.position.set(0,0,.087);body.add(paint)});
  },
  previewAssembly(order,faces={}){
-  const structure=this.hotspots.structure;if(!structure)return;if(typeof order==='number')order=HOUSE_ORDER.slice(0,order);order??=[];
-  structure.visible=order.length>0;
-  for(const piece of structure.children){const pieceIndex=piece.userData.pieceIndex;if(pieceIndex===undefined)continue;const label=HOUSE_ORDER[pieceIndex],slot=order.indexOf(label);piece.visible=slot>=0;if(slot<0)continue;piece.position.fromArray(HOUSE_SLOTS[slot]);piece.rotation.x=faces[label]?Math.PI:0;}
+  if(typeof order==='number')order=HOUSE_ORDER.slice(0,order);arrangeHouse(this,order||[],faces);
  },
  resetCroquet(){this.ballPath=null;this.ball.position.set(82,.3,-24.7);this.ball.rotation.set(0,0,0)},
  rollCroquet(from,to,stop,done){const a=CROQUET_POINTS[from],b=stop||CROQUET_POINTS[to];this.ballPath={elapsed:0,duration:.75,from:new THREE.Vector3(a[0]+72,.3,a[1]-22),to:new THREE.Vector3(b[0]+72,.3,b[1]-22),done}},

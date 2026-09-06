@@ -97,6 +97,11 @@ async function build() {
     const { data, body } = parseFrontmatter(raw)
     const slug = data.slug || file.replace(/\.md$/, '')
     const { html } = renderMarkdown(body)
+    if (data.redirect) {
+      if (!/^\/[a-z0-9/#-]+$/.test(data.redirect)) throw new Error(`Invalid internal redirect in ${file}`)
+      written.push(await write(`/${slug}/`, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=${u(data.redirect)}"><link rel="canonical" href="${abs(data.redirect)}"><title>Walkthrough has moved</title></head><body>${html}</body></html>`))
+      continue
+    }
     written.push(await write(`/${slug}/`, prosePage({
       title: data.title || slug,
       label: data.label || 'Page',

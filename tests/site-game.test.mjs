@@ -21,12 +21,13 @@ test('the production game has local subdirectory assets and every model',()=>{
  assert.match(html,/id="move-pad"/);assert.match(html,/id="look-pad"/);assert.match(html,/id="touch-action"/);assert.match(html,/id="rotate-device"/);
 });
 
-test('the spoiler appendix includes the recording and all referenced evidence images',()=>{
- const post=read('after-the-white-rabbit/index.html');
- assert.match(post,/href="\/white-rabbit-walkthrough\/"/);
- const appendix=read('white-rabbit-walkthrough/index.html');
- assert.match(appendix,/<video[^>]*controls[^>]*playsinline/);
- assert.match(appendix,/releases\/download\/white-rabbit-repair-walkthrough\/walkthrough\.mp4/);
- assert.equal((appendix.match(/<details>/g)||[]).length,4);
- for(const html of [post,appendix])for(const match of html.matchAll(/(?:src|poster)="(\/images\/[^"?#]+)"/g))assert.ok(existsSync(resolve('dist','.'+match[1])),match[1]);
+test('the main post has every comparison and the visible walkthrough, with the old URL redirected',()=>{
+ const post=read('after-the-white-rabbit/index.html'),old=read('white-rabbit-walkthrough/index.html');
+ assert.match(post,/id="full-walkthrough"/);assert.equal((post.match(/class="puzzle-study"/g)||[]).length,27);
+ assert.match(post,/source-perspective.png/);assert.match(post,/pdf#page=7/);
+ assert.equal((post.match(/<video[^>]*controls[^>]*playsinline/g)||[]).length,2);
+ for(const release of ['white-rabbit-repair-walkthrough/walkthrough','white-rabbit-visual-finale/finale'])assert.ok(post.includes('releases/download/'+release+'.mp4'));
+ assert.doesNotMatch(post,/<details>/);for(const n of ['I','II','III','IV'])assert.ok(post.includes('Chapter '+n+' ·'));
+ assert.match(old,/<meta http-equiv="refresh" content="0;url=\/after-the-white-rabbit\/#full-walkthrough">/);
+ for(const match of post.matchAll(/(?:src|poster)="(\/images\/[^"?#]+)"/g))assert.ok(existsSync(resolve('dist','.'+match[1])),match[1]);
 });

@@ -1,6 +1,6 @@
 # Verification
 
-The most recently confirmed game test run has 42 passing checks. The recorded repair playthrough reached the ending through the ordinary game UI. This document separates that run from the earlier checkpoint checks, which missed the failures listed in [BUGS.md](BUGS.md). The site build and four publishing checks also pass.
+The most recently confirmed game test run has 45 passing checks. The recorded repair playthrough reached the ending through the ordinary game UI. This document separates that run from the earlier checkpoint checks, which missed the failures listed in [BUGS.md](BUGS.md). The site build and four publishing checks also pass.
 
 ## Automated coverage
 
@@ -31,7 +31,7 @@ The final production snapshot was `index-CCssolBJ.js`. Runtime captures `189-cat
 
 Separate final-build runtime checks verified the cook and Hatter examination views. Screenshots `200-court-opening-fixed` and `201-court-inside` document walking through the widened entrance from the east road. These checks used development checkpoints with saving disabled.
 
-The local evidence session is `evidence/rabbit-walkthrough-20260905T223743Z/`, with an action log, raw recordings and screenshots. Published excerpts belong in the separate solution appendix. Door and phone before images come from the unchanged earlier build. The court before image comes from an intermediate repair build; Blender composition renders are distinguished from runtime captures.
+The local evidence session is `evidence/rabbit-walkthrough-20260905T223743Z/`, with an action log, raw recordings and screenshots. Published excerpts now appear inline in the main game post. Door and phone before images come from the unchanged earlier build. The court before image comes from an intermediate repair build; Blender composition renders are distinguished from runtime captures.
 
 ## Phone and targeted browser review
 
@@ -50,3 +50,15 @@ In the game directory, run `npm test` and `npm run build`. From the site reposit
 For development-only visual review, run `npm run dev` in the game directory and open `touch-review.html`. Its selector seeds explicit checkpoints and disables saving. Useful desktop review URLs include `?review=garden&at=caterpillar`, `?review=garden&after=fan&at=kitchen`, `?review=court&after=trial&at=croquet`, `?review=court&after=croquet&at=effigies` and `?review=tower&at=assembly`. These controls are excluded from production.
 
 To repeat the progression check, use the normal Begin a new dream action in a separate test browser profile, then play through with ordinary controls. Keep the player's existing save separate from review checkpoints and recording saves.
+
+## Visual finale rebuild
+
+The current game adds three geometry and construction checks, bringing the game suite to 45 tests. Four site checks cover discovery, game-first placement, the production bundle and the inline study/walkthrough. The latter checks all 27 comparison entries, both recordings, local evidence images and the old walkthrough URL's redirect.
+
+Targeted runtime review used `?review=tower&at=assembly` and `?review=tower&after=assembly&at=amber_view` or `ivory_view`. These checkpoints disable saving. The rebuilt assembly accepts pieces in arbitrary order, including a roof before its supports. Clicking a real painted piece and a real socket places the same mesh. The structure check rejects bridges facing upward. Both manual viewing controls produce readable, vertically stacked digits. Wrong readings leave the panel open; correct submitted readings add their respective inventory entry.
+
+The phone layout checks include 844 × 390, 667 × 375 and a reduced 844 × 210 viewport. Camera dragging, scrolling the panel, answer submission and Step back remain available. The game follows `visualViewport` for keyboard space; these checks do not emulate an operating-system keyboard or physical touch hardware.
+
+The new finale recording begins at a chapter-four development checkpoint. It supplements the older full repair playthrough, whose final chapter predates the manual viewpoint rebuild. It must not be described as a second fresh-save full playthrough.
+
+Capture session: `evidence/rabbit-visual-finale-20260906T020507Z/`. The checkpoint omits the earlier gardeners-match history flag, so its ending shows 24 solved. The normal-game full repair run above shows 25. The new clip is an edited finale demonstration with real desktop input, no audio and no injected progress after its starting checkpoint.

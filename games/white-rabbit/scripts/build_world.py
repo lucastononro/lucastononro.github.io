@@ -525,22 +525,33 @@ cylinder('assembly dais',(0,.18,-2),3.2,.36,'teal');ring('dais rim',(0,.38,-2),3
 g=empty('assembly');pedestal((0,0,4),g);plaque('assembly controls','BUILD WHAT THE KINGS DESCRIBE',(0,1.8,3.8),3.5,g)
 # Architectural pieces carry the kings' numbers; no card artwork is used.
 g=empty('structure')
-slots=[(-1.65,1.25,-2),(0,1.25,-2),(-.8,2.25,-2),(1.65,1.25,-2),(-.85,3.1,-2),(.85,3.1,-2),(0,4.15,-2),(-.38,4.95,-2),(.38,4.95,-2)]
+slots=[(-1.65,1.02,-2),(0,1.02,-2),(0,1.73,-2),(1.65,1.02,-2),(-.83,2.44,-2),(.83,2.44,-2),(0,3.15,-2),(-.42,3.79,-2),(.42,3.79,-2)]
 labels=['6','4','8','6','4','2','9','5','7']
 for i,pos in enumerate(slots):
     piece=bpy.data.objects.new('house_piece_'+str(i),None);bpy.context.collection.objects.link(piece);piece.parent=g;piece.location=xyz(pos);piece['pieceIndex']=i
     if i in [2,6]:
-        width=3.4 if i==2 else 3.1
-        box('king bridge',(0,0,0),(width,.16,2.25),'gold',piece)
-        emblem=text_obj('matching bridge seal',labels[i],(0,.09,0),.6,'ink' if i==2 else 'red',piece);emblem.rotation_euler=(0,0,0)
+        width=4.9 if i==2 else 3.3
+        box('king bridge',(0,0,0),(width,.12,2.6),'gold',piece)
+        emblem=text_obj('matching bridge seal',labels[i],(0,.071,0),.6,'ink' if i==2 else 'red',piece);emblem.rotation_euler=(0,0,0)
     else:
+        w=.79 if i in [7,8] else 1.56;h=1.16 if i in [7,8] else 1.30
         for side in [-1,1]:
-            panel=box('folded wing',(side*.28,0,0),(1.05,.1,2.25),'panel',piece);panel.rotation_euler.y=side*.88
-        text_obj('support number',labels[i],(0,.13,1.15),.3,'cream' if i<2 else 'rose',piece)
+            verts=[];faces=[];nx=24;nz=24
+            for j in range(nz+1):
+                for k in range(nx+1):
+                    t=k/nx;relief=(.48 if i<7 else .32)*math.sin(j/nz*math.pi*6)*math.sin(t*math.pi)
+                    verts.append(xyz((side*(w*.5*t+relief),h*.5-h*t,(j/nz-.5)*2.6)))
+            for j in range(nz):
+                for k in range(nx):
+                    n=j*(nx+1)+k;f=(n,n+1,n+nx+2,n+nx+1);faces.append(f if side<0 else tuple(reversed(f)))
+            wing=mesh_obj('folded wing',verts,faces,'panel',piece);wing['houseSurface']='amber' if side<0 else 'ivory'
+            for z in [-1.30,1.30]:tube('fold rim',[(0,h*.5,z),(side*w*.5,-h*.5,z)],.018,'brass',piece)
+        text_obj('support number',labels[i],(0,0,1.32),.25,'cream' if i<2 else 'rose',piece)
         if i in [1,5]:
-            seal=text_obj('under bridge seal','8' if i==1 else '9',(0,.54,0),.35,'ink' if i==1 else 'red',piece);seal.rotation_euler=(0,0,0)
+            seal=text_obj('under bridge seal','8' if i==1 else '9',(0,h*.5+.01,0),.27,'ink' if i==1 else 'red',piece);seal.rotation_euler=(0,0,0)
 for name,x,mat in [('amber_view',-6,'orange'),('ivory_view',6,'cream')]:
-    g=empty(name);ring('viewpoint',(x,.05,-2),.7,.045,mat,g);plaque('viewpoint clue','STAND HERE. LOOK AT THE HOUSE.',(x,1.2,-5),3,g)
+    g=empty(name);ring('viewpoint',(x,.05,-2),.7,.045,mat,g)
+    plaque('viewpoint clue','A DIFFERENT POINT OF VIEW',(x,1.2,-5),3,g)
 g=empty('final_lock');door('final_lock',0,-10.4,2.2,3.5,parent=g);clockface('final watch',0,4.7,-10.2,7,40,g,.6)
 g=empty('cat_eyes')
 for x,mat in [(-.34,'orange'),(.34,'cream')]:
