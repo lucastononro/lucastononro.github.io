@@ -1,0 +1,364 @@
+{
+  "originalSource": "https://www.nos-jeux-de-societe.fr/wp-content/uploads/2023/08/Solution-Unlock-heroic-adventure-a-la-poursuite-du-lapin-blanc.pdf",
+  "sourceSha256": "d6e4510f2416e05138ee692a299f5e0f776e0c7159dd04682a2b9e71c9497452",
+  "originalArtwork": "Space Cowboys",
+  "cropCoordinates": "Left, top, right, bottom in PDF page renders at 1132 by 1600 pixels. Cropped, no generated artwork.",
+  "adaptedImages": "Actual browser screenshots from the repair walkthrough, repair checks and visual-finale recording. Re-encoded as WebP.",
+  "images": [
+    {
+      "id": 1,
+      "page": 1,
+      "box": [
+        710,
+        450,
+        1100,
+        825
+      ],
+      "shot": "03-book.png",
+      "sourceCaption": "The torn story fragments in the solution booklet.",
+      "gameCaption": "The story fragments in our book interface."
+    },
+    {
+      "id": 2,
+      "page": 1,
+      "box": [
+        409,
+        1267,
+        1056,
+        1474
+      ],
+      "shot": "08-shadow-turned.png",
+      "sourceCaption": "The rotated M and its second shape.",
+      "gameCaption": "The brass letter after rotation, with the second shape behind it."
+    },
+    {
+      "id": 3,
+      "page": 2,
+      "box": [
+        695,
+        110,
+        890,
+        476
+      ],
+      "shot": "13-arithmetic.png",
+      "sourceCaption": "The cat and the multiplication clue.",
+      "gameCaption": "The same sequence on the hall blackboard."
+    },
+    {
+      "id": 4,
+      "page": 2,
+      "box": [
+        555,
+        515,
+        750,
+        726
+      ],
+      "shot": "17-door-arrangement.png",
+      "sourceCaption": "The doors form the missing A.",
+      "gameCaption": "The repaired doors viewed together across the hall."
+    },
+    {
+      "id": 5,
+      "page": 2,
+      "box": [
+        520,
+        733,
+        1120,
+        999
+      ],
+      "shot": "21-grown.png",
+      "sourceCaption": "The scale, table and cake explain how to reach the key.",
+      "gameCaption": "Alice at the high table after eating cake."
+    },
+    {
+      "id": 6,
+      "page": 2,
+      "box": [
+        565,
+        1003,
+        978,
+        1151
+      ],
+      "shot": "28-triangular-keyway.png",
+      "sourceCaption": "The triangular key combines with door 6.",
+      "gameCaption": "The matching triangular keyway in the door."
+    },
+    {
+      "id": 7,
+      "page": 2,
+      "box": [
+        539,
+        1152,
+        1121,
+        1355
+      ],
+      "shot": "39-fit-door.png",
+      "sourceCaption": "The bottle and height scale show the small-door clearance.",
+      "gameCaption": "The opening at the smaller player size."
+    },
+    {
+      "id": 8,
+      "page": 3,
+      "box": [
+        580,
+        142,
+        949,
+        286
+      ],
+      "shot": "walkthrough-clean.mp4 at 307.5s",
+      "sourceCaption": "The two sides of the card give 89 and 12.",
+      "gameCaption": "The missing-feet subtraction inside the passage."
+    },
+    {
+      "id": 9,
+      "page": 3,
+      "box": [
+        30,
+        315,
+        735,
+        467
+      ],
+      "shot": "walkthrough-clean.mp4 at 317s",
+      "sourceCaption": "The booklet tells the player to point the device upward.",
+      "gameCaption": "Looking upward inside the passage triggers the move to the woods."
+    },
+    {
+      "id": 10,
+      "page": 3,
+      "box": [
+        535,
+        763,
+        851,
+        908
+      ],
+      "shot": "48-caterpillar.png",
+      "sourceCaption": "The caterpillar hides two digits in smoke.",
+      "gameCaption": "The smoke rings above our caterpillar."
+    },
+    {
+      "id": 11,
+      "page": 3,
+      "box": [
+        524,
+        920,
+        850,
+        1115
+      ],
+      "shot": "52-mushroom.png",
+      "sourceCaption": "The unique mushroom on a card back.",
+      "gameCaption": "The spotted mushroom among the trees."
+    },
+    {
+      "id": 12,
+      "page": 4,
+      "box": [
+        651,
+        120,
+        1024,
+        264
+      ],
+      "shot": "58-frog-conversation.png",
+      "sourceCaption": "The frog appointment and its message.",
+      "gameCaption": "Our frog with the English dialogue and transcript."
+    },
+    {
+      "id": 13,
+      "page": 4,
+      "box": [
+        578,
+        683,
+        1039,
+        827
+      ],
+      "shot": "walkthrough-clean.mp4 at 459s",
+      "sourceCaption": "The fan clears the smoke from the kitchen card.",
+      "gameCaption": "Using the fan at the open kitchen front."
+    },
+    {
+      "id": 14,
+      "page": 4,
+      "box": [
+        592,
+        1027,
+        1099,
+        1306
+      ],
+      "shot": "static/images/white-rabbit-repairs/hatter-after.png",
+      "sourceCaption": "The hat distraction and the tea-to-T deduction.",
+      "gameCaption": "The Hatter, his price tag and the tea table."
+    },
+    {
+      "id": 15,
+      "page": 4,
+      "box": [
+        620,
+        1334,
+        1092,
+        1575
+      ],
+      "shot": "80-messages-ordered.png",
+      "sourceCaption": "Four messages above their appointment clocks.",
+      "gameCaption": "The ordered messages beside our clock faces."
+    },
+    {
+      "id": 16,
+      "page": 5,
+      "box": [
+        507,
+        318,
+        1100,
+        654
+      ],
+      "shot": "85-green-five.png",
+      "sourceCaption": "The four traced paths in the solution.",
+      "gameCaption": "Tracing one colored route on our sign table."
+    },
+    {
+      "id": 17,
+      "page": 5,
+      "box": [
+        745,
+        721,
+        1043,
+        1020
+      ],
+      "shot": "126-maze-dialog.png",
+      "sourceCaption": "The hedge map and its three size modifiers.",
+      "gameCaption": "The three paths and their arithmetic controls."
+    },
+    {
+      "id": 18,
+      "page": 5,
+      "box": [
+        584,
+        1014,
+        835,
+        1190
+      ],
+      "shot": "walkthrough-clean.mp4 at 802.5s",
+      "sourceCaption": "The gardeners match symbols on a card back.",
+      "gameCaption": "The numbered gardeners beside the tool chest."
+    },
+    {
+      "id": 19,
+      "page": 5,
+      "box": [
+        680,
+        1200,
+        1053,
+        1353
+      ],
+      "shot": "walkthrough-clean.mp4 at 852s",
+      "sourceCaption": "Painting the white card header makes a new combination.",
+      "gameCaption": "The brush applies red paint to the white blooms."
+    },
+    {
+      "id": 20,
+      "page": 6,
+      "box": [
+        686,
+        183,
+        956,
+        441
+      ],
+      "shot": "135-tart-clue.png",
+      "sourceCaption": "The crumb outline points to the heart suit.",
+      "gameCaption": "The cut pastry and its visible crumb trail."
+    },
+    {
+      "id": 21,
+      "page": 6,
+      "box": [
+        514,
+        449,
+        1098,
+        704
+      ],
+      "shot": [
+        "static/images/white-rabbit-walkthrough/guard.png",
+        "static/images/white-rabbit-walkthrough/impostor.png"
+      ],
+      "sourceCaption": "The two guards and seven annotated differences.",
+      "gameCaption": "One guard in examination view. The other can be inspected from the same angle.",
+      "gameEdit": "Each screenshot cropped to [310,100,680,720] then placed side by side with labels."
+    },
+    {
+      "id": 22,
+      "page": 6,
+      "box": [
+        34,
+        404,
+        1106,
+        875
+      ],
+      "shot": "143-trial.png",
+      "sourceCaption": "The hearing questions and the Queen in the solution.",
+      "gameCaption": "The Queen asks about the evidence gathered earlier."
+    },
+    {
+      "id": 23,
+      "page": 6,
+      "box": [
+        509,
+        1223,
+        1024,
+        1429
+      ],
+      "shot": "150-cushion-four.png",
+      "sourceCaption": "The three rebound cards and the flag.",
+      "gameCaption": "The hedgehog on our lawn after the first rebound."
+    },
+    {
+      "id": 24,
+      "page": 7,
+      "box": [
+        453,
+        10,
+        1061,
+        427
+      ],
+      "shot": "158-witness-number.png",
+      "sourceCaption": "Overlapping the figures joins their markings.",
+      "gameCaption": "The wooden figures overlap with their heads lowered."
+    },
+    {
+      "id": 25,
+      "page": 7,
+      "box": [
+        401,
+        415,
+        1108,
+        673
+      ],
+      "shot": "164-missing-letters.png",
+      "sourceCaption": "The decree and the missing-letter cards.",
+      "gameCaption": "Our English decree with the letter-marking tool."
+    },
+    {
+      "id": 26,
+      "page": 7,
+      "box": [
+        507,
+        708,
+        1106,
+        1023
+      ],
+      "shot": "static/images/white-rabbit-study/assembly-new.png",
+      "sourceCaption": "The numbered folded house and the marked construction pieces.",
+      "gameCaption": "The rebuilt bench with physical pieces and selectable sockets."
+    },
+    {
+      "id": 27,
+      "page": 7,
+      "box": [
+        552,
+        1032,
+        1073,
+        1508
+      ],
+      "shot": "static/images/white-rabbit-study/amber-aligned.png",
+      "sourceCaption": "Both viewing angles and the cat's eye-color clue.",
+      "gameCaption": "The amber strokes align across our folded surfaces."
+    }
+  ]
+}
