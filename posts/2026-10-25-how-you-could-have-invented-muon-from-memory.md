@@ -1,5 +1,5 @@
 ---
-title: "How You Could Have Invented Muon from Memory"
+title: "how you could have invented muon from memory"
 dek: The matrix trick hiding in plain sight that made AdamW look less inevitable.
 date: 2026-10-25
 tags: [research]
