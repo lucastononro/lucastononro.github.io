@@ -1,0 +1,120 @@
+/* Inline illustrations use the article's paper and ink; no dashboard shell. */
+.muon-film { display: block; }
+.muon-film text { fill: var(--ink-2); font: 20px var(--sans); }
+.muon-film .mf-small { font-size: 17px; }
+.muon-film .mf-strong { font-size: 21px; font-weight: 600; fill: var(--ink); }
+.muon-film .mf-accent-text { fill: var(--accent); }
+.muon-film .mf-axis { stroke: var(--rule); stroke-width: 1.2; }
+.muon-film .mf-contour { stroke: var(--rule); fill: none; stroke-width: 1.4; }
+.muon-film .mf-budget { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
+.muon-film .mf-orange, .muon-film .mf-trail { stroke: var(--accent); stroke-width: 3; fill: none; stroke-linejoin: round; }
+.muon-film .mf-ink { stroke: var(--ink-2); stroke-width: 2; fill: none; }
+.muon-film .mf-dashed, .muon-film .mf-noise { stroke-dasharray: 6 5; }
+.muon-film .mf-history { stroke: var(--ink-3); stroke-width: 1.5; fill: none; opacity: .22; }
+.muon-film .mf-noise { stroke: var(--ink-2); stroke-width: 2; fill: none; }
+.muon-film .mf-objective { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 5 5; }
+.muon-film .mf-target { stroke: var(--ink-3); stroke-dasharray: 3 5; }
+.muon-film .mf-five { stroke: var(--accent); stroke-dasharray: 2 5; opacity: .5; }
+.muon-film .mf-dot { fill: var(--accent); stroke: var(--paper); stroke-width: 1.5; }
+.muon-film .mf-open { fill: var(--paper); stroke: var(--ink-2); stroke-width: 2; }
+.muon-film .mf-muted-dot { fill: var(--ink-3); }
+.post-body .diagram:has(.muon-film) { margin-bottom: 1rem; }
+.muon-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem 1rem; margin: 0 0 .75rem; font: .9rem/1.5 var(--sans); }
+.muon-controls button { min-height: 44px; padding: .3rem 0; border: 0; border-bottom: 1px solid var(--rule); color: var(--accent); background: transparent; font: inherit; cursor: pointer; }
+.muon-controls button:first-child::before { content: '▶'; font-size: .7em; margin-right: .5rem; }
+.muon-controls[data-playing="true"] button:first-child::before { content: '■'; }
+.muon-controls button:hover { border-color: var(--accent); }
+.muon-controls button:disabled { opacity: .35; cursor: default; }
+.muon-controls [data-status] { flex: 1 1 15rem; color: var(--ink-3); }
+.muon-controls button[data-action="play"] { position: relative; }
+@media (prefers-reduced-motion: no-preference) {
+  .muon-controls[data-unplayed="true"] button[data-action="play"]::before {
+    animation: muon-play-glint 5.5s ease-in-out infinite;
+  }
+  .muon-controls[data-unplayed="true"] button[data-action="play"]::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -1px;
+    height: 2px;
+    pointer-events: none;
+    background: linear-gradient(100deg, transparent 40%, currentColor 50%, transparent 60%) 100% 0 / 250% 100%;
+    animation: muon-play-shimmer 5.5s ease-in-out infinite;
+  }
+}
+@keyframes muon-play-glint {
+  0%, 55%, 100% { text-shadow: 0 0 0 transparent; }
+  72% { text-shadow: 0 0 7px currentColor; }
+}
+@keyframes muon-play-shimmer {
+  0%, 55% { background-position: 100% 0; opacity: 0; }
+  68% { opacity: .65; }
+  92%, 100% { background-position: 0 0; opacity: 0; }
+}
+.post-body .section-alias { display: block; scroll-margin-top: 7rem; }
+@media print { .muon-controls { display: none; } }
+
+.post-body:has(#muon-gd) > p:first-of-type::first-line { font-variant-caps: normal; letter-spacing: normal; }
+.muon-film .mf-surface-face { fill: var(--ink-3); stroke: var(--ink-3); stroke-opacity: .22; stroke-width: .5; }
+.muon-film .mf-floor { opacity: .5; }
+.muon-film .mf-floor-trail { stroke: var(--ink-3); stroke-width: 1.5; stroke-dasharray: 3 4; fill: none; }
+.muon-film .mf-trail-halo { stroke: var(--paper); stroke-width: 6; stroke-opacity: .8; fill: none; stroke-linejoin: round; }
+.muon-film .mf-shadow { fill: var(--ink); opacity: .15; }
+.muon-film .mf-curve { stroke: var(--ink-2); stroke-width: 2.5; fill: none; }
+.muon-surface-note { margin: 1.2rem 0 2rem; }
+.muon-surface-note summary { color: var(--accent); font: 1rem/1.5 var(--sans); cursor: pointer; }
+.muon-surface-note p { font-size: 1.05rem; }
+
+.muon-film { --memory-ink: #46727c; }
+:root[data-theme="dark"] .muon-film { --memory-ink: #92bdc6; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .muon-film { --memory-ink: #92bdc6; }
+}
+.muon-film .mf-memory-arrow { fill: none; stroke: var(--memory-ink); stroke-width: 3; }
+.muon-film .mf-equation { display: flex; justify-content: center; align-items: center; gap: 9px; height: 100%; white-space: nowrap; color: var(--ink-2); font-size: 18px; line-height: 1; }
+.muon-film .mf-symbolic { font-size: 18px; }
+.muon-film .mf-equation .katex { font-size: 1.12em; }
+.muon-film .mf-memory-math { color: var(--memory-ink); }
+.muon-film .mf-result-math { color: var(--accent); }
+.muon-film .mf-incoming-math { color: var(--ink-2); }
+.muon-film .mf-fixed-ring { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
+.muon-film .mf-reference { opacity: .35; }
+.muon-film .mf-shape { fill: var(--accent-soft); stroke: var(--ink-2); stroke-width: 1.8; }
+.muon-film .mf-shape-point { fill: var(--ink-3); }
+.muon-film .mf-blue-dot { fill: var(--memory-ink); stroke: var(--paper); stroke-width: 1.5; }
+.muon-film .mf-blue-text { fill: var(--memory-ink); }
+.muon-film .mf-phone-equation { font-size: 23px; }
+
+.post-body .muon-aside { margin: 1.5rem 0 2rem; padding: .75rem 0 .75rem 1.1rem; border-left: 2px solid var(--rule); }
+.post-body .muon-aside[open] { border-left-color: var(--accent); }
+.post-body .muon-aside summary { color: var(--accent); font: 1rem/1.55 var(--sans); cursor: pointer; padding: .25rem 0; }
+.post-body .muon-aside summary:hover { text-decoration: underline; text-underline-offset: .2em; }
+.post-body .muon-aside[open] summary { margin-bottom: 1.1rem; }
+.post-body .muon-aside > :last-child { margin-bottom: .5rem; }
+.post-body .muon-aside .diagram { margin: 1.5rem 0; }
+.muon-film .mf-number { font-size: 27px; }
+.muon-film .mf-faded { opacity: .4; }
+.muon-film .mf-token-bg { fill: var(--paper); stroke: var(--accent); stroke-width: 1.5; }
+.muon-film .mf-input-slot { fill: var(--accent-soft); stroke: var(--rule); stroke-width: 1; stroke-dasharray: 4 3; }
+#muon-gd, #muon-momentumlandscape, #muon-valley { cursor: grab; touch-action: pan-y; }
+#muon-gd:active, #muon-momentumlandscape:active, #muon-valley:active { cursor: grabbing; }
+#muon-gd:focus-visible, #muon-momentumlandscape:focus-visible, #muon-valley:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (max-width: 480px) {
+  .post-body .muon-aside { padding-left: .65rem; }
+  .muon-controls { gap: .35rem .85rem; }
+}
+@media print { .muon-aside { border-left: 0; } }
+
+/* Keep the math renderer’s stretchy roots independent of diagram sizing. */
+.muon-film .katex svg { height: inherit; max-width: none; }
+
+.muon-film .mf-compact-equation { font-size: 16px; gap: 5px; }
+.muon-film .mf-matrix-number { font-size: 23px; font-variant-numeric: tabular-nums; }
+.muon-film .mf-flying-number { paint-order: stroke; stroke: var(--paper); stroke-width: 5px; stroke-linejoin: round; }
+
+.muon-film .mf-polynomial-equation { font-size: 18px; gap: 5px; }
+
+.muon-film .mf-exact-arrow { stroke-dasharray: 2 5; stroke-width: 2; opacity: .85; }
+.muon-film .mf-tolerance-band { fill: var(--memory-ink); opacity: .1; }
+.muon-film .mf-loss-contour { stroke: var(--ink-3); stroke-opacity: .32; stroke-width: 1; fill: none; }
+.muon-film .mf-sgd { stroke: #9b7c24; stroke-width: 2.5; fill: none; stroke-dasharray: 8 4; stroke-linejoin: round; }
+.muon-film .mf-sgd-dot { fill: #9b7c24; stroke: var(--paper); stroke-width: 1.5; }

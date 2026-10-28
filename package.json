@@ -5,6 +5,7 @@
   "type": "module",
   "description": "A hand-rolled static blog generator. Markdown in, letterpress HTML out.",
   "scripts": {
+    "build:muon": "node scripts/build-muon-diagrams.mjs",
     "build": "node build.mjs",
     "dev": "node serve.mjs",
     "clean": "rm -rf dist",
